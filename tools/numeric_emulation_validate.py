@@ -222,6 +222,27 @@ def centre_augmentation() -> None:
             got[sample, atom] = matrices[sample] @ centered[atom] + translation[sample]
     assert_close("09_centre_random_augmentation", ref, got)
 
+    # The reference's centre-only branch returns centered coordinates before
+    # applying the output mask.  A sparse mask therefore affects the center,
+    # but masked atoms remain present in the returned coordinates.
+    sparse_mask = np.array([1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1], dtype=np.float32)
+    sparse_center = (
+        (coords * sparse_mask[:, None]).sum(axis=0, keepdims=True)
+        / (sparse_mask.sum() + 1e-12)
+    )
+    centre_only_ref = np.broadcast_to(
+        coords - sparse_center, (samples, atoms, 3)
+    ).copy()
+    centre_only_got = np.empty_like(centre_only_ref)
+    for sample in range(samples):
+        for atom in range(atoms):
+            centre_only_got[sample, atom] = coords[atom] - sparse_center[0]
+    assert_close(
+        "09_centre_random_augmentation_centre_only",
+        centre_only_ref,
+        centre_only_got,
+    )
+
 
 def head_mix_bwd() -> None:
     x = RNG.normal(size=(2, 9, 4)).astype(np.float32)

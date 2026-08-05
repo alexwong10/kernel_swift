@@ -10,6 +10,7 @@ triton_kernels/       10 个 ModelNew 实现和共享 Triton 内核
 tools/                提取、静态校验、批量运行工具
 results/coverage.json 算子 × 芯片验收台账
 KernelSwift平台使用记录.md
+离线审查记录.md
 赛道说明.md
 ```
 
@@ -33,10 +34,14 @@ KernelSwift平台使用记录.md
 ```powershell
 python tools/extract_references.py
 python tools/static_validate.py
+python tools/numeric_emulation_validate.py
 python -m compileall -q reference triton_kernels tools
 ```
 
 `static_validate.py` 会检查 10 对文件、`Model`/`ModelNew` 的 `__init__` 和 `forward` 参数、必需的输入函数，并拒绝 `ModelNew` 中的回退式 `try/except`。
+`numeric_emulation_validate.py` 在不依赖 PyTorch/Triton 的情况下检查内核使用的索引、
+归约和公式；它只能发现代数错误，不能证明 Triton 可编译或芯片精度通过。逐算子风险见
+[`离线审查记录.md`](./离线审查记录.md)。
 
 ## 厂商环境评测
 
@@ -73,4 +78,3 @@ python tools/run_all.py \
 ## 当前验证边界
 
 工作区所在 Windows 主机没有 PyTorch、Triton 或加速卡，因此这里只能完成源码、接口和语法静态检查。任何“已覆盖芯片”声明必须以目标芯片上的官方 `auto_bench.py` 日志为证，不能用静态检查替代。
-

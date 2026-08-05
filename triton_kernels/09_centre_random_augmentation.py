@@ -73,7 +73,9 @@ def _augment_kernel(
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
         rotated = tl.where(component == 0, y0, tl.where(component == 1, y1, y2))
         result = rotated + tl.load(translation_ptr + sample * 3 + component, mask=valid, other=0.0)
-    if HAS_MASK:
+    # The reference returns immediately after centering in centre-only mode;
+    # mask multiplication is part of the rotation/translation path only.
+    if HAS_MASK and not CENTRE_ONLY:
         result *= tl.load(mask_ptr + atom, mask=valid, other=0.0).to(tl.float32)
     tl.store(out_ptr + offsets, result, mask=valid)
 
@@ -149,4 +151,3 @@ def get_inputs():
 
 def get_init_inputs():
     return [4, 1.0, False]
-
