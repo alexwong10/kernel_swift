@@ -1,0 +1,293 @@
+"""Shared, conservative Triton kernels used by multiple competition tasks.
+
+The code intentionally sticks to operations implemented by the major Triton
+forks used by the competition: masked load/store, reductions, exp/erf and
+`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;
+the default configurations favor portability and correctness.
+"""
+
+from __future__ import annotations
+
+import torch
+import triton
+import triton.language as tl
+
+
+@triton.jit
+def _linear_kernel(
+    a_ptr,
+    w_ptr,
+    bias_ptr,
+    out_ptr,
+    m_size: tl.constexpr,
+    n_size: tl.constexpr,
+    k_size: tl.constexpr,
+    stride_am: tl.constexpr,
+    stride_ak: tl.constexpr,
+    stride_wn: tl.constexpr,
+    stride_wk: tl.constexpr,
+    stride_om: tl.constexpr,
+    stride_on: tl.constexpr,
+    HAS_BIAS: tl.constexpr,
+    EPILOGUE: tl.constexpr,
+    BLOCK_M: tl.constexpr,
+    BLOCK_N: tl.constexpr,
+    BLOCK_K: tl.constexpr,
+):
+    pid_m = tl.program_id(0)
+    pid_n = tl.program_id(1)
+    offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+    offs_k = tl.arange(0, BLOCK_K)
+    acc = tl.zeros((BLOCK_M, BLOCK_N), tl.float32)
+
+    for k0 in range(0, k_size, BLOCK_K):
+        k = k0 + offs_k
+        a = tl.load(
+            a_ptr + offs_m[:, None] * stride_am + k[None, :] * stride_ak,
+            mask=(offs_m[:, None] < m_size) & (k[None, :] < k_size),
+            other=0.0,
+        )
+        # nn.Linear stores weight as [out_features, in_features].
+        w = tl.load(
+            w_ptr + offs_n[None, :] * stride_wn + k[:, None] * stride_wk,
+            mask=(offs_n[None, :] < n_size) & (k[:, None] < k_size),
+            other=0.0,
+        )
+        acc += tl.dot(a, w)
+
+    if HAS_BIAS:
+        bias = tl.load(bias_ptr + offs_n, mask=offs_n < n_size, other=0.0)
+        acc += bias[None, :]
+    if EPILOGUE == 1:
+        # log1p(relu(x)), written without a separate materialized activation.
+        acc = tl.log(1.0 + tl.maximum(acc, 0.0))
+
+    tl.store(
+        out_ptr + offs_m[:, None] * stride_om + offs_n[None, :] * stride_on,
+        acc,
+        mask=(offs_m[:, None] < m_size) & (offs_n[None, :] < n_size),
+    )
+
+
+def triton_linear(
+    x: torch.Tensor,
+    weight: torch.Tensor,
+    bias: torch.Tensor | None,
+    *,
+    log1p_relu: bool = False,
+) -> torch.Tensor:
+    """Compute a 2-D nn.Linear with a portable tiled Triton kernel."""
+    if x.ndim != 2 or weight.ndim != 2:
+        raise ValueError("triton_linear expects 2-D input and weight")
+    m_size, k_size = x.shape
+    n_size = weight.shape[0]
+    out = torch.empty((m_size, n_size), device=x.device, dtype=x.dtype)
+    block_m = 16
+    block_n = 64
+    block_k = 32
+    grid = (triton.cdiv(m_size, block_m), triton.cdiv(n_size, block_n))
+    # Triton needs a valid pointer even when the constexpr disables the load.
+    bias_arg = bias if bias is not None else weight
+    _linear_kernel[grid](
+        x,
+        weight,
+        bias_arg,
+        out,
+        m_size,
+        n_size,
+        k_size,
+        x.stride(0),
+        x.stride(1),
+        weight.stride(0),
+        weight.stride(1),
+        out.stride(0),
+        out.stride(1),
+        HAS_BIAS=bias is not None,
+        EPILOGUE=1 if log1p_relu else 0,
+        BLOCK_M=block_m,
+        BLOCK_N=block_n,
+        BLOCK_K=block_k,
+        num_warps=4,
+    )
+    return out
+
+
+@triton.jit
+def _gelu_layer_norm_kernel(
+    x_ptr,
+    weight_ptr,
+    bias_ptr,
+    out_ptr,
+    width: tl.constexpr,
+    eps: tl.constexpr,
+    BLOCK: tl.constexpr,
+):
+    row = tl.program_id(0)
+    cols = tl.arange(0, BLOCK)
+    mask = cols < width
+    x = tl.load(x_ptr + row * width + cols, mask=mask, other=0.0).to(tl.float32)
+    gelu = 0.5 * x * (1.0 + tl.erf(x * 0.7071067811865476))
+    mean = tl.sum(tl.where(mask, gelu, 0.0), axis=0) / width
+    centered = tl.where(mask, gelu - mean, 0.0)
+    variance = tl.sum(centered * centered, axis=0) / width
+    norm = centered * tl.rsqrt(variance + eps)
+    weight = tl.load(weight_ptr + cols, mask=mask, other=0.0).to(tl.float32)
+    bias = tl.load(bias_ptr + cols, mask=mask, other=0.0).to(tl.float32)
+    tl.store(out_ptr + row * width + cols, norm * weight + bias, mask=mask)
+
+
+def gelu_layer_norm(
+    x: torch.Tensor,
+    weight: torch.Tensor,
+    bias: torch.Tensor,
+    eps: float,
+) -> torch.Tensor:
+    rows, width = x.shape
+    out = torch.empty_like(x)
+    block = triton.next_power_of_2(width)
+    _gelu_layer_norm_kernel[(rows,)](
+        x,
+        weight,
+        bias,
+        out,
+        width,
+        eps,
+        BLOCK=block,
+        num_warps=8 if block >= 2048 else 4,
+    )
+    return out
+
+
+@triton.jit
+def _attention_kernel(
+    q_ptr,
+    k_ptr,
+    v_ptr,
+    out_ptr,
+    batch_size: tl.constexpr,
+    seq_len: tl.constexpr,
+    num_heads: tl.constexpr,
+    head_dim: tl.constexpr,
+    scale,
+    stride_qb: tl.constexpr,
+    stride_qs: tl.constexpr,
+    stride_qh: tl.constexpr,
+    stride_qd: tl.constexpr,
+    stride_kb: tl.constexpr,
+    stride_ks: tl.constexpr,
+    stride_kh: tl.constexpr,
+    stride_kd: tl.constexpr,
+    stride_vb: tl.constexpr,
+    stride_vs: tl.constexpr,
+    stride_vh: tl.constexpr,
+    stride_vd: tl.constexpr,
+    stride_ob: tl.constexpr,
+    stride_os: tl.constexpr,
+    stride_oh: tl.constexpr,
+    stride_od: tl.constexpr,
+    CAUSAL: tl.constexpr,
+    BLOCK_SEQ: tl.constexpr,
+    BLOCK_D: tl.constexpr,
+):
+    q_index = tl.program_id(0)
+    head = tl.program_id(1)
+    batch = tl.program_id(2)
+    d = tl.arange(0, BLOCK_D)
+    n = tl.arange(0, BLOCK_SEQ)
+    d_mask = d < head_dim
+    n_mask = n < seq_len
+
+    q = tl.load(
+        q_ptr
+        + batch * stride_qb
+        + q_index * stride_qs
+        + head * stride_qh
+        + d * stride_qd,
+        mask=d_mask,
+        other=0.0,
+    ).to(tl.float32)
+    k = tl.load(
+        k_ptr
+        + batch * stride_kb
+        + n[:, None] * stride_ks
+        + head * stride_kh
+        + d[None, :] * stride_kd,
+        mask=n_mask[:, None] & d_mask[None, :],
+        other=0.0,
+    ).to(tl.float32)
+    scores = tl.sum(k * q[None, :], axis=1) * scale
+    valid = n_mask
+    if CAUSAL:
+        valid = valid & (n <= q_index)
+    scores = tl.where(valid, scores, -float("inf"))
+    scores = scores - tl.max(scores, axis=0)
+    probs = tl.exp(scores)
+    probs = probs / tl.sum(probs, axis=0)
+
+    v = tl.load(
+        v_ptr
+        + batch * stride_vb
+        + n[:, None] * stride_vs
+        + head * stride_vh
+        + d[None, :] * stride_vd,
+        mask=n_mask[:, None] & d_mask[None, :],
+        other=0.0,
+    ).to(tl.float32)
+    result = tl.sum(probs[:, None] * v, axis=0)
+    tl.store(
+        out_ptr
+        + batch * stride_ob
+        + q_index * stride_os
+        + head * stride_oh
+        + d * stride_od,
+        result,
+        mask=d_mask,
+    )
+
+
+def triton_attention(
+    query: torch.Tensor,
+    key: torch.Tensor,
+    value: torch.Tensor,
+    *,
+    scale: float,
+    causal: bool,
+) -> torch.Tensor:
+    """Attention for contiguous logical [B, S, H, D] tensors/views."""
+    batch_size, seq_len, num_heads, head_dim = query.shape
+    out = torch.empty_like(query)
+    block_seq = triton.next_power_of_2(seq_len)
+    block_d = triton.next_power_of_2(head_dim)
+    _attention_kernel[(seq_len, num_heads, batch_size)](
+        query,
+        key,
+        value,
+        out,
+        batch_size,
+        seq_len,
+        num_heads,
+        head_dim,
+        scale,
+        query.stride(0),
+        query.stride(1),
+        query.stride(2),
+        query.stride(3),
+        key.stride(0),
+        key.stride(1),
+        key.stride(2),
+        key.stride(3),
+        value.stride(0),
+        value.stride(1),
+        value.stride(2),
+        value.stride(3),
+        out.stride(0),
+        out.stride(1),
+        out.stride(2),
+        out.stride(3),
+        CAUSAL=causal,
+        BLOCK_SEQ=block_seq,
+        BLOCK_D=block_d,
+        num_warps=8,
+    )
+    return out

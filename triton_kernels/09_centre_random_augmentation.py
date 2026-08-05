@@ -1,0 +1,152 @@
+import math
+from typing import Optional
+
+import torch
+import torch.nn as nn
+import triton
+import triton.language as tl
+
+
+@triton.jit
+def _center_kernel(
+    coords_ptr,
+    mask_ptr,
+    center_ptr,
+    n_atoms: tl.constexpr,
+    HAS_MASK: tl.constexpr,
+    EPS: tl.constexpr,
+    BLOCK: tl.constexpr,
+):
+    component = tl.program_id(0)
+    atom = tl.arange(0, BLOCK)
+    valid = atom < n_atoms
+    coord = tl.load(coords_ptr + atom * 3 + component, mask=valid, other=0.0).to(tl.float32)
+    if HAS_MASK:
+        weight = tl.load(mask_ptr + atom, mask=valid, other=0.0).to(tl.float32)
+    else:
+        weight = tl.where(valid, 1.0, 0.0)
+    center = tl.sum(coord * weight, axis=0) / (tl.sum(weight, axis=0) + EPS)
+    tl.store(center_ptr + component, center)
+
+
+@triton.jit
+def _augment_kernel(
+    coords_ptr,
+    mask_ptr,
+    center_ptr,
+    u1_ptr,
+    u2_ptr,
+    u3_ptr,
+    translation_ptr,
+    out_ptr,
+    n_atoms: tl.constexpr,
+    HAS_MASK: tl.constexpr,
+    CENTRE_ONLY: tl.constexpr,
+    total: tl.constexpr,
+    BLOCK: tl.constexpr,
+):
+    offsets = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
+    valid = offsets < total
+    component = offsets % 3
+    atom = (offsets // 3) % n_atoms
+    sample = offsets // (n_atoms * 3)
+
+    x0 = tl.load(coords_ptr + atom * 3, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr)
+    x1 = tl.load(coords_ptr + atom * 3 + 1, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 1)
+    x2 = tl.load(coords_ptr + atom * 3 + 2, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 2)
+
+    if CENTRE_ONLY:
+        result = tl.where(component == 0, x0, tl.where(component == 1, x1, x2))
+    else:
+        u1 = tl.load(u1_ptr + sample, mask=valid, other=0.0).to(tl.float32)
+        u2 = tl.load(u2_ptr + sample, mask=valid, other=0.0).to(tl.float32)
+        u3 = tl.load(u3_ptr + sample, mask=valid, other=0.0).to(tl.float32)
+        qx = tl.sqrt(1.0 - u1) * tl.sin(6.283185307179586 * u2)
+        qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
+        qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
+        qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
+        xx, yy, zz = qx * qx, qy * qy, qz * qz
+        xy, xz, yz = qx * qy, qx * qz, qy * qz
+        wx, wy, wz = qw * qx, qw * qy, qw * qz
+        y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
+        y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
+        y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
+        rotated = tl.where(component == 0, y0, tl.where(component == 1, y1, y2))
+        result = rotated + tl.load(translation_ptr + sample * 3 + component, mask=valid, other=0.0)
+    if HAS_MASK:
+        result *= tl.load(mask_ptr + atom, mask=valid, other=0.0).to(tl.float32)
+    tl.store(out_ptr + offsets, result, mask=valid)
+
+
+class ModelNew(nn.Module):
+    def __init__(self, n_sample: int = 1, s_trans: float = 1.0, centre_only: bool = False):
+        super().__init__()
+        self.n_sample = n_sample
+        self.s_trans = s_trans
+        self.centre_only = centre_only
+
+    def forward(
+        self, x_input_coords: torch.Tensor, mask: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
+        n_atoms = x_input_coords.shape[0]
+        center = torch.empty(3, device=x_input_coords.device, dtype=torch.float32)
+        mask_arg = mask if mask is not None else x_input_coords
+        block_atoms = triton.next_power_of_2(n_atoms)
+        _center_kernel[(3,)](
+            x_input_coords,
+            mask_arg,
+            center,
+            n_atoms,
+            HAS_MASK=mask is not None,
+            EPS=1e-12,
+            BLOCK=block_atoms,
+            num_warps=4,
+        )
+
+        if self.centre_only:
+            # Dummy pointers are compile-time dead in the CENTRE_ONLY branch.
+            u1 = u2 = u3 = translation = x_input_coords
+        else:
+            # Match the reference RNG calls exactly; all geometry is fused in Triton.
+            u1 = torch.rand(self.n_sample, device=x_input_coords.device, dtype=x_input_coords.dtype)
+            u2 = torch.rand(self.n_sample, device=x_input_coords.device, dtype=x_input_coords.dtype)
+            u3 = torch.rand(self.n_sample, device=x_input_coords.device, dtype=x_input_coords.dtype)
+            translation = self.s_trans * torch.randn(
+                self.n_sample, 3, device=x_input_coords.device, dtype=x_input_coords.dtype
+            )
+        out = torch.empty(
+            (self.n_sample, n_atoms, 3),
+            device=x_input_coords.device,
+            dtype=x_input_coords.dtype,
+        )
+        total = out.numel()
+        block = 256
+        _augment_kernel[(triton.cdiv(total, block),)](
+            x_input_coords,
+            mask_arg,
+            center,
+            u1,
+            u2,
+            u3,
+            translation,
+            out,
+            n_atoms,
+            HAS_MASK=mask is not None,
+            CENTRE_ONLY=self.centre_only,
+            total=total,
+            BLOCK=block,
+            num_warps=4,
+        )
+        return out
+
+
+def get_inputs():
+    torch.manual_seed(42)
+    x_input_coords = torch.randn(256, 3, device="cuda")
+    mask = torch.ones(256, device="cuda", dtype=torch.float32)
+    return [x_input_coords, mask]
+
+
+def get_init_inputs():
+    return [4, 1.0, False]
+

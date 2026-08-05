@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "meaning": "passed requires an attached official auto_bench.py log from that exact chip",
+  "tasks": [
+    "01_grouped_topk",
+    "02_fused_moe",
+    "03_flex_attention",
+    "04_splade_sparse_pooler",
+    "05_music_flamingo_rotary_embedding",
+    "06_mm_encoder_attention",
+    "07_mhc_post",
+    "08_hc_split_sinkhorn",
+    "09_centre_random_augmentation",
+    "10_head_compute_mix_bwd"
+  ],
+  "chips": {
+    "ascend_a2_910b": {"vendor": "华为昇腾", "model": "A2（910B）", "resource": "KernelSwift", "status": "not_run"},
+    "metax_c500": {"vendor": "沐曦", "model": "C500", "resource": "KernelSwift", "status": "platform_tasks_active"},
+    "iluvatar_bi150": {"vendor": "天数智芯", "model": "BI150", "resource": "KernelSwift", "status": "not_run"},
+    "enflame_s60": {"vendor": "燧原", "model": "S60", "resource": "KernelSwift", "status": "not_run"},
+    "thead_810e": {"vendor": "平头哥", "model": "真武810E", "resource": "KernelSwift", "status": "not_run"},
+    "cambricon_mlu590_m9d": {"vendor": "寒武纪", "model": "MLU590-M9D", "resource": "KernelSwift", "status": "not_run"},
+    "hygon_bw1000": {"vendor": "海光", "model": "BW1000", "resource": "KernelSwift", "status": "not_run"},
+    "moore_threads_ph100": {"vendor": "摩尔线程", "model": "PH100", "resource": "to_confirm_or_self_hosted", "status": "not_run"},
+    "kunlun_p800": {"vendor": "昆仑芯", "model": "P800", "resource": "self_hosted_required", "status": "not_run"},
+    "biren_br106m": {"vendor": "壁仞", "model": "BR106M", "resource": "self_hosted_required", "status": "not_run"}
+  },
+  "matrix": {
+    "metax_c500": {
+      "observed_at": "2026-08-05T23:03:00+08:00",
+      "01_grouped_topk": {"status": "infrastructure_failed", "detail": "reference code exec HTTP read timeout after 600s"},
+      "02_fused_moe": {"status": "failed_detail_pending"},
+      "03_flex_attention": {"status": "failed_detail_pending"},
+      "04_splade_sparse_pooler": {"status": "running"},
+      "05_music_flamingo_rotary_embedding": {"status": "queued"},
+      "06_mm_encoder_attention": {"status": "queued"},
+      "07_mhc_post": {"status": "queued"},
+      "08_hc_split_sinkhorn": {"status": "queued"},
+      "09_centre_random_augmentation": {"status": "queued"},
+      "10_head_compute_mix_bwd": {"status": "queued"}
+    }
+  }
+}

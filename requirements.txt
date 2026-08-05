@@ -1,0 +1,5 @@
+# Generic development baseline. Vendor images may replace these with their
+# corresponding PyTorch/Triton forks (torch_npu, torch_mlu, torch_gcu, etc.).
+torch>=2.1
+triton>=2.1
+

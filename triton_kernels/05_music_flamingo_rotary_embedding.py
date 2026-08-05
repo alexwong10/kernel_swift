@@ -1,0 +1,86 @@
+import math
+
+import torch
+import torch.nn as nn
+import triton
+import triton.language as tl
+
+
+@triton.jit
+def _music_rope_kernel(
+    timestamps_ptr,
+    inv_freq_ptr,
+    position_angles_ptr,
+    cos_ptr,
+    sin_ptr,
+    seq_len: tl.constexpr,
+    dim: tl.constexpr,
+    max_seq_len: tl.constexpr,
+    total: tl.constexpr,
+    BLOCK: tl.constexpr,
+):
+    offsets = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
+    mask = offsets < total
+    channel = offsets % (2 * dim)
+    position = (offsets // (2 * dim)) % seq_len
+    batch = offsets // (seq_len * 2 * dim)
+    timestamp = tl.load(timestamps_ptr + batch * seq_len + position, mask=mask, other=0.0)
+    local_channel = channel % dim
+    inv = tl.load(inv_freq_ptr + local_channel // 2, mask=mask, other=0.0).to(tl.float32)
+    batch_freq = (batch.to(tl.float32) / max_seq_len) * inv
+    time_freq = tl.load(
+        position_angles_ptr + position * dim + local_channel,
+        mask=mask,
+        other=0.0,
+    ).to(tl.float32)
+    freq = tl.where(channel < dim, batch_freq, time_freq)
+    angle = -timestamp.to(tl.float32) * 6.283185307179586
+    phase = freq * angle
+    tl.store(cos_ptr + offsets, tl.cos(phase), mask=mask)
+    tl.store(sin_ptr + offsets, tl.sin(phase), mask=mask)
+
+
+class ModelNew(nn.Module):
+    def __init__(self, dim: int = 64, max_seq_len: int = 256, base: float = 10000.0):
+        super().__init__()
+        self.max_seq_len = max_seq_len
+        inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2, dtype=torch.float) / dim))
+        self.register_buffer("inv_freq", inv_freq)
+        positions = torch.arange(max_seq_len, dtype=torch.float)
+        positions_norm = positions / max_seq_len * (2 * math.pi)
+        position_angles = positions_norm.unsqueeze(-1) * inv_freq
+        self.register_buffer("position_angles", position_angles.repeat_interleave(2, dim=-1))
+
+    def forward(self, timestamps: torch.Tensor, seq_len: int):
+        batch_size = timestamps.shape[0]
+        dim = self.position_angles.shape[1]
+        shape = (batch_size, seq_len, 2 * dim)
+        cos = torch.empty(shape, device=timestamps.device, dtype=torch.float32)
+        sin = torch.empty_like(cos)
+        total = cos.numel()
+        block = 256
+        _music_rope_kernel[(triton.cdiv(total, block),)](
+            timestamps,
+            self.inv_freq,
+            self.position_angles,
+            cos,
+            sin,
+            seq_len,
+            dim,
+            self.max_seq_len,
+            total,
+            BLOCK=block,
+            num_warps=4,
+        )
+        return cos, sin
+
+
+def get_inputs():
+    batch_size, seq_len = 4, 32
+    timestamps = torch.rand(batch_size, seq_len, device="cuda")
+    return [timestamps, seq_len]
+
+
+def get_init_inputs():
+    return [64, 256, 10000.0]
+
