@@ -76,6 +76,7 @@ def triton_linear(
     bias: torch.Tensor | None,
     *,
     log1p_relu: bool = False,
+    config: dict[str, int],
 ) -> torch.Tensor:
     """Compute a 2-D nn.Linear with a portable tiled Triton kernel."""
     if x.ndim != 2 or weight.ndim != 2:
@@ -83,9 +84,9 @@ def triton_linear(
     m_size, k_size = x.shape
     n_size = weight.shape[0]
     out = torch.empty((m_size, n_size), device=x.device, dtype=x.dtype)
-    block_m = 16
-    block_n = 64
-    block_k = 32
+    block_m = int(config["block_m"])
+    block_n = int(config["block_n"])
+    block_k = int(config["block_k"])
     grid = (triton.cdiv(m_size, block_m), triton.cdiv(n_size, block_n))
     # Triton needs a valid pointer even when the constexpr disables the load.
     bias_arg = bias if bias is not None else weight
@@ -108,7 +109,7 @@ def triton_linear(
         BLOCK_M=block_m,
         BLOCK_N=block_n,
         BLOCK_K=block_k,
-        num_warps=4,
+        num_warps=int(config["num_warps"]),
     )
     return out
 
@@ -142,6 +143,8 @@ def gelu_layer_norm(
     weight: torch.Tensor,
     bias: torch.Tensor,
     eps: float,
+    *,
+    config: dict[str, int],
 ) -> torch.Tensor:
     rows, width = x.shape
     out = torch.empty_like(x)
@@ -154,7 +157,9 @@ def gelu_layer_norm(
         width,
         eps,
         BLOCK=block,
-        num_warps=8 if block >= 2048 else 4,
+        num_warps=int(
+            config["num_warps_large"] if block >= 2048 else config["num_warps_small"]
+        ),
     )
     return out
 
@@ -166,7 +171,8 @@ def _attention_kernel(
     v_ptr,
     out_ptr,
     batch_size: tl.constexpr,
-    seq_len: tl.constexpr,
+    q_len: tl.constexpr,
+    kv_len: tl.constexpr,
     num_heads: tl.constexpr,
     head_dim: tl.constexpr,
     scale,
@@ -196,7 +202,7 @@ def _attention_kernel(
     d = tl.arange(0, BLOCK_D)
     n = tl.arange(0, BLOCK_SEQ)
     d_mask = d < head_dim
-    n_mask = n < seq_len
+    n_mask = n < kv_len
 
     q = tl.load(
         q_ptr
@@ -253,19 +259,28 @@ def triton_attention(
     *,
     scale: float,
     causal: bool,
+    config: dict[str, int],
 ) -> torch.Tensor:
     """Attention for contiguous logical [B, S, H, D] tensors/views."""
-    batch_size, seq_len, num_heads, head_dim = query.shape
+    batch_size, q_len, num_heads, head_dim = query.shape
+    kv_len = key.shape[1]
+    if key.shape[0] != batch_size or value.shape[0] != batch_size:
+        raise ValueError("query/key/value batch sizes must match")
+    if key.shape != value.shape:
+        raise ValueError("key and value shapes must match")
+    if key.shape[2] != num_heads or key.shape[3] != head_dim:
+        raise ValueError("query/key/value heads and head dimensions must match")
     out = torch.empty_like(query)
-    block_seq = triton.next_power_of_2(seq_len)
+    block_seq = triton.next_power_of_2(kv_len)
     block_d = triton.next_power_of_2(head_dim)
-    _attention_kernel[(seq_len, num_heads, batch_size)](
+    _attention_kernel[(q_len, num_heads, batch_size)](
         query,
         key,
         value,
         out,
         batch_size,
-        seq_len,
+        q_len,
+        kv_len,
         num_heads,
         head_dim,
         scale,
@@ -288,6 +303,6 @@ def triton_attention(
         CAUSAL=causal,
         BLOCK_SEQ=block_seq,
         BLOCK_D=block_d,
-        num_warps=8,
+        num_warps=int(config["num_warps"]),
     )
     return out

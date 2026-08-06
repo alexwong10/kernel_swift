@@ -1,5 +1,4 @@
-# Generic development baseline. Vendor images may replace these with their
-# corresponding PyTorch/Triton forks (torch_npu, torch_mlu, torch_gcu, etc.).
-torch>=2.1
-triton>=2.1
-
+# Host-only offline validation environment.  This is deliberately not an
+# accelerator runtime specification; vendor environments are locked under
+# environments/<chip_key>/manifest.json after they are observed.
+numpy==2.3.5

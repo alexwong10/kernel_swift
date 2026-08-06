@@ -6,6 +6,8 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
+from profile_runtime import get_operator_profile
+
 
 @triton.jit
 def _center_kernel(
@@ -86,6 +88,10 @@ class ModelNew(nn.Module):
         self.n_sample = n_sample
         self.s_trans = s_trans
         self.centre_only = centre_only
+        profile = get_operator_profile("09_centre_random_augmentation")
+        if profile["variant"] != "framework_rng_triton_geometry":
+            raise ValueError(f"unsupported CentreRandomAugmentation variant: {profile['variant']}")
+        self._ks_config = profile["config"]
 
     def forward(
         self, x_input_coords: torch.Tensor, mask: Optional[torch.Tensor] = None
@@ -102,7 +108,7 @@ class ModelNew(nn.Module):
             HAS_MASK=mask is not None,
             EPS=1e-12,
             BLOCK=block_atoms,
-            num_warps=4,
+            num_warps=int(self._ks_config["center_num_warps"]),
         )
 
         if self.centre_only:
@@ -122,7 +128,7 @@ class ModelNew(nn.Module):
             dtype=x_input_coords.dtype,
         )
         total = out.numel()
-        block = 256
+        block = int(self._ks_config["augment_block"])
         _augment_kernel[(triton.cdiv(total, block),)](
             x_input_coords,
             mask_arg,
@@ -137,7 +143,7 @@ class ModelNew(nn.Module):
             CENTRE_ONLY=self.centre_only,
             total=total,
             BLOCK=block,
-            num_warps=4,
+            num_warps=int(self._ks_config["augment_num_warps"]),
         )
         return out
 

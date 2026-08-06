@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "moore_threads_ph100",
+  "vendor": "摩尔线程",
+  "model": "PH100",
+  "resource": "resource_path_unresolved",
+  "runtime": {
+    "family": "unconfirmed",
+    "torch_device": null,
+    "accelerator_module": null,
+    "bootstrap_imports": [],
+    "source_device_aliases": [],
+    "evaluator_support": "unconfirmed",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

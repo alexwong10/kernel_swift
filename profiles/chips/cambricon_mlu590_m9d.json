@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "cambricon_mlu590_m9d",
+  "vendor": "寒武纪",
+  "model": "MLU590-M9D",
+  "resource": "kernelswift_option_observed",
+  "runtime": {
+    "family": "torch_mlu",
+    "torch_device": "mlu",
+    "accelerator_module": "mlu",
+    "bootstrap_imports": ["torch_mlu"],
+    "source_device_aliases": ["cuda"],
+    "evaluator_support": "native_after_case_preparation",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

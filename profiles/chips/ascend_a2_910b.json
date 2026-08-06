@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "ascend_a2_910b",
+  "vendor": "华为昇腾",
+  "model": "A2（910B）",
+  "resource": "kernelswift_option_observed",
+  "runtime": {
+    "family": "torch_npu",
+    "torch_device": "npu",
+    "accelerator_module": "npu",
+    "bootstrap_imports": ["torch_npu"],
+    "source_device_aliases": ["cuda"],
+    "evaluator_support": "native_after_case_preparation",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

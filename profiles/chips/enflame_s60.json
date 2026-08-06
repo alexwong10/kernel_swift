@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "enflame_s60",
+  "vendor": "燧原",
+  "model": "S60",
+  "resource": "kernelswift_option_observed",
+  "runtime": {
+    "family": "torch_gcu",
+    "torch_device": "gcu",
+    "accelerator_module": "gcu",
+    "bootstrap_imports": ["torch_gcu"],
+    "source_device_aliases": ["cuda"],
+    "evaluator_support": "native_after_case_preparation",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

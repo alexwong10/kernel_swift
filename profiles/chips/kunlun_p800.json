@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "kunlun_p800",
+  "vendor": "昆仑芯",
+  "model": "P800",
+  "resource": "self_hosted_required",
+  "runtime": {
+    "family": "unconfirmed",
+    "torch_device": null,
+    "accelerator_module": null,
+    "bootstrap_imports": [],
+    "source_device_aliases": [],
+    "evaluator_support": "unconfirmed",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

@@ -3,6 +3,8 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
+from profile_runtime import get_operator_profile
+
 
 @triton.jit
 def _mhc_post_kernel(
@@ -50,6 +52,10 @@ def _mhc_post_kernel(
 class ModelNew(nn.Module):
     def __init__(self):
         super().__init__()
+        profile = get_operator_profile("07_mhc_post")
+        if profile["variant"] != "flat_elementwise":
+            raise ValueError(f"unsupported mhc_post variant: {profile['variant']}")
+        self._ks_config = profile["config"]
 
     def forward(
         self,
@@ -62,7 +68,7 @@ class ModelNew(nn.Module):
         mhc_mult = residual.shape[-2]
         out = torch.empty_like(residual)
         total = out.numel()
-        block = 256
+        block = int(self._ks_config["block"])
         _mhc_post_kernel[(triton.cdiv(total, block),)](
             x,
             residual,
@@ -73,7 +79,7 @@ class ModelNew(nn.Module):
             mhc_mult,
             total,
             BLOCK=block,
-            num_warps=4,
+            num_warps=int(self._ks_config["num_warps"]),
         )
         return out
 
@@ -89,4 +95,3 @@ def get_inputs():
 
 def get_init_inputs():
     return []
-

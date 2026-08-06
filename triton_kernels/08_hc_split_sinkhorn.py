@@ -3,6 +3,8 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
+from profile_runtime import get_operator_profile
+
 
 @triton.jit
 def _split_sinkhorn_kernel(
@@ -48,12 +50,117 @@ def _split_sinkhorn_kernel(
     tl.store(comb_ptr + row * HC * HC + matrix_offsets, tl.reshape(matrix, (HC * HC,)))
 
 
+@triton.jit
+def _split_sinkhorn_hc4_scalar_kernel(
+    mixes_ptr,
+    scale_ptr,
+    base_ptr,
+    pre_ptr,
+    post_ptr,
+    comb_ptr,
+    EPS: tl.constexpr,
+    ITERS: tl.constexpr,
+):
+    """HC=4 fallback without dynamic reshape or two-dimensional reductions."""
+    row = tl.program_id(0)
+    row_base = row * 24
+    scale0 = tl.load(scale_ptr).to(tl.float32)
+    scale1 = tl.load(scale_ptr + 1).to(tl.float32)
+    scale2 = tl.load(scale_ptr + 2).to(tl.float32)
+
+    for lane in range(4):
+        pre_x = tl.load(mixes_ptr + row_base + lane).to(tl.float32)
+        post_x = tl.load(mixes_ptr + row_base + 4 + lane).to(tl.float32)
+        pre_base = tl.load(base_ptr + lane).to(tl.float32)
+        post_base = tl.load(base_ptr + 4 + lane).to(tl.float32)
+        tl.store(pre_ptr + row * 4 + lane, tl.sigmoid(pre_x * scale0 + pre_base) + EPS)
+        tl.store(post_ptr + row * 4 + lane, 2.0 * tl.sigmoid(post_x * scale1 + post_base))
+
+    m00 = tl.load(mixes_ptr + row_base + 8).to(tl.float32) * scale2 + tl.load(base_ptr + 8).to(tl.float32)
+    m01 = tl.load(mixes_ptr + row_base + 9).to(tl.float32) * scale2 + tl.load(base_ptr + 9).to(tl.float32)
+    m02 = tl.load(mixes_ptr + row_base + 10).to(tl.float32) * scale2 + tl.load(base_ptr + 10).to(tl.float32)
+    m03 = tl.load(mixes_ptr + row_base + 11).to(tl.float32) * scale2 + tl.load(base_ptr + 11).to(tl.float32)
+    m10 = tl.load(mixes_ptr + row_base + 12).to(tl.float32) * scale2 + tl.load(base_ptr + 12).to(tl.float32)
+    m11 = tl.load(mixes_ptr + row_base + 13).to(tl.float32) * scale2 + tl.load(base_ptr + 13).to(tl.float32)
+    m12 = tl.load(mixes_ptr + row_base + 14).to(tl.float32) * scale2 + tl.load(base_ptr + 14).to(tl.float32)
+    m13 = tl.load(mixes_ptr + row_base + 15).to(tl.float32) * scale2 + tl.load(base_ptr + 15).to(tl.float32)
+    m20 = tl.load(mixes_ptr + row_base + 16).to(tl.float32) * scale2 + tl.load(base_ptr + 16).to(tl.float32)
+    m21 = tl.load(mixes_ptr + row_base + 17).to(tl.float32) * scale2 + tl.load(base_ptr + 17).to(tl.float32)
+    m22 = tl.load(mixes_ptr + row_base + 18).to(tl.float32) * scale2 + tl.load(base_ptr + 18).to(tl.float32)
+    m23 = tl.load(mixes_ptr + row_base + 19).to(tl.float32) * scale2 + tl.load(base_ptr + 19).to(tl.float32)
+    m30 = tl.load(mixes_ptr + row_base + 20).to(tl.float32) * scale2 + tl.load(base_ptr + 20).to(tl.float32)
+    m31 = tl.load(mixes_ptr + row_base + 21).to(tl.float32) * scale2 + tl.load(base_ptr + 21).to(tl.float32)
+    m32 = tl.load(mixes_ptr + row_base + 22).to(tl.float32) * scale2 + tl.load(base_ptr + 22).to(tl.float32)
+    m33 = tl.load(mixes_ptr + row_base + 23).to(tl.float32) * scale2 + tl.load(base_ptr + 23).to(tl.float32)
+
+    max0 = tl.maximum(tl.maximum(m00, m01), tl.maximum(m02, m03))
+    max1 = tl.maximum(tl.maximum(m10, m11), tl.maximum(m12, m13))
+    max2 = tl.maximum(tl.maximum(m20, m21), tl.maximum(m22, m23))
+    max3 = tl.maximum(tl.maximum(m30, m31), tl.maximum(m32, m33))
+    m00, m01, m02, m03 = tl.exp(m00 - max0), tl.exp(m01 - max0), tl.exp(m02 - max0), tl.exp(m03 - max0)
+    m10, m11, m12, m13 = tl.exp(m10 - max1), tl.exp(m11 - max1), tl.exp(m12 - max1), tl.exp(m13 - max1)
+    m20, m21, m22, m23 = tl.exp(m20 - max2), tl.exp(m21 - max2), tl.exp(m22 - max2), tl.exp(m23 - max2)
+    m30, m31, m32, m33 = tl.exp(m30 - max3), tl.exp(m31 - max3), tl.exp(m32 - max3), tl.exp(m33 - max3)
+
+    row0, row1 = m00 + m01 + m02 + m03, m10 + m11 + m12 + m13
+    row2, row3 = m20 + m21 + m22 + m23, m30 + m31 + m32 + m33
+    m00, m01, m02, m03 = m00 / row0 + EPS, m01 / row0 + EPS, m02 / row0 + EPS, m03 / row0 + EPS
+    m10, m11, m12, m13 = m10 / row1 + EPS, m11 / row1 + EPS, m12 / row1 + EPS, m13 / row1 + EPS
+    m20, m21, m22, m23 = m20 / row2 + EPS, m21 / row2 + EPS, m22 / row2 + EPS, m23 / row2 + EPS
+    m30, m31, m32, m33 = m30 / row3 + EPS, m31 / row3 + EPS, m32 / row3 + EPS, m33 / row3 + EPS
+    col0, col1 = m00 + m10 + m20 + m30 + EPS, m01 + m11 + m21 + m31 + EPS
+    col2, col3 = m02 + m12 + m22 + m32 + EPS, m03 + m13 + m23 + m33 + EPS
+    m00, m10, m20, m30 = m00 / col0, m10 / col0, m20 / col0, m30 / col0
+    m01, m11, m21, m31 = m01 / col1, m11 / col1, m21 / col1, m31 / col1
+    m02, m12, m22, m32 = m02 / col2, m12 / col2, m22 / col2, m32 / col2
+    m03, m13, m23, m33 = m03 / col3, m13 / col3, m23 / col3, m33 / col3
+
+    for _ in range(ITERS - 1):
+        row0, row1 = m00 + m01 + m02 + m03 + EPS, m10 + m11 + m12 + m13 + EPS
+        row2, row3 = m20 + m21 + m22 + m23 + EPS, m30 + m31 + m32 + m33 + EPS
+        m00, m01, m02, m03 = m00 / row0, m01 / row0, m02 / row0, m03 / row0
+        m10, m11, m12, m13 = m10 / row1, m11 / row1, m12 / row1, m13 / row1
+        m20, m21, m22, m23 = m20 / row2, m21 / row2, m22 / row2, m23 / row2
+        m30, m31, m32, m33 = m30 / row3, m31 / row3, m32 / row3, m33 / row3
+        col0, col1 = m00 + m10 + m20 + m30 + EPS, m01 + m11 + m21 + m31 + EPS
+        col2, col3 = m02 + m12 + m22 + m32 + EPS, m03 + m13 + m23 + m33 + EPS
+        m00, m10, m20, m30 = m00 / col0, m10 / col0, m20 / col0, m30 / col0
+        m01, m11, m21, m31 = m01 / col1, m11 / col1, m21 / col1, m31 / col1
+        m02, m12, m22, m32 = m02 / col2, m12 / col2, m22 / col2, m32 / col2
+        m03, m13, m23, m33 = m03 / col3, m13 / col3, m23 / col3, m33 / col3
+
+    output = row * 16
+    tl.store(comb_ptr + output + 0, m00)
+    tl.store(comb_ptr + output + 1, m01)
+    tl.store(comb_ptr + output + 2, m02)
+    tl.store(comb_ptr + output + 3, m03)
+    tl.store(comb_ptr + output + 4, m10)
+    tl.store(comb_ptr + output + 5, m11)
+    tl.store(comb_ptr + output + 6, m12)
+    tl.store(comb_ptr + output + 7, m13)
+    tl.store(comb_ptr + output + 8, m20)
+    tl.store(comb_ptr + output + 9, m21)
+    tl.store(comb_ptr + output + 10, m22)
+    tl.store(comb_ptr + output + 11, m23)
+    tl.store(comb_ptr + output + 12, m30)
+    tl.store(comb_ptr + output + 13, m31)
+    tl.store(comb_ptr + output + 14, m32)
+    tl.store(comb_ptr + output + 15, m33)
+
+
 class ModelNew(nn.Module):
     def __init__(self, hc_mult: int = 4, sinkhorn_iters: int = 20, eps: float = 1e-6):
         super().__init__()
         self.hc_mult = hc_mult
         self.sinkhorn_iters = sinkhorn_iters
         self.eps = eps
+        profile = get_operator_profile("08_hc_split_sinkhorn")
+        if profile["variant"] not in {"matrix_reduce", "scalar_hc4"}:
+            raise ValueError(f"unsupported Sinkhorn variant: {profile['variant']}")
+        if profile["variant"] == "scalar_hc4" and hc_mult != 4:
+            raise ValueError("scalar_hc4 Sinkhorn variant requires hc_mult == 4")
+        self._ks_variant = profile["variant"]
+        self._ks_num_warps = int(profile["config"]["num_warps"])
 
     def forward(self, mixes: torch.Tensor, hc_scale: torch.Tensor, hc_base: torch.Tensor):
         batch, seq_len, _ = mixes.shape
@@ -63,19 +170,32 @@ class ModelNew(nn.Module):
         comb = torch.empty(
             (batch, seq_len, hc, hc), device=mixes.device, dtype=torch.float32
         )
-        _split_sinkhorn_kernel[(batch * seq_len,)](
-            mixes,
-            hc_scale,
-            hc_base,
-            pre,
-            post,
-            comb,
-            batch * seq_len,
-            HC=hc,
-            EPS=self.eps,
-            ITERS=self.sinkhorn_iters,
-            num_warps=1,
-        )
+        if self._ks_variant == "scalar_hc4":
+            _split_sinkhorn_hc4_scalar_kernel[(batch * seq_len,)](
+                mixes,
+                hc_scale,
+                hc_base,
+                pre,
+                post,
+                comb,
+                EPS=self.eps,
+                ITERS=self.sinkhorn_iters,
+                num_warps=self._ks_num_warps,
+            )
+        else:
+            _split_sinkhorn_kernel[(batch * seq_len,)](
+                mixes,
+                hc_scale,
+                hc_base,
+                pre,
+                post,
+                comb,
+                batch * seq_len,
+                HC=hc,
+                EPS=self.eps,
+                ITERS=self.sinkhorn_iters,
+                num_warps=self._ks_num_warps,
+            )
         return pre, post, comb
 
 
@@ -91,4 +211,3 @@ def get_inputs():
     hc_scale = torch.tensor([0.5, 0.25, 1.0], dtype=torch.float32)
     hc_base = torch.randn(mix_hc, dtype=torch.float32) * 0.1
     return [mixes, hc_scale, hc_base]
-

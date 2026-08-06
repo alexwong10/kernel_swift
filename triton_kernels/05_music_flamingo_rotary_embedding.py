@@ -5,6 +5,8 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
+from profile_runtime import get_operator_profile
+
 
 @triton.jit
 def _music_rope_kernel(
@@ -50,6 +52,10 @@ class ModelNew(nn.Module):
         positions_norm = positions / max_seq_len * (2 * math.pi)
         position_angles = positions_norm.unsqueeze(-1) * inv_freq
         self.register_buffer("position_angles", position_angles.repeat_interleave(2, dim=-1))
+        profile = get_operator_profile("05_music_flamingo_rotary_embedding")
+        if profile["variant"] != "fused_elementwise":
+            raise ValueError(f"unsupported MusicFlamingo variant: {profile['variant']}")
+        self._ks_config = profile["config"]
 
     def forward(self, timestamps: torch.Tensor, seq_len: int):
         batch_size = timestamps.shape[0]
@@ -58,7 +64,7 @@ class ModelNew(nn.Module):
         cos = torch.empty(shape, device=timestamps.device, dtype=torch.float32)
         sin = torch.empty_like(cos)
         total = cos.numel()
-        block = 256
+        block = int(self._ks_config["block"])
         _music_rope_kernel[(triton.cdiv(total, block),)](
             timestamps,
             self.inv_freq,
@@ -70,7 +76,7 @@ class ModelNew(nn.Module):
             self.max_seq_len,
             total,
             BLOCK=block,
-            num_warps=4,
+            num_warps=int(self._ks_config["num_warps"]),
         )
         return cos, sin
 
@@ -83,4 +89,3 @@ def get_inputs():
 
 def get_init_inputs():
     return [64, 256, 10000.0]
-

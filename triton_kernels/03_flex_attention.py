@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 from common import triton_attention
+from profile_runtime import get_operator_profile
 
 
 class ModelNew(nn.Module):
@@ -17,6 +18,10 @@ class ModelNew(nn.Module):
         self.head_size = head_size
         self.scale = scale or 1.0 / (head_size**0.5)
         self.num_kv_heads = num_kv_heads
+        profile = get_operator_profile("03_flex_attention")
+        if profile["variant"] != "full_row_diagnostic":
+            raise ValueError(f"unsupported FlexAttention variant: {profile['variant']}")
+        self._ks_attention_config = profile["config"]
 
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor):
         num_tokens = query.shape[0]
@@ -33,7 +38,14 @@ class ModelNew(nn.Module):
         q = query.unsqueeze(0)
         k = key.unsqueeze(0)
         v = value.unsqueeze(0)
-        out = triton_attention(q, k, v, scale=self.scale, causal=True)
+        out = triton_attention(
+            q,
+            k,
+            v,
+            scale=self.scale,
+            causal=True,
+            config=self._ks_attention_config,
+        )
         return out.reshape(num_tokens, self.num_heads * self.head_size)
 
 
@@ -48,4 +60,3 @@ def get_inputs():
 
 def get_init_inputs():
     return [8, 64, None, 8]
-

@@ -1,6 +1,7 @@
 {
-  "schema_version": 1,
-  "meaning": "passed requires an attached official auto_bench.py log from that exact chip",
+  "schema_version": 2,
+  "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+  "meaning": "passed requires a parsed official PASS and an immutable run bundle from that exact task and chip",
   "tasks": [
     "01_grouped_topk",
     "02_fused_moe",
@@ -14,30 +15,62 @@
     "10_head_compute_mix_bwd"
   ],
   "chips": {
-    "ascend_a2_910b": {"vendor": "华为昇腾", "model": "A2（910B）", "resource": "KernelSwift", "status": "not_run"},
-    "metax_c500": {"vendor": "沐曦", "model": "C500", "resource": "KernelSwift", "status": "platform_tasks_active"},
-    "iluvatar_bi150": {"vendor": "天数智芯", "model": "BI150", "resource": "KernelSwift", "status": "not_run"},
-    "enflame_s60": {"vendor": "燧原", "model": "S60", "resource": "KernelSwift", "status": "not_run"},
-    "thead_810e": {"vendor": "平头哥", "model": "真武810E", "resource": "KernelSwift", "status": "not_run"},
-    "cambricon_mlu590_m9d": {"vendor": "寒武纪", "model": "MLU590-M9D", "resource": "KernelSwift", "status": "not_run"},
-    "hygon_bw1000": {"vendor": "海光", "model": "BW1000", "resource": "KernelSwift", "status": "not_run"},
-    "moore_threads_ph100": {"vendor": "摩尔线程", "model": "PH100", "resource": "to_confirm_or_self_hosted", "status": "not_run"},
-    "kunlun_p800": {"vendor": "昆仑芯", "model": "P800", "resource": "self_hosted_required", "status": "not_run"},
-    "biren_br106m": {"vendor": "壁仞", "model": "BR106M", "resource": "self_hosted_required", "status": "not_run"}
+    "ascend_a2_910b": {"vendor": "华为昇腾", "model": "A2（910B）", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "metax_c500": {"vendor": "沐曦", "model": "C500", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "iluvatar_bi150": {"vendor": "天数智芯", "model": "BI150", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "enflame_s60": {"vendor": "燧原", "model": "S60", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "thead_810e": {"vendor": "平头哥", "model": "真武810E", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "cambricon_mlu590_m9d": {"vendor": "寒武纪", "model": "MLU590-M9D", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "hygon_bw1000": {"vendor": "海光", "model": "BW1000", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
+    "moore_threads_ph100": {"vendor": "摩尔线程", "model": "PH100", "resource_status": "resource_path_unresolved", "verification_status": "unverified"},
+    "kunlun_p800": {"vendor": "昆仑芯", "model": "P800", "resource_status": "self_hosted_required", "verification_status": "unverified"},
+    "biren_br106m": {"vendor": "壁仞", "model": "BR106M", "resource_status": "self_hosted_required", "verification_status": "unverified"}
   },
   "matrix": {
+    "ascend_a2_910b": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
     "metax_c500": {
-      "observed_at": "2026-08-05T23:03:00+08:00",
-      "01_grouped_topk": {"status": "infrastructure_failed", "detail": "reference code exec HTTP read timeout after 600s"},
-      "02_fused_moe": {"status": "failed_detail_pending"},
-      "03_flex_attention": {"status": "failed_detail_pending"},
-      "04_splade_sparse_pooler": {"status": "running"},
-      "05_music_flamingo_rotary_embedding": {"status": "queued"},
-      "06_mm_encoder_attention": {"status": "queued"},
-      "07_mhc_post": {"status": "queued"},
-      "08_hc_split_sinkhorn": {"status": "queued"},
-      "09_centre_random_augmentation": {"status": "queued"},
-      "10_head_compute_mix_bwd": {"status": "queued"}
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "iluvatar_bi150": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "enflame_s60": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "thead_810e": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "cambricon_mlu590_m9d": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "hygon_bw1000": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "moore_threads_ph100": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "kunlun_p800": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+    },
+    "biren_br106m": {
+      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
     }
-  }
+  },
+  "legacy_observations": [
+    {
+      "chip_key": "metax_c500",
+      "task_key": "01_grouped_topk",
+      "observed_at": "2026-08-05T23:03:00+08:00",
+      "status": "infrastructure_failed",
+      "detail": "Reference execution HTTP read timeout after 600 seconds; no candidate-kernel verdict and no archived run bundle."
+    },
+    {
+      "chip_key": "metax_c500",
+      "observed_at": "2026-08-05T23:03:00+08:00",
+      "status": "non_evidence_platform_state",
+      "detail": "Other task states were observed in the platform UI without complete logs; all corresponding matrix cells remain not_run."
+    }
+  ]
 }

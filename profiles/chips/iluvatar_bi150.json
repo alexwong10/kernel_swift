@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "iluvatar_bi150",
+  "vendor": "天数智芯",
+  "model": "BI150",
+  "resource": "kernelswift_option_observed",
+  "runtime": {
+    "family": "unconfirmed",
+    "torch_device": null,
+    "accelerator_module": null,
+    "bootstrap_imports": [],
+    "source_device_aliases": [],
+    "evaluator_support": "unconfirmed",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

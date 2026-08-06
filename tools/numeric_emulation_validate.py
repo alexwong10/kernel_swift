@@ -42,12 +42,14 @@ def grouped_topk() -> None:
         remaining_groups = grouped[token].max(axis=1).copy()
         eligible = np.zeros(32, dtype=bool)
         for _ in range(2):
-            group = int(np.argmax(remaining_groups))
+            best_group_score = remaining_groups.max()
+            group = int(np.flatnonzero(remaining_groups == best_group_score)[0])
             eligible |= np.arange(32) // 8 == group
             remaining_groups[group] = -np.inf
         remaining = np.where(eligible, scores[token], -np.inf)
         for rank in range(4):
-            expert = int(np.argmax(remaining))
+            best_expert_score = remaining.max()
+            expert = int(np.flatnonzero(remaining == best_expert_score)[0])
             got_ids[token, rank] = expert
             got_weights[token, rank] = remaining[expert]
             remaining[expert] = -np.inf
@@ -55,6 +57,26 @@ def grouped_topk() -> None:
     if not np.array_equal(ref_ids, got_ids):
         raise AssertionError("GroupedTopk ids differ")
     assert_close("01_grouped_topk", ref_weights, got_weights)
+
+    # The manual fallback deliberately uses lowest-id tie breaking.  This is an
+    # internal invariant only; each target runtime must still compare it with
+    # that runtime's torch.topk before selecting the fallback profile.
+    tied = np.ones(16, dtype=np.float32)
+    remaining_groups = np.full(4, 4.0, dtype=np.float32)
+    eligible = np.zeros(16, dtype=bool)
+    for _ in range(2):
+        group = int(np.flatnonzero(remaining_groups == remaining_groups.max())[0])
+        eligible |= np.arange(16) // 4 == group
+        remaining_groups[group] = -np.inf
+    candidates = np.where(eligible, tied, -np.inf)
+    tied_ids = []
+    for _ in range(4):
+        expert = int(np.flatnonzero(candidates == candidates.max())[0])
+        tied_ids.append(expert)
+        candidates[expert] = -np.inf
+    if tied_ids != [0, 1, 2, 3]:
+        raise AssertionError(f"manual GroupedTopk tie order differs: {tied_ids}")
+    print("PASS", "01_grouped_topk_manual_tie_order")
 
 
 def fused_moe() -> None:
@@ -91,16 +113,20 @@ def fused_moe() -> None:
 
 
 def attention() -> None:
-    batch, seq, heads, dim = 2, 7, 3, 5
-    q = RNG.normal(size=(batch, seq, heads, dim))
-    k = RNG.normal(size=q.shape)
-    v = RNG.normal(size=q.shape)
+    batch, heads, dim = 2, 3, 5
     scale = dim**-0.5
-    for causal, name in ((True, "03_flex_attention"), (False, "06_mm_encoder_attention")):
+    for causal, q_len, kv_len, name in (
+        (True, 7, 7, "03_flex_attention"),
+        (False, 5, 7, "06_mm_encoder_attention_q5_kv7"),
+    ):
+        q = RNG.normal(size=(batch, q_len, heads, dim))
+        k = RNG.normal(size=(batch, kv_len, heads, dim))
+        v = RNG.normal(size=k.shape)
         scores = np.einsum("bqhd,bkhd->bhqk", q, k) * scale
         if causal:
             scores = np.where(
-                np.arange(seq)[None, None, None, :] <= np.arange(seq)[None, None, :, None],
+                np.arange(kv_len)[None, None, None, :]
+                <= np.arange(q_len)[None, None, :, None],
                 scores,
                 -np.inf,
             )
@@ -109,9 +135,13 @@ def attention() -> None:
         ref = np.einsum("bhqk,bkhd->bqhd", probs, v)
         got = np.empty_like(ref)
         for b in range(batch):
-            for query in range(seq):
+            for query in range(q_len):
                 for head in range(heads):
-                    valid = np.arange(seq) <= query if causal else np.ones(seq, dtype=bool)
+                    valid = (
+                        np.arange(kv_len) <= query
+                        if causal
+                        else np.ones(kv_len, dtype=bool)
+                    )
                     row = (k[b, :, head] @ q[b, query, head]) * scale
                     row = np.where(valid, row, -np.inf)
                     p = np.exp(row - row.max())
@@ -255,16 +285,24 @@ def head_mix_bwd() -> None:
     ref_base = grad_z.sum(axis=(0, 1))
     ref_scale = np.array([(grad_z * x).sum()], dtype=np.float32)
     got_input = np.empty_like(x)
-    got_base = np.empty_like(base)
-    partial_scale = np.empty_like(base)
+    block_rows = 3
+    num_chunks = (x.shape[0] * x.shape[1] + block_rows - 1) // block_rows
+    partial_base = np.zeros((num_chunks, 4), dtype=np.float32)
+    partial_scale = np.zeros((num_chunks, 4), dtype=np.float32)
     rows = x.reshape(-1, 4)
     grads = grad_out.reshape(-1, 4)
-    for mix in range(4):
-        sig = 1.0 / (1.0 + np.exp(-(rows[:, mix] * scale[0] + base[mix])))
-        gz = grads[:, mix] * sig * (1 - sig)
-        got_input.reshape(-1, 4)[:, mix] = gz * scale[0]
-        got_base[mix] = gz.sum()
-        partial_scale[mix] = (gz * rows[:, mix]).sum()
+    for chunk in range(num_chunks):
+        begin = chunk * block_rows
+        end = min(begin + block_rows, rows.shape[0])
+        for mix in range(4):
+            sig = 1.0 / (
+                1.0 + np.exp(-(rows[begin:end, mix] * scale[0] + base[mix]))
+            )
+            gz = grads[begin:end, mix] * sig * (1 - sig)
+            got_input.reshape(-1, 4)[begin:end, mix] = gz * scale[0]
+            partial_base[chunk, mix] = gz.sum()
+            partial_scale[chunk, mix] = (gz * rows[begin:end, mix]).sum()
+    got_base = partial_base.sum(axis=0)
     assert_close("10_head_mix_grad_input", ref_input, got_input)
     assert_close("10_head_mix_grad_base", ref_base, got_base)
     assert_close("10_head_mix_grad_scale", ref_scale, np.array([partial_scale.sum()]))

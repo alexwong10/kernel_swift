@@ -3,6 +3,8 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
+from profile_runtime import get_operator_profile
+
 
 @triton.jit
 def _moe_route_kernel(
@@ -164,6 +166,10 @@ class ModelNew(nn.Module):
         self.w2 = nn.Parameter(torch.empty(num_experts, hidden_size, intermediate_size))
         nn.init.normal_(self.w1, std=0.02)
         nn.init.normal_(self.w2, std=0.02)
+        profile = get_operator_profile("02_fused_moe")
+        if profile["variant"] != "token_rank_reference":
+            raise ValueError(f"unsupported FusedMoE variant: {profile['variant']}")
+        self._ks_config = profile["config"]
 
     def forward(self, hidden_states: torch.Tensor, router_logits: torch.Tensor):
         num_tokens = hidden_states.shape[0]
@@ -182,7 +188,7 @@ class ModelNew(nn.Module):
             TOP_K=self.top_k,
             RENORMALIZE=self.renormalize,
             BLOCK_E=block_e,
-            num_warps=1,
+            num_warps=int(self._ks_config["route_num_warps"]),
         )
         act = torch.empty(
             (num_tokens, self.top_k, self.intermediate_size),
@@ -201,7 +207,7 @@ class ModelNew(nn.Module):
             TOP_K=self.top_k,
             BLOCK_H=block_h,
             BLOCK_I=block_i,
-            num_warps=4,
+            num_warps=int(self._ks_config["gate_up_num_warps"]),
         )
         contributions = torch.empty(
             (num_tokens, self.top_k, self.hidden_size),
@@ -219,11 +225,11 @@ class ModelNew(nn.Module):
             TOP_K=self.top_k,
             BLOCK_H=block_h,
             BLOCK_I=block_i,
-            num_warps=4,
+            num_warps=int(self._ks_config["down_num_warps"]),
         )
         out = torch.empty_like(hidden_states)
         total = out.numel()
-        block = 256
+        block = int(self._ks_config["reduce_block"])
         _moe_reduce_kernel[(triton.cdiv(total, block),)](
             contributions,
             out,
@@ -231,7 +237,7 @@ class ModelNew(nn.Module):
             self.hidden_size,
             TOP_K=self.top_k,
             BLOCK=block,
-            num_warps=4,
+            num_warps=int(self._ks_config["reduce_num_warps"]),
         )
         return out
 
@@ -244,4 +250,3 @@ def get_inputs():
 
 def get_init_inputs():
     return [8, 2, 128, 64]
-

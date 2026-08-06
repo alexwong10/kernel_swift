@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KernelSwift chip environment manifest",
+  "type": "object",
+  "required": ["schema_version", "chip_key", "status", "source", "image", "python", "packages", "driver", "compiler"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "chip_key": {"type": "string"},
+    "status": {"enum": ["unverified", "verified"]},
+    "source": {"type": ["string", "null"]},
+    "image": {
+      "type": "object",
+      "required": ["identifier", "digest"],
+      "properties": {
+        "identifier": {"type": ["string", "null"]},
+        "digest": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "python": {"type": ["string", "null"]},
+    "packages": {"type": "object", "additionalProperties": {"type": "string"}},
+    "driver": {"type": ["string", "null"]},
+    "compiler": {"type": ["string", "null"]},
+    "captured_at_utc": {"type": ["string", "null"]},
+    "evidence": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

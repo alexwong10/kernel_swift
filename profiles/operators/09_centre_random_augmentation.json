@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "task_key": "09_centre_random_augmentation",
+  "default": {"variant": "framework_rng_triton_geometry", "config": {"center_num_warps": 4, "augment_block": 256, "augment_num_warps": 4}},
+  "chips": {
+    "ascend_a2_910b": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {}},
+    "iluvatar_bi150": {"verified": false, "overrides": {}},
+    "enflame_s60": {"verified": false, "overrides": {}},
+    "thead_810e": {"verified": false, "overrides": {}},
+    "cambricon_mlu590_m9d": {"verified": false, "overrides": {}},
+    "hygon_bw1000": {"verified": false, "overrides": {}},
+    "moore_threads_ph100": {"verified": false, "overrides": {}},
+    "kunlun_p800": {"verified": false, "overrides": {}},
+    "biren_br106m": {"verified": false, "overrides": {}}
+  }
+}

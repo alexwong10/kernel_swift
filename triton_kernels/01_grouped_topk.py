@@ -3,6 +3,8 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
+from profile_runtime import get_operator_profile
+
 
 @triton.jit
 def _grouped_topk_kernel(
@@ -59,6 +61,86 @@ def _grouped_topk_kernel(
     tl.store(weights_ptr + token * TOPK + out_k, selected)
 
 
+@triton.jit
+def _grouped_topk_manual_kernel(
+    logits_ptr,
+    weights_ptr,
+    ids_ptr,
+    num_experts: tl.constexpr,
+    experts_per_group: tl.constexpr,
+    num_groups: tl.constexpr,
+    TOPK: tl.constexpr,
+    TOPK_GROUPS: tl.constexpr,
+    SOFTMAX: tl.constexpr,
+    RENORMALIZE: tl.constexpr,
+    ROUTED_SCALE: tl.constexpr,
+    BLOCK: tl.constexpr,
+    GROUP_BLOCK: tl.constexpr,
+):
+    """Portable selection path without tl.reshape or tl.argmax.
+
+    Equal scores are resolved toward the lowest group/expert id.  Target runs
+    still need to compare that behavior with the vendor's torch.topk tie order.
+    """
+    token = tl.program_id(0)
+    expert = tl.arange(0, BLOCK)
+    expert_mask = expert < num_experts
+    logits = tl.load(
+        logits_ptr + token * num_experts + expert,
+        mask=expert_mask,
+        other=-float("inf"),
+    ).to(tl.float32)
+    if SOFTMAX:
+        shifted = logits - tl.max(logits, axis=0)
+        scores = tl.exp(shifted)
+        scores = scores / tl.sum(tl.where(expert_mask, scores, 0.0), axis=0)
+    else:
+        scores = tl.sigmoid(logits)
+
+    group_lane = tl.arange(0, GROUP_BLOCK)
+    group_scores = tl.full((GROUP_BLOCK,), -float("inf"), tl.float32)
+    for group in range(num_groups):
+        in_group = (expert >= group * experts_per_group) & (
+            expert < (group + 1) * experts_per_group
+        )
+        score = tl.max(tl.where(expert_mask & in_group, scores, -float("inf")), axis=0)
+        group_scores = tl.where(group_lane == group, score, group_scores)
+
+    selected_groups = tl.zeros((GROUP_BLOCK,), tl.int1)
+    eligible = tl.zeros((BLOCK,), tl.int1)
+    for _ in range(TOPK_GROUPS):
+        candidates = tl.where(
+            (group_lane < num_groups) & ~selected_groups,
+            group_scores,
+            -float("inf"),
+        )
+        best_score = tl.max(candidates, axis=0)
+        group_id = tl.min(
+            tl.where(candidates == best_score, group_lane, GROUP_BLOCK), axis=0
+        )
+        selected_groups = selected_groups | (group_lane == group_id)
+        eligible = eligible | ((expert // experts_per_group) == group_id)
+
+    candidates = tl.where(expert_mask & eligible, scores, -float("inf"))
+    weight_sum = 0.0
+    for rank in range(TOPK):
+        weight = tl.max(candidates, axis=0)
+        expert_id = tl.min(
+            tl.where(candidates == weight, expert, BLOCK), axis=0
+        )
+        tl.store(weights_ptr + token * TOPK + rank, weight)
+        tl.store(ids_ptr + token * TOPK + rank, expert_id)
+        weight_sum += weight
+        candidates = tl.where(expert == expert_id, -float("inf"), candidates)
+
+    output_rank = tl.arange(0, TOPK)
+    selected = tl.load(weights_ptr + token * TOPK + output_rank)
+    if RENORMALIZE:
+        selected = selected / weight_sum
+    selected *= ROUTED_SCALE
+    tl.store(weights_ptr + token * TOPK + output_rank, selected)
+
+
 class ModelNew(nn.Module):
     def __init__(
         self,
@@ -76,6 +158,11 @@ class ModelNew(nn.Module):
         self.topk_group = topk_group
         self.scoring_func = scoring_func
         self.routed_scaling_factor = routed_scaling_factor
+        profile = get_operator_profile("01_grouped_topk")
+        if profile["variant"] not in {"vector_reduce", "manual_stable"}:
+            raise ValueError(f"unsupported GroupedTopk variant: {profile['variant']}")
+        self._ks_variant = profile["variant"]
+        self._ks_num_warps = int(profile["config"]["num_warps"])
 
     def forward(self, hidden_states: torch.Tensor, gating_output: torch.Tensor):
         num_tokens, num_experts = gating_output.shape
@@ -87,20 +174,30 @@ class ModelNew(nn.Module):
             (num_tokens, self.topk), device=gating_output.device, dtype=torch.int32
         )
         block = triton.next_power_of_2(num_experts)
-        _grouped_topk_kernel[(num_tokens,)](
-            gating_output,
-            weights,
-            ids,
-            num_experts,
-            experts_per_group,
-            self.num_expert_group,
+        kernel = (
+            _grouped_topk_manual_kernel
+            if self._ks_variant == "manual_stable"
+            else _grouped_topk_kernel
+        )
+        launch = dict(
             TOPK=self.topk,
             TOPK_GROUPS=self.topk_group,
             SOFTMAX=self.scoring_func == "softmax",
             RENORMALIZE=self.renormalize,
             ROUTED_SCALE=self.routed_scaling_factor,
             BLOCK=block,
-            num_warps=4,
+            num_warps=self._ks_num_warps,
+        )
+        if self._ks_variant == "manual_stable":
+            launch["GROUP_BLOCK"] = triton.next_power_of_2(self.num_expert_group)
+        kernel[(num_tokens,)](
+            gating_output,
+            weights,
+            ids,
+            num_experts,
+            experts_per_group,
+            self.num_expert_group,
+            **launch,
         )
         return weights, ids
 
@@ -114,4 +211,3 @@ def get_inputs():
 
 def get_init_inputs():
     return [8, True, 8, 4]
-
