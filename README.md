@@ -1,6 +1,7 @@
 # KernelSwift 2026 Triton 赛道提交集
 
-本目录包含 `赛道说明.md` 中全部 10 道题的参考实现、便携 Triton `ModelNew` 实现、批量评测脚本，以及 10 款计分芯片的覆盖台账。
+本目录包含 `赛道说明.md` 中全部 10 道题的参考实现、公共 Triton `ModelNew` 原型、基础批量
+评测脚本，以及 10 款计分芯片的覆盖台账。当前代码尚未形成厂商 profile 或单文件提交产物。
 
 ## 目录
 
@@ -71,10 +72,17 @@ python tools/run_all.py \
 ## 跨芯片原则
 
 - 核心内核只使用常见 Triton 原语，避免 CUDA 专属 API、CUDA Graph 和硬编码 warp-size。
-- `get_inputs()` 中的 `"cuda"` 与参考题保持一致；官方评测器会按当前后端重写到 `npu`、`mlu`、`gcu` 等设备。
-- 默认块大小优先保证 10 个厂商编译器可接受；每张卡的最优 `num_warps`、tile 和 stage 数应在该卡实测后单独调节。
+- 当前官方 `auto_bench.py` 只会把源码中的 `"npu"` 重写为检测到的目标设备；目标为
+  GCU 时还会额外执行 `"cuda" -> "gcu"`。它不会在纯 NPU/MLU 环境自动执行
+  `"cuda" -> "npu"/"mlu"`。因此包含硬编码 `"cuda"` 的 reference 和优化文件，在昇腾、
+  寒武纪及其他非 CUDA 兼容运行时上必须先通过经审计的设备适配步骤，不能假定评测器会处理。
+- 当前 tile、`num_warps` 和 stage 仍是源码中的公共硬编码，未经 10 个厂商编译器验证；目标方案
+  是用稳定 `chip_key` 选择经实测的 runtime/operator profile 和单文件 artifact。
 - 昆仑芯 P800、壁仞 BR106M 需自备资源；KernelSwift 当前下拉框也未显示摩尔线程 PH100。
 
 ## 当前验证边界
 
-工作区所在 Windows 主机没有 PyTorch、Triton 或加速卡，因此这里只能完成源码、接口和语法静态检查。任何“已覆盖芯片”声明必须以目标芯片上的官方 `auto_bench.py` 日志为证，不能用静态检查替代。
+工作区所在 Windows 主机没有 PyTorch、Triton 或加速卡。当前证据仅包括接口静态检查、已有
+NumPy 公式检查和 Python 编译；NumPy 检查不覆盖 SPLADE 完整数值链。没有任何芯片的官方
+PASS，实际覆盖为 **0/100**。任何“已覆盖芯片”声明必须以目标芯片上的固定版本官方评测日志
+和完整环境证据为准。
