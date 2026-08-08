@@ -6,7 +6,19 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
-from profile_runtime import get_operator_profile
+
+_KS_PROFILE = {
+    "task_key": "09_centre_random_augmentation",
+    "chip_key": "portable_default",
+    "variant": "framework_rng_triton_geometry",
+    "config": {"center_num_warps": 4, "augment_block": 256, "augment_num_warps": 4},
+}
+
+
+def get_operator_profile(task_key, chip_key=None):
+    if task_key != _KS_PROFILE["task_key"]:
+        raise ValueError(f"unsupported task profile: {task_key}")
+    return _KS_PROFILE
 
 
 @triton.jit

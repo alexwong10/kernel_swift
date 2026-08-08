@@ -3,7 +3,27 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
-from profile_runtime import get_operator_profile
+
+# Portable default for direct KernelSwift upload.  The artifact builder bakes
+# the selected chip profile over this definition for formal cell runs.
+_KS_PROFILE = {
+    "task_key": "02_fused_moe",
+    "chip_key": "portable_default",
+    "variant": "token_rank_reference",
+    "config": {
+        "route_num_warps": 1,
+        "gate_up_num_warps": 4,
+        "down_num_warps": 4,
+        "reduce_block": 256,
+        "reduce_num_warps": 4,
+    },
+}
+
+
+def get_operator_profile(task_key, chip_key=None):
+    if task_key != _KS_PROFILE["task_key"]:
+        raise ValueError(f"unsupported task profile: {task_key}")
+    return _KS_PROFILE
 
 
 @triton.jit

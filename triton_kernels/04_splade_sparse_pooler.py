@@ -4,7 +4,29 @@ import triton
 import triton.language as tl
 
 from common import gelu_layer_norm, triton_linear
-from profile_runtime import get_operator_profile
+
+_KS_PROFILE = {
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "portable_default",
+    "variant": "staged_portable",
+    "config": {
+        "linear_block_m": 16,
+        "linear_block_n": 64,
+        "linear_block_k": 32,
+        "linear_num_warps": 4,
+        "layer_norm_num_warps_small": 4,
+        "layer_norm_num_warps_large": 8,
+        "pool_block_t": 32,
+        "pool_block_v": 128,
+        "pool_num_warps": 4,
+    },
+}
+
+
+def get_operator_profile(task_key, chip_key=None):
+    if task_key != _KS_PROFILE["task_key"]:
+        raise ValueError(f"unsupported task profile: {task_key}")
+    return _KS_PROFILE
 
 
 @triton.jit

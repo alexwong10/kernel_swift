@@ -3,7 +3,19 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
-from profile_runtime import get_operator_profile
+
+_KS_PROFILE = {
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "portable_default",
+    "variant": "chunked_deterministic",
+    "config": {"block_rows": 256, "num_warps": 4, "reduce_num_warps": 1},
+}
+
+
+def get_operator_profile(task_key, chip_key=None):
+    if task_key != _KS_PROFILE["task_key"]:
+        raise ValueError(f"unsupported task profile: {task_key}")
+    return _KS_PROFILE
 
 
 @triton.jit

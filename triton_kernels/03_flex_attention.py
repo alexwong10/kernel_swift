@@ -2,7 +2,19 @@ import torch
 import torch.nn as nn
 
 from common import triton_attention
-from profile_runtime import get_operator_profile
+
+_KS_PROFILE = {
+    "task_key": "03_flex_attention",
+    "chip_key": "portable_default",
+    "variant": "full_row_diagnostic",
+    "config": {"num_warps": 8},
+}
+
+
+def get_operator_profile(task_key, chip_key=None):
+    if task_key != _KS_PROFILE["task_key"]:
+        raise ValueError(f"unsupported task profile: {task_key}")
+    return _KS_PROFILE
 
 
 class ModelNew(nn.Module):

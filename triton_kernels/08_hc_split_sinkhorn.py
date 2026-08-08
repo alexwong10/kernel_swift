@@ -3,7 +3,19 @@ import torch.nn as nn
 import triton
 import triton.language as tl
 
-from profile_runtime import get_operator_profile
+
+_KS_PROFILE = {
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "portable_default",
+    "variant": "scalar_hc4",
+    "config": {"num_warps": 1},
+}
+
+
+def get_operator_profile(task_key, chip_key=None):
+    if task_key != _KS_PROFILE["task_key"]:
+        raise ValueError(f"unsupported task profile: {task_key}")
+    return _KS_PROFILE
 
 
 @triton.jit

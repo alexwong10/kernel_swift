@@ -48,6 +48,13 @@ def _split_module(tree: ast.Module) -> tuple[list[ast.stmt], list[ast.stmt]]:
     imports: list[ast.stmt] = []
     body: list[ast.stmt] = []
     for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name == "get_operator_profile":
+            continue
+        if isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id == "_KS_PROFILE"
+            for target in node.targets
+        ):
+            continue
         if isinstance(node, ast.ImportFrom) and node.module in {"common", "profile_runtime"}:
             continue
         if isinstance(node, ast.ImportFrom) and node.module == "__future__":

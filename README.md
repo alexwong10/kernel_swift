@@ -58,11 +58,15 @@ python -m compileall -q reference triton_kernels tools
 单独构建某个提交文件：
 
 ```bash
-python tools/build_submission.py \
+python tools/build_upload.py \
   --chip ascend_a2_910b \
   --task 05_music_flamingo_rotary_embedding \
-  --output-root artifacts
+  --output-root upload_artifacts
 ```
+
+将命令输出的 `upload_artifacts/<chip_key>/<task_key>.py` 直接上传到 KernelSwift 新建任务页；
+不要上传 `triton_kernels/<task>.py`，也不要只上传 `common.py` 或 `profile_runtime.py`。生成文件会
+内联 03/04/06 所需的 `common.py`，并固化芯片 profile，不依赖仓库目录、环境变量或本地模块。
 
 ## 厂商环境评测
 
