@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "hygon_bw1000",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "d19b37945c436d0eebea0b9b649673cffa239a3e2106c08abb0f9b094b2546e2",
+  "artifact_sha256": "4f09c49d3cd8a579d69c48640141ab1aa73b3311659169612721fab409269d8d",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
     "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",

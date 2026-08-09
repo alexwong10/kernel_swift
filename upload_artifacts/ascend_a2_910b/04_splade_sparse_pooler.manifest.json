@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\ascend_a2_910b\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "06654f4135abc3db7ebec9023369a9da73b593756b07431b6d8038aebf1ea15a",
+  "artifact_sha256": "5b99ccf506eac4e2be119289e5c3d881dafbb94a30a1403a27daa0aaed835e4f",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",

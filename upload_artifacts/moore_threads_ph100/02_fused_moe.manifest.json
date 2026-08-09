@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\moore_threads_ph100\\02_fused_moe.py",
-  "artifact_sha256": "0698c7dd2f6a39f3dd8fcf605c591d2b24ea2b318fb9c58a9fff192d0ce87079",
+  "artifact_sha256": "c1aa5b8f1b219647b4e3455eea669bac9a55886f8d54c34e50be8c8e4a8189a2",
   "sources": {
     "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
     "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",

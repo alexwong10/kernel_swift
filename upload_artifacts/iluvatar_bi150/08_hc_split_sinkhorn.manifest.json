@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\iluvatar_bi150\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "dc8146bfaac076e3a10136beb17581a2ac636ec019c607510d2c2a55c7a1a76f",
+  "artifact_sha256": "8617e9c8655fbf463fd9be0c003d899b59006abde200d57988be5bde9fdb9f1e",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",

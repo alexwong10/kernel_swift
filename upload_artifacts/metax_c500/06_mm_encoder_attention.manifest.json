@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "metax_c500",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\metax_c500\\06_mm_encoder_attention.py",
-  "artifact_sha256": "e85e38bd81bedfbf81a0b5dc904fba0d7f8508533d8ef68e7893143895eba3b3",
+  "artifact_sha256": "e24f794ebc6008b4ebcd79d6bc9ab659df80fbc875ac0dc947bb7775c79e02e3",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "8871b76bed4f5c6037ae37b8a5361cf97834a16f9ab10fd8cd37b77b1536730d",
     "profiles/operators/06_mm_encoder_attention.json": "7400424a8e42b02668e69323bc5dac32a262d3614df25626a03cadc7d04073b9",

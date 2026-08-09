@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\iluvatar_bi150\\03_flex_attention.py",
-  "artifact_sha256": "9fe02ab50855b0da51bf811598a462b853428c585bd5d98071d6d66f6cc05ef9",
+  "artifact_sha256": "57ffba81ff95f06423a396c05bf8acc79102504df5a29f6f033629e02a77fb29",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

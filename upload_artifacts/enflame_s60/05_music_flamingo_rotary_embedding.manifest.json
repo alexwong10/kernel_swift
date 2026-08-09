@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "enflame_s60",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\enflame_s60\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "b38f12ed410d8ed7cdca63913d218db207df59e2ff602ce384b6fdb900baa9ea",
+  "artifact_sha256": "c4be83c0357a8ff404c5c9043ecc45b2f01aad244a8e6abda7a93dec5b1f3a44",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "enflame_s60",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\enflame_s60\\01_grouped_topk.py",
-  "artifact_sha256": "f71ec995582da0a866c6cb0a36809f88e8d08ef824650ca74026a09ab5fca76c",
+  "artifact_sha256": "d804ee6645345ef394209be9226b54430154767d235e5853af9f25d75bcb3f6e",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
     "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",

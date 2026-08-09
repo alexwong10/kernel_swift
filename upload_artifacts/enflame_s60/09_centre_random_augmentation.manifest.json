@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "enflame_s60",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
-  "artifact_sha256": "b013ff6c898182c41a0d1e03b6252bb8038e8f2a6dcaf9f09a495c6f539608a9",
+  "artifact_sha256": "bd755faa90615b4921e8286346c086b8c2216e1d2dd955c86b65618d1f3567d3",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",

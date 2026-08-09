@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "468ed5aebd4d6512ceccbdfe1ffe4ff66a56c6e9e30b3f5a830cae24ba1bf8c6",
+  "artifact_sha256": "ee75c1b0a7d36bb1ebeb7b34725867fcd0d5df91e9d2f932b69871846b813c59",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",

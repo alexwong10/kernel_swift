@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "thead_810e",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\thead_810e\\03_flex_attention.py",
-  "artifact_sha256": "dc1a96ef403cb5395a530a1da9ac4c7d08d83888e721449f141bc3dee430f270",
+  "artifact_sha256": "4dd7a324ddb36579e9b00a3795dd81b0d023793a4d30efba72da54ae0f0ee000",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

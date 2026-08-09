@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\03_flex_attention.py",
-  "artifact_sha256": "ada97735b9fe548c8c28f1bec65f04d07b7af40abea5fe2c176223c8178fda90",
+  "artifact_sha256": "5d16b5ef947dd753b08562938fe5a85ceda91bf3e5d249d0b6c85b5b016b52c2",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

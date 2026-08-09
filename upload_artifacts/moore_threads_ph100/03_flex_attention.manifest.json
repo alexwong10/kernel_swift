@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\moore_threads_ph100\\03_flex_attention.py",
-  "artifact_sha256": "b6663489610ce137ff12b6698f824fe235fd100a496b744cb813f5a0fc222370",
+  "artifact_sha256": "56dfd9cd091abe312d4a79dfddf1df40f54c4d70a34e225376973fc2465cf392",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\iluvatar_bi150\\01_grouped_topk.py",
-  "artifact_sha256": "491a405d0c93ced2a500c84c7a2261aad806ec6d83eebdbd67c71cb475bed29a",
+  "artifact_sha256": "11ccb8ca56b1f30ba04f7ba3a80cd98b811496aba032a0613be36113c1279200",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
     "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",

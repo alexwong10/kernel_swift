@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\moore_threads_ph100\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "26aff965b6503307f171301290830cce03be3efc9a499131d0829b0756cfb9be",
+  "artifact_sha256": "8fcced1286276f294c16bac90c8595a4b36282eeea784b5ae17c01a47cc2c3ab",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\ascend_a2_910b\\06_mm_encoder_attention.py",
-  "artifact_sha256": "bb378beca9f2fe83d9b03a4d2438d04bc13ecd4d475d60471fc0a3b91aef7d5a",
+  "artifact_sha256": "a06845598a542c45d4286f2b79c55006f54ee8d41f15f1fd43b488b12afc58ea",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "8871b76bed4f5c6037ae37b8a5361cf97834a16f9ab10fd8cd37b77b1536730d",
     "profiles/operators/06_mm_encoder_attention.json": "7400424a8e42b02668e69323bc5dac32a262d3614df25626a03cadc7d04073b9",

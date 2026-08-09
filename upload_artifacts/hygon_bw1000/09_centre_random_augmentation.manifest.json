@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 3,
+  "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "hygon_bw1000",
-  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
+  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
   "artifact": "upload_artifacts\\hygon_bw1000\\09_centre_random_augmentation.py",
-  "artifact_sha256": "6af67dc5024bfdc3f37b64eab7d90813e61cf01553376eab4bddabf4ba37b71a",
+  "artifact_sha256": "3235c4f85e5ff5c846f6ad034f4b2a2801a4e3ed103b2dd556a767715ea6d2a6",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
