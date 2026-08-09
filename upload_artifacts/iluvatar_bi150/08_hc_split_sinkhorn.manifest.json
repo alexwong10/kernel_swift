@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\iluvatar_bi150\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "58dafd18358cf8e4c843a7e11360a94f78eb72756f56715eb7ed5caf4389ade5",
+  "artifact_sha256": "dc8146bfaac076e3a10136beb17581a2ac636ec019c607510d2c2a55c7a1a76f",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
@@ -49,5 +49,11 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
   }
 }

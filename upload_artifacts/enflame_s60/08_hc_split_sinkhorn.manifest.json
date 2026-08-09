@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "enflame_s60",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\enflame_s60\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "0e894182be41d838c66ef786787858bace6672164dc84ef0022fcba42d20b17f",
+  "artifact_sha256": "d1d525434dfab3556728ce547291af35249cc41f45449406fdb7b793dad7e263",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
@@ -53,5 +53,13 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "gcu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [],
+    "status": "no_matches"
   }
 }

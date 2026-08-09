@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "01_grouped_topk",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\moore_threads_ph100\\01_grouped_topk.py",
-  "artifact_sha256": "fa86f7a886b1440ab1685c41c8fdda8d088d4b8d97cf41dcca30694e5442f0ad",
+  "artifact_sha256": "0ea6f80dbe431f37d7b24eebd2908b100098f422d577f5f6375b2b16965e9d3e",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
     "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
@@ -49,5 +49,11 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
   }
 }

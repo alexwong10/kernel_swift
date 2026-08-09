@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "f751be8ed4bc70bb8af24dd8f2868095d285ba45196a8c1c495a0bc762b3744a",
+  "artifact_sha256": "468ed5aebd4d6512ceccbdfe1ffe4ff66a56c6e9e30b3f5a830cae24ba1bf8c6",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
@@ -46,5 +46,20 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "mlu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 98,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

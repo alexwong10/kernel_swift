@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "thead_810e",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\thead_810e\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "a0040ae7f628f2acc2a7856e63aee5b86559c1128d25109d444d4a85295a2658",
+  "artifact_sha256": "32532c60d203a286ac691c72ce63e9646871296bec3cc44ab29fe980b73ef2c9",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
@@ -50,5 +50,11 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
   }
 }

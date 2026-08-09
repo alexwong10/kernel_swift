@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "03_flex_attention",
   "chip_key": "thead_810e",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\thead_810e\\03_flex_attention.py",
-  "artifact_sha256": "190fd119a8544d4fffea16a0e8094e537cf5440c969ba45c70b6b8506b6a80d1",
+  "artifact_sha256": "dc1a96ef403cb5395a530a1da9ac4c7d08d83888e721449f141bc3dee430f270",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",
@@ -42,5 +42,11 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
   }
 }

@@ -53,7 +53,9 @@ python -m compileall -q reference triton_kernels tools
 [`离线审查记录.md`](./离线审查记录.md)。
 
 `validate_artifacts.py` 在临时目录生成并校验全部 100 份芯片固化单文件：接口一致、无
-`common/profile_runtime` 本地导入、profile 身份和 SHA-256 一致。它同样不等价于目标编译器验证。
+`common/profile_runtime` 本地导入、`Model` 上传入口、profile 身份和 SHA-256 一致。构建器还会
+对已确认 runtime profile 的芯片改写输入构造中的设备别名，并把替换记录写入 manifest；这同样
+不等价于目标编译器验证。
 
 单独构建某个提交文件：
 
@@ -105,8 +107,9 @@ speedup 后才原子更新 `coverage.json`。
 - 核心内核只使用常见 Triton 原语，避免 CUDA 专属 API、CUDA Graph 和硬编码 warp-size。
 - 当前官方 `auto_bench.py` 只会把源码中的 `"npu"` 重写为检测到的目标设备；目标为
   GCU 时还会额外执行 `"cuda" -> "gcu"`。它不会在纯 NPU/MLU 环境自动执行
-  `"cuda" -> "npu"/"mlu"`。因此包含硬编码 `"cuda"` 的 reference 和优化文件，在昇腾、
-  寒武纪及其他非 CUDA 兼容运行时上必须先通过经审计的设备适配步骤，不能假定评测器会处理。
+  `"cuda" -> "npu"/"mlu"`。`tools/build_submission.py` 对已有 runtime profile 的芯片
+  在生成上传文件时执行同样的显式设备改写，并记录 `device_adaptation`；runtime 未确认的
+  芯片保留原始字面量并拒绝伪造适配结论。
 - variant、tile 和 `num_warps` 已由稳定 `chip_key` 对应的 operator profile 选择并固化进单文件；
   当前配置尚未经 10 个厂商编译器验证，不能把“可选择”写成“已适配”。
 - 昆仑芯 P800、壁仞 BR106M 需自备资源；KernelSwift 当前下拉框也未显示摩尔线程 PH100。

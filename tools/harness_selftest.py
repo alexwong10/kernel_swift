@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from coverage_lib import EVALUATOR_COMMIT, load_coverage, update_cell, validate_coverage  # noqa: E402
+from build_submission import build_submission  # noqa: E402
 from prepare_case import prepare_source  # noqa: E402
 from profile_runtime import CHIP_KEYS, TASK_KEYS  # noqa: E402
 from run_all import failure_status, parse_metrics  # noqa: E402
@@ -67,6 +68,34 @@ def case_preparation_scope() -> None:
         contexts = {item["context"] for item in manifest["replacements"]}
         if contexts != {"device_assignment", "device_keyword", "torch.device"}:
             raise AssertionError(f"unexpected rewrite contexts: {contexts}")
+
+
+def upload_builder_scope() -> None:
+    with tempfile.TemporaryDirectory(prefix=".upload-builder-", dir=ROOT) as temp:
+        temp_root = Path(temp)
+        ascend_path = temp_root / "ascend.py"
+        ascend_manifest = build_submission(
+            "02_fused_moe", "ascend_a2_910b", ascend_path
+        )
+        ascend_source = ascend_path.read_text(encoding="utf-8")
+        if "import torch_npu" not in ascend_source or not any(
+            token in ascend_source for token in ("device='npu'", 'device="npu"')
+        ):
+            raise AssertionError("known runtime device adaptation missing")
+        if ascend_manifest["device_adaptation"]["status"] != "rewritten":
+            raise AssertionError("known runtime adaptation was not recorded")
+
+        metax_path = temp_root / "metax.py"
+        metax_manifest = build_submission(
+            "02_fused_moe", "metax_c500", metax_path
+        )
+        metax_source = metax_path.read_text(encoding="utf-8")
+        if not any(
+            token in metax_source for token in ("device='cuda'", 'device="cuda"')
+        ):
+            raise AssertionError("unconfirmed runtime must not guess a device")
+        if metax_manifest["device_adaptation"]["status"] != "unconfirmed_runtime":
+            raise AssertionError("unconfirmed runtime status was not recorded")
 
 
 def coverage_updates() -> None:
@@ -127,6 +156,7 @@ def coverage_updates() -> None:
 def main() -> None:
     evaluator_parser()
     case_preparation_scope()
+    upload_builder_scope()
     coverage_updates()
     print("PASS harness self-test")
 

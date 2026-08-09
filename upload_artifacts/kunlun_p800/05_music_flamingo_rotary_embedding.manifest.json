@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "kunlun_p800",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\kunlun_p800\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "6a3ea0687c78fa4eeee4f9db7a033324b65193e06402b50c1f56adba8a4d6970",
+  "artifact_sha256": "83f2eb6e0e4b3a543a71aabd04f0b41ce3896711d8816748a2b837e7b15326bc",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
@@ -42,5 +42,11 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
   }
 }

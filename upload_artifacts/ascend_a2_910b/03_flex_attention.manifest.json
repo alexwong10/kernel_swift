@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "03_flex_attention",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\ascend_a2_910b\\03_flex_attention.py",
-  "artifact_sha256": "067f0d91424e267a6400e24c5f67fe81184bbc1a8cdb5523ac314620fc4227df",
+  "artifact_sha256": "a7ebdcb7eac18dd97c771074801e534b02c7f724c059189957442784af688203",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",
@@ -46,5 +46,32 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "npu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 67,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 69,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

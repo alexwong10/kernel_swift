@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\06_mm_encoder_attention.py",
-  "artifact_sha256": "c6a5272cda9e3dbe307a790923c0c8ece5b160dfdea63d12ebb6eaf75808bab1",
+  "artifact_sha256": "1cbb78c8019cf6a79b62dc2563d7d9e1141fef322b9c1715e4c3ee15bf1b3fe8",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "8871b76bed4f5c6037ae37b8a5361cf97834a16f9ab10fd8cd37b77b1536730d",
     "profiles/operators/06_mm_encoder_attention.json": "7400424a8e42b02668e69323bc5dac32a262d3614df25626a03cadc7d04073b9",
@@ -46,5 +46,32 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "mlu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 66,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 67,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

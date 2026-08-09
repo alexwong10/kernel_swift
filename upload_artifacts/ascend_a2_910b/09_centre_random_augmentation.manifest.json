@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
-  "artifact_sha256": "b0922f12bd29a4fcb357998001f74f75d5d07db7d57b08aada8889148bcc7acd",
+  "artifact_sha256": "de68b816880226ce8937375c27605a14458668068daa76db4ee6d20abbbeb963",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
@@ -47,5 +47,26 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "npu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 165,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 166,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "thead_810e",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\thead_810e\\06_mm_encoder_attention.py",
-  "artifact_sha256": "903c8deb813f9170e50c58f0c9be313313f7f49d761ad7c1415b88cfb65dd580",
+  "artifact_sha256": "4765c031a0f9c48c8f15d8f89db5af96d8b73f786aabe7ee463439d0ee0ef6c3",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "8871b76bed4f5c6037ae37b8a5361cf97834a16f9ab10fd8cd37b77b1536730d",
     "profiles/operators/06_mm_encoder_attention.json": "7400424a8e42b02668e69323bc5dac32a262d3614df25626a03cadc7d04073b9",
@@ -42,5 +42,11 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
   }
 }

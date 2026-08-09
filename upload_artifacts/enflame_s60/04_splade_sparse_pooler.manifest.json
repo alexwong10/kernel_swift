@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "enflame_s60",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "b5d459f741e6045b9bdbc03dbfc1363ad7db362929e9e1fa2f20e905def3793c",
+  "artifact_sha256": "993265245854410386bb3bd5a65d86b6633ef6000a0f210c84dc465fb0ec2dce",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
@@ -54,5 +54,26 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "gcu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 151,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 152,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

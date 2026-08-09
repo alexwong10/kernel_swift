@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\09_centre_random_augmentation.py",
-  "artifact_sha256": "fce16b01a416160f39e30cb645263dae84a2c4e48c5b79f3278454841d50d295",
+  "artifact_sha256": "85440e43e89f13ea0fb289e4d1bdcd682fa6216c445a4c0900f25c8f1fe2c2b7",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
@@ -47,5 +47,26 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "mlu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 165,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 166,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

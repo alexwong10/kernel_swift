@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 2,
+  "builder_version": 3,
   "task_key": "03_flex_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
+  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
   "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
-  "artifact_sha256": "2cf31376e15809edb04284f71769f07f08c3a5f4ff0d07d4c6bb16104b498ef5",
+  "artifact_sha256": "eb2c459d05f7c2dec3eca2299dc1f41335b45b00ddc16f32d7ea41ba892af8c4",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",
@@ -46,5 +46,32 @@
       "dtypes": {},
       "primitives": {}
     }
+  },
+  "device_adaptation": {
+    "target_device": "gcu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 67,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 69,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }
