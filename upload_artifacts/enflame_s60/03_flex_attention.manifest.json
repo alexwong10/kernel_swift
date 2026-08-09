@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
-  "artifact_sha256": "a4618df5373c2d5e6f301530c8fe4732e650db9e8a4e2e9b7c0769ecd5d58934",
+  "artifact_sha256": "2cf31376e15809edb04284f71769f07f08c3a5f4ff0d07d4c6bb16104b498ef5",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

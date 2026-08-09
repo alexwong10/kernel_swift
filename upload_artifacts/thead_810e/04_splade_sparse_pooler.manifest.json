@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "thead_810e",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\thead_810e\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "9eaa43080c8af304a38c5e0700846fe7aff0a089b27223b6808b35cc820f1af6",
+  "artifact_sha256": "a0040ae7f628f2acc2a7856e63aee5b86559c1128d25109d444d4a85295a2658",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",

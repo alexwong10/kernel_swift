@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\moore_threads_ph100\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "637095b8ce0aee6062442b0d54022e8d9c82c266959397dfe04579651100e9e4",
+  "artifact_sha256": "014f8876fa854c8cc24ed4c72b77a5777e87708dcd5a974c5150f0234d7f1c8b",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",

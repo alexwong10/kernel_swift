@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "02_fused_moe",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\ascend_a2_910b\\02_fused_moe.py",
-  "artifact_sha256": "11237db377af82f919b169c110b4bfbf8be5724c330f9dc01782f433fa9e2b4c",
+  "artifact_sha256": "2b2b6f8ad904357626678e1d7a54a693ad20ace00a42ccbe1807f7c7083ded94",
   "sources": {
     "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
     "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",

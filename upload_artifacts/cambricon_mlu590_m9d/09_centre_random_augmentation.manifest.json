@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\09_centre_random_augmentation.py",
-  "artifact_sha256": "0cecf3a6806a393b4838fbda6156a3abfbbaeb2abe32469bec17803115d58527",
+  "artifact_sha256": "fce16b01a416160f39e30cb645263dae84a2c4e48c5b79f3278454841d50d295",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",

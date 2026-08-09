@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "01_grouped_topk",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\ascend_a2_910b\\01_grouped_topk.py",
-  "artifact_sha256": "1b38ea3e2831dfd191de4a1906dd8771b152a12704c5c842ea3e15af576b155a",
+  "artifact_sha256": "6f30f240de287910b77e2c4bc61242b6ea4acf9514004c1d2ad5c7d182828e29",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
     "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",

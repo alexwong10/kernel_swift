@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
-  "artifact_sha256": "96f8aae1de7f7ef86c72ccaedd209e65561176de98feea136d5fee074d0b779b",
+  "artifact_sha256": "b0922f12bd29a4fcb357998001f74f75d5d07db7d57b08aada8889148bcc7acd",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",

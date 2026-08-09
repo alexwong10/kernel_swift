@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "thead_810e",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\thead_810e\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "b7919b565d9e986cc23f8308b0afc1ca71dc2586ac03ca5cac192e15614f975d",
+  "artifact_sha256": "b851b60c6f79839585d29e8567a94218b207bbf6bea43e52b1714eb960ffca10",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",

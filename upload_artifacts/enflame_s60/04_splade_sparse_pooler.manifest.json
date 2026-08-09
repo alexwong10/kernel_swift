@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "enflame_s60",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "4c67e81d725d3d688ecdbf80010d60d96fda37f65ec6c6f29440c798c7cf57ad",
+  "artifact_sha256": "b5d459f741e6045b9bdbc03dbfc1363ad7db362929e9e1fa2f20e905def3793c",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",

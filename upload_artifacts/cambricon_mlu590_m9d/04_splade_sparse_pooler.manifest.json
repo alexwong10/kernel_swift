@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "ea68395d390588879bc72de15a2acc8e80255449a8b2e4de43bac1e1071e4c96",
+  "artifact_sha256": "5f33ee5404b12cc701b76d2a049472c37aa0697ac5cd72e7a24c2148b04ebdc7",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",

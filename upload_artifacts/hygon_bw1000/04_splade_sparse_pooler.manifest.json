@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "hygon_bw1000",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\hygon_bw1000\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "5fc77a34a216df42f87b456a5f047d2dea51bb18cc1f0177ac465d25dc83be15",
+  "artifact_sha256": "f1069a9460a26e6b4f0dd94a8c76783886ebfdd84e6c44ede4766fc26e060b78",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",

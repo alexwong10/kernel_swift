@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "hygon_bw1000",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\hygon_bw1000\\03_flex_attention.py",
-  "artifact_sha256": "5e4edbc02d163b6792796e25438dbd3b39ed55b1baf4f4ec7472fbdfa3f1b025",
+  "artifact_sha256": "db8169d8ac9b37483d46732d651e3e379d0342f4a043751aa4fdd507057b4279",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

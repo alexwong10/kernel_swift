@@ -27,7 +27,7 @@ def main() -> None:
     manifest = build_submission(args.task, args.chip, output)
     print(f"UPLOAD_FILE {output}")
     print(f"SHA256 {manifest['artifact_sha256']}")
-    print("This file is self-contained; upload it as the candidate ModelNew file.")
+    print("This file is self-contained; upload it as the candidate Model file.")
 
 
 if __name__ == "__main__":

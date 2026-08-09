@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "07_mhc_post",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\07_mhc_post.py",
-  "artifact_sha256": "befed0be2d310614f2afce72fe671189371c4d839df9ca3ef420dd27a123ddb5",
+  "artifact_sha256": "c6d0c78618dcc9674adc85e1e2d7dcf169b5a869d2976102f0a983c40fd1376f",
   "sources": {
     "triton_kernels/07_mhc_post.py": "5ddcd95081146bf53a2ade7a747980de1ccbc76d7292406342e9d551672b0537",
     "profiles/operators/07_mhc_post.json": "d0d38ad3412a6a460b4ae07394f6eb36e53a0b12c41eb76c223f2366bfbe854a",

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\iluvatar_bi150\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "2cbf3480be96c68b964866efa569d136cdceed0a03d9fa81ae7e1dcd7c1fae47",
+  "artifact_sha256": "1bee61a18458527b10ec5fdb195b1631201fdac0b95ebae33a0f11f85254bfbc",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",

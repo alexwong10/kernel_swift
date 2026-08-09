@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\iluvatar_bi150\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "3592d71d31f982e5140c29597002b09ec4a00ddbbcdef83432bac8534d9f9ac5",
+  "artifact_sha256": "9e2198e1f5d76238e19d8d631e2d7a3a0fbcffbf583f21bf61b0eae04add5919",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
     "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",

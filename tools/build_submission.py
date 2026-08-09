@@ -23,7 +23,7 @@ from profile_runtime import (  # noqa: E402
 )
 
 
-BUILDER_VERSION = 1
+BUILDER_VERSION = 2
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -85,6 +85,18 @@ def _uses_common(tree: ast.Module) -> bool:
     )
 
 
+def _rename_submission_class(module: ast.Module) -> None:
+    """KernelSwift upload entrypoint is Model; canonical sources use ModelNew."""
+    matches = [
+        node
+        for node in module.body
+        if isinstance(node, ast.ClassDef) and node.name == "ModelNew"
+    ]
+    if len(matches) != 1:
+        raise ValueError(f"expected one canonical ModelNew class, found {len(matches)}")
+    matches[0].name = "Model"
+
+
 def build_submission(
     task_key: str,
     chip_key: str,
@@ -125,6 +137,7 @@ def build_submission(
         ],
         type_ignores=[],
     )
+    _rename_submission_class(module)
     ast.fix_missing_locations(module)
     generated = ast.unparse(module) + "\n"
     header = (

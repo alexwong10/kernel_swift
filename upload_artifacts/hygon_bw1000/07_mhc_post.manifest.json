@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "07_mhc_post",
   "chip_key": "hygon_bw1000",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\hygon_bw1000\\07_mhc_post.py",
-  "artifact_sha256": "55ee46fbae6064f3be3c200ab1cd7de703ebcd59aa570bc8859d23b31798799f",
+  "artifact_sha256": "51183abbdf410441c9079e6369513d4773c92dd74e936689a220f550ff05e087",
   "sources": {
     "triton_kernels/07_mhc_post.py": "5ddcd95081146bf53a2ade7a747980de1ccbc76d7292406342e9d551672b0537",
     "profiles/operators/07_mhc_post.json": "d0d38ad3412a6a460b4ae07394f6eb36e53a0b12c41eb76c223f2366bfbe854a",

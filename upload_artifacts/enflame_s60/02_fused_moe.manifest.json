@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "02_fused_moe",
   "chip_key": "enflame_s60",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\enflame_s60\\02_fused_moe.py",
-  "artifact_sha256": "2717c2ce052aad846188f24742a60def5ab9bcb428a07ad6455aabdb0cc5ced9",
+  "artifact_sha256": "9ab75b41caf7bc1ec9845a8f1ae382329fc588175ad6b31abb3761e10f9363c8",
   "sources": {
     "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
     "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",

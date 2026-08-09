@@ -47,7 +47,7 @@ def validate_interface(reference: Path, artifact: Path) -> None:
             raise AssertionError(f"{artifact}: forbidden local import")
 
     ref_cls = find_class(ref_tree, "Model")
-    artifact_cls = find_class(artifact_tree, "ModelNew")
+    artifact_cls = find_class(artifact_tree, "Model")
     for method_name in ("__init__", "forward"):
         ref_method = find_method(ref_cls, method_name)
         artifact_method = find_method(artifact_cls, method_name)

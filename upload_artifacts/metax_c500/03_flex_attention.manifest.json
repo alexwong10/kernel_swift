@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "metax_c500",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\metax_c500\\03_flex_attention.py",
-  "artifact_sha256": "d44a1b8b996d7f66b0a7ff81978a2b890755ae2612049c5d39346bf6800fa54f",
+  "artifact_sha256": "100b499b19e0fb646b0721c0180f45158555f24a011ceacdbf8f5199013a1f24",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

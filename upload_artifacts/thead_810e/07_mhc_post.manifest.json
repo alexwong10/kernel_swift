@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "07_mhc_post",
   "chip_key": "thead_810e",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\thead_810e\\07_mhc_post.py",
-  "artifact_sha256": "279e36318d7112f48ce9ad717ab8f59d927eb0c28e3eba559a956184d8d46e41",
+  "artifact_sha256": "3e60fa3f8cfa62aaeeb6c31a029c8b9d80b3e8985dee1c0b3547fdd5da5f8bf2",
   "sources": {
     "triton_kernels/07_mhc_post.py": "5ddcd95081146bf53a2ade7a747980de1ccbc76d7292406342e9d551672b0537",
     "profiles/operators/07_mhc_post.json": "d0d38ad3412a6a460b4ae07394f6eb36e53a0b12c41eb76c223f2366bfbe854a",

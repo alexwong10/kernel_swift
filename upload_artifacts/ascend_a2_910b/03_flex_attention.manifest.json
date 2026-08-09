@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\ascend_a2_910b\\03_flex_attention.py",
-  "artifact_sha256": "45f5745d7c124c0345e8c28e5be927964ae48789324d80b911e4f04114f5043a",
+  "artifact_sha256": "067f0d91424e267a6400e24c5f67fe81184bbc1a8cdb5523ac314620fc4227df",
   "sources": {
     "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
     "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",

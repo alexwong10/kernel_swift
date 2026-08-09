@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "metax_c500",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\metax_c500\\09_centre_random_augmentation.py",
-  "artifact_sha256": "6a129706d7991573bfe81de3d9646375828106798188e40a9f0b377fce596fb9",
+  "artifact_sha256": "7c7d5c72e2a8f0da7333704b13ef9c7d6509cfd5ff890cbf0e7f44407a3346a3",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",

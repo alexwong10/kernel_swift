@@ -66,7 +66,8 @@ python tools/build_upload.py \
 
 将命令输出的 `upload_artifacts/<chip_key>/<task_key>.py` 直接上传到 KernelSwift 新建任务页；
 不要上传 `triton_kernels/<task>.py`，也不要只上传 `common.py` 或 `profile_runtime.py`。生成文件会
-内联 03/04/06 所需的 `common.py`，并固化芯片 profile，不依赖仓库目录、环境变量或本地模块。
+以 `Model` 作为平台入口类，内联 03/04/06 所需的 `common.py`，并固化芯片 profile，不依赖
+仓库目录、环境变量或本地模块。
 
 ## 厂商环境评测
 

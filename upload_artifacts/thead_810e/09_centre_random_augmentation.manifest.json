@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "thead_810e",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\thead_810e\\09_centre_random_augmentation.py",
-  "artifact_sha256": "bcdbfac2e637d91a48d8d7d754b61e66890d47117e070816461e42eba46d2028",
+  "artifact_sha256": "b8474c9ad96c5cae15d09e43e8c333746cd5d300174c48f5e4f5d361474d33c1",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
     "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",

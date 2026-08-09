@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "thead_810e",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\thead_810e\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "a27aac13fb334889510faf7b080d3dfd99bff5769337ac7e754fa5215288ea55",
+  "artifact_sha256": "b4e14283c6939b40b1e73b9676bc0d695aa9cd58d883de796cf9fc58303c16b0",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
     "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",

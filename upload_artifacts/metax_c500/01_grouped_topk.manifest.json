@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "builder_version": 1,
+  "builder_version": 2,
   "task_key": "01_grouped_topk",
   "chip_key": "metax_c500",
-  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
   "artifact": "upload_artifacts\\metax_c500\\01_grouped_topk.py",
-  "artifact_sha256": "493794caed19619b24749df6e46d014f63814cc9a382e603954371f0bc368bdb",
+  "artifact_sha256": "868f2b15401ec0d605d5c9007d60bd2e6aae80193fd3a46cdcea6fd7eb7c2803",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
     "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
