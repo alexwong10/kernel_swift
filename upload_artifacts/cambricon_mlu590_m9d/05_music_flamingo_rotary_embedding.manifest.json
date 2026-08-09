@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "f751be8ed4bc70bb8af24dd8f2868095d285ba45196a8c1c495a0bc762b3744a",
   "sources": {

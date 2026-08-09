@@ -3,11 +3,11 @@
   "builder_version": 2,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\06_mm_encoder_attention.py",
-  "artifact_sha256": "d00bdf3671268d60095e9e5d43527e678d3fbb2893e596109601d659db5ce54f",
+  "artifact_sha256": "c6a5272cda9e3dbe307a790923c0c8ece5b160dfdea63d12ebb6eaf75808bab1",
   "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "9b89941e19347c00950024bd5aeebe038e360705d9d47e8d79c2d0f7acb847dd",
+    "triton_kernels/06_mm_encoder_attention.py": "8871b76bed4f5c6037ae37b8a5361cf97834a16f9ab10fd8cd37b77b1536730d",
     "profiles/operators/06_mm_encoder_attention.json": "7400424a8e42b02668e69323bc5dac32a262d3614df25626a03cadc7d04073b9",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed",
     "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"

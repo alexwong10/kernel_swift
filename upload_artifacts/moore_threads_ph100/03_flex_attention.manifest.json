@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\moore_threads_ph100\\03_flex_attention.py",
   "artifact_sha256": "91eda127679d8b46c1756e260501fad4d7650cf50aa9482047c4cc82f716cd4d",
   "sources": {

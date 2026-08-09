@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "01_grouped_topk",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\iluvatar_bi150\\01_grouped_topk.py",
   "artifact_sha256": "5b97645157b375aca2821e5b5f1294aa88641a6e4e35f538939c676e4ffc9625",
   "sources": {

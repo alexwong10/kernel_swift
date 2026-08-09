@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\ascend_a2_910b\\03_flex_attention.py",
   "artifact_sha256": "067f0d91424e267a6400e24c5f67fe81184bbc1a8cdb5523ac314620fc4227df",
   "sources": {

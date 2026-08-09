@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\03_flex_attention.py",
   "artifact_sha256": "3719b3a5c1e150e52f5b53e40a64a89dd089d2566756d787acce5210b713daa6",
   "sources": {

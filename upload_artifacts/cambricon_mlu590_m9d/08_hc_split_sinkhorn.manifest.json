@@ -3,11 +3,11 @@
   "builder_version": 2,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "a3cb3103c4c51f797b94ce6ffba18321ff581ae682caf96ea8a2eab5b7ed7c63",
+  "artifact_sha256": "1f82f755bf1225ec00f34006828b83f5b6ecdadcb0a8331e2fd78b11bd5eabb7",
   "sources": {
-    "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
+    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },

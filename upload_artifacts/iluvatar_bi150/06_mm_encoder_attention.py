@@ -127,11 +127,15 @@ class Model(nn.Module):
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor):
         batch_size, q_len = query.shape[:2]
         kv_len = key.shape[1]
-        if self.num_heads != self.num_kv_heads:
-            raise ValueError('num_heads != num_kv_heads requires a separately verified variant')
         q = query.view(batch_size, q_len, self.num_heads, self.head_size)
         k = key.view(batch_size, kv_len, self.num_kv_heads, self.head_size)
         v = value.view(batch_size, kv_len, self.num_kv_heads, self.head_size)
+        if self.num_heads != self.num_kv_heads:
+            if self.num_heads % self.num_kv_heads != 0:
+                raise ValueError('num_heads must be divisible by num_kv_heads for grouped-query attention')
+            repeat = self.num_heads // self.num_kv_heads
+            k = k[:, :, :, None, :].expand(batch_size, kv_len, self.num_kv_heads, repeat, self.head_size).reshape(batch_size, kv_len, self.num_heads, self.head_size)
+            v = v[:, :, :, None, :].expand(batch_size, kv_len, self.num_kv_heads, repeat, self.head_size).reshape(batch_size, kv_len, self.num_heads, self.head_size)
         out = triton_attention(q, k, v, scale=self.scale, causal=False, config=self._ks_attention_config)
         return out.reshape(batch_size, q_len, self.num_heads * self.head_size)
 

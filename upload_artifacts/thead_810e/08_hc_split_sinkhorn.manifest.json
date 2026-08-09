@@ -3,11 +3,11 @@
   "builder_version": 2,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "thead_810e",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\thead_810e\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "c9f0767ee725855a253721b33562b6c50a9b2ae3888f4adee3f54ad4e57dbdec",
+  "artifact_sha256": "4ba9edc085ea051638d31612cfc0041fb0ca1ab4002584c5919a94a8de2337ff",
   "sources": {
-    "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
+    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
   },

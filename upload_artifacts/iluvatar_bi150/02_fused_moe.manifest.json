@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "02_fused_moe",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\iluvatar_bi150\\02_fused_moe.py",
   "artifact_sha256": "bda10d9e62c494a69baf404f54973eb7f6aa4efe535e9050296c1579c16523a7",
   "sources": {

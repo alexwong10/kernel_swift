@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
+  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
   "artifact": "upload_artifacts\\moore_threads_ph100\\04_splade_sparse_pooler.py",
   "artifact_sha256": "8e36da0542ef566e5a1fc5208d55162487c5e4c2dbc68a11e972033f9793d4e9",
   "sources": {
