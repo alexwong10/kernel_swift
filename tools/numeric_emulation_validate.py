@@ -112,6 +112,96 @@ def fused_moe() -> None:
     assert_close("02_fused_moe", ref, got)
 
 
+def splade_sparse_pooler() -> None:
+    """Exercise the complete SPLADE pipeline with the tiled layout formulas.
+
+    The host does not have a PyTorch/Triton runtime, so this mirrors the
+    reference with NumPy and separately evaluates the same staged operations
+    used by ``triton_kernels/04_splade_sparse_pooler.py``.  Small dimensions
+    keep this check fast while still covering padded GEMM tiles and uneven
+    sequence segments.
+    """
+    batch, hidden, vocab = 3, 7, 11
+    seq_lens = np.array([2, 4, 1], dtype=np.int32)
+    total_tokens = int(seq_lens.sum())
+    hidden_states = RNG.normal(size=(total_tokens, hidden)).astype(np.float32)
+    dense_w = RNG.normal(scale=0.02, size=(hidden, hidden)).astype(np.float32)
+    dense_b = RNG.normal(scale=0.02, size=(hidden,)).astype(np.float32)
+    decoder_w = RNG.normal(scale=0.02, size=(vocab, hidden)).astype(np.float32)
+    decoder_b = RNG.normal(scale=0.02, size=(vocab,)).astype(np.float32)
+
+    # Reference chain: Linear -> exact GELU -> LayerNorm -> Linear ->
+    # log1p(relu) -> per-sequence pooling.
+    dense_ref = hidden_states @ dense_w.T + dense_b
+    gelu_ref = 0.5 * dense_ref * (
+        1.0 + np.vectorize(math.erf)(dense_ref / math.sqrt(2.0))
+    )
+    mean = gelu_ref.mean(axis=1, keepdims=True)
+    variance = ((gelu_ref - mean) ** 2).mean(axis=1, keepdims=True)
+    normalized_ref = (gelu_ref - mean) / np.sqrt(variance + 1e-12)
+    logits_ref = normalized_ref @ decoder_w.T + decoder_b
+    activated_ref = np.log1p(np.maximum(logits_ref, 0.0))
+
+    # Staged kernel emulation.  Use explicit padded tiles for the two GEMMs,
+    # then the same row-wise reductions and sequence offset calculation as
+    # the Triton implementation.
+    def tiled_linear(x: np.ndarray, weight: np.ndarray, bias: np.ndarray) -> np.ndarray:
+        out = np.zeros((x.shape[0], weight.shape[0]), dtype=np.float32)
+        block_m, block_n, block_k = 4, 8, 4
+        for m0 in range(0, x.shape[0], block_m):
+            for n0 in range(0, weight.shape[0], block_n):
+                acc = np.zeros(
+                    (
+                        min(block_m, x.shape[0] - m0),
+                        min(block_n, weight.shape[0] - n0),
+                    ),
+                    dtype=np.float32,
+                )
+                for k0 in range(0, x.shape[1], block_k):
+                    acc += x[
+                        m0 : m0 + block_m, k0 : k0 + block_k
+                    ] @ weight[
+                        n0 : n0 + block_n, k0 : k0 + block_k
+                    ].T
+                acc += bias[n0:n0 + block_n]
+                out[m0:m0 + block_m, n0:n0 + block_n] = acc
+        return out
+
+    dense_got = tiled_linear(hidden_states, dense_w, dense_b)
+    gelu_got = 0.5 * dense_got * (
+        1.0 + np.vectorize(math.erf)(dense_got / math.sqrt(2.0))
+    )
+    mean_got = gelu_got.mean(axis=1, keepdims=True)
+    variance_got = ((gelu_got - mean_got) ** 2).mean(axis=1, keepdims=True)
+    normalized_got = (gelu_got - mean_got) / np.sqrt(variance_got + 1e-12)
+    logits_got = tiled_linear(normalized_got, decoder_w, decoder_b)
+    activated_got = np.log1p(np.maximum(logits_got, 0.0))
+    assert_close(
+        "04_splade_dense_gelu_layernorm", normalized_ref, normalized_got, atol=2e-6
+    )
+    assert_close(
+        "04_splade_logits_activation", activated_ref, activated_got, atol=2e-6
+    )
+
+    for pooling in ("max", "sum"):
+        ref_segments = []
+        got_segments = []
+        offset = 0
+        for length in seq_lens:
+            ref_chunk = activated_ref[offset:offset + int(length)]
+            got_chunk = activated_got[offset:offset + int(length)]
+            reducer = np.max if pooling == "max" else np.sum
+            ref_segments.append(reducer(ref_chunk, axis=0))
+            got_segments.append(reducer(got_chunk, axis=0))
+            offset += int(length)
+        assert_close(
+            f"04_splade_pool_{pooling}",
+            np.stack(ref_segments),
+            np.stack(got_segments),
+            atol=2e-6,
+        )
+
+
 def attention() -> None:
     batch, heads, dim = 2, 3, 5
     scale = dim**-0.5
@@ -334,6 +424,7 @@ def head_mix_bwd() -> None:
 def main() -> None:
     grouped_topk()
     fused_moe()
+    splade_sparse_pooler()
     attention()
     music_rope()
     mhc_post()
