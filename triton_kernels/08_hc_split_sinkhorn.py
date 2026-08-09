@@ -177,6 +177,9 @@ class ModelNew(nn.Module):
     def forward(self, mixes: torch.Tensor, hc_scale: torch.Tensor, hc_base: torch.Tensor):
         batch, seq_len, _ = mixes.shape
         hc = self.hc_mult
+        expected = (2 + hc) * hc
+        if mixes.shape[-1] != expected:
+            raise ValueError(f"expected mix dim {expected}, got {mixes.shape[-1]}")
         pre = torch.empty((batch, seq_len, hc), device=mixes.device, dtype=torch.float32)
         post = torch.empty_like(pre)
         comb = torch.empty(

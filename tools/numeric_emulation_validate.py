@@ -149,6 +149,29 @@ def attention() -> None:
                     got[b, query, head] = (p[:, None] * v[b, :, head]).sum(axis=0)
         assert_close(name, ref, got)
 
+    # The MM encoder reference supports grouped-query attention.  Exercise the
+    # same head expansion used by the Triton wrapper instead of only checking
+    # the equal-head case from the default input generator.
+    q_len, kv_len, q_heads, kv_heads, dim = 4, 6, 8, 2, 5
+    q = RNG.normal(size=(1, q_len, q_heads, dim))
+    k_small = RNG.normal(size=(1, kv_len, kv_heads, dim))
+    v_small = RNG.normal(size=k_small.shape)
+    repeat = q_heads // kv_heads
+    k = np.repeat(k_small, repeat, axis=2)
+    v = np.repeat(v_small, repeat, axis=2)
+    scores = np.einsum("bqhd,bkhd->bhqk", q, k) * (dim ** -0.5)
+    probs = np.exp(scores - scores.max(axis=-1, keepdims=True))
+    probs /= probs.sum(axis=-1, keepdims=True)
+    ref = np.einsum("bhqk,bkhd->bqhd", probs, v)
+    got = np.empty_like(ref)
+    for query in range(q_len):
+        for head in range(q_heads):
+            row = (k[0, :, head] @ q[0, query, head]) * (dim ** -0.5)
+            p = np.exp(row - row.max())
+            p /= p.sum()
+            got[0, query, head] = (p[:, None] * v[0, :, head]).sum(axis=0)
+    assert_close("06_mm_encoder_attention_gqa", ref, got)
+
 
 def music_rope() -> None:
     batch, seq, dim, max_seq = 4, 8, 12, 64
