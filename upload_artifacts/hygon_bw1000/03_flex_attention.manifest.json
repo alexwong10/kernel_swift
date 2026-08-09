@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "hygon_bw1000",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\hygon_bw1000\\03_flex_attention.py",
   "artifact_sha256": "db8169d8ac9b37483d46732d651e3e379d0342f4a043751aa4fdd507057b4279",
   "sources": {

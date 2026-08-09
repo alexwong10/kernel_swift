@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "02_fused_moe",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\02_fused_moe.py",
   "artifact_sha256": "777d8f7f44f2d622c907ecb16128ccf2b4b13216502e9b0386adfa335d25feca",
   "sources": {

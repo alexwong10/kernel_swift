@@ -3,11 +3,11 @@
   "builder_version": 2,
   "task_key": "01_grouped_topk",
   "chip_key": "hygon_bw1000",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
-  "artifact_sha256": "8f2c274a61ff170ddb98e91eab890b33fc6bf615d2debae8ffc48a704b214c8a",
+  "artifact_sha256": "819272492371e81b11c28d6bfa7de88d7f2cd93fd62a0c5cc8c887a2bb3e2669",
   "sources": {
-    "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
+    "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
     "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
     "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
   },

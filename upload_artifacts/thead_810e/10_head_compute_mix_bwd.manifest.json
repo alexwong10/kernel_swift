@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "thead_810e",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\thead_810e\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "b4e14283c6939b40b1e73b9676bc0d695aa9cd58d883de796cf9fc58303c16b0",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "03_flex_attention",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\iluvatar_bi150\\03_flex_attention.py",
   "artifact_sha256": "f30c53a1f4a39944302f5925e0b5a005e189939b9e6e5177500520ee63df6e48",
   "sources": {

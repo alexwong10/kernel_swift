@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\06_mm_encoder_attention.py",
   "artifact_sha256": "c6a5272cda9e3dbe307a790923c0c8ece5b160dfdea63d12ebb6eaf75808bab1",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\ascend_a2_910b\\06_mm_encoder_attention.py",
   "artifact_sha256": "a587929f4ad0c16866d1e736aafd062efcbf40d0e88689e7dcd0a4cc1c4695b9",
   "sources": {

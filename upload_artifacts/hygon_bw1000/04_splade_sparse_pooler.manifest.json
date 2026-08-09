@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "hygon_bw1000",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\hygon_bw1000\\04_splade_sparse_pooler.py",
   "artifact_sha256": "f1069a9460a26e6b4f0dd94a8c76783886ebfdd84e6c44ede4766fc26e060b78",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "07_mhc_post",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\ascend_a2_910b\\07_mhc_post.py",
   "artifact_sha256": "f1f06d76ad347502b0da294617f7ece086aaadaa2c673972e08ef389e88c8af8",
   "sources": {

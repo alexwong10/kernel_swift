@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "hygon_bw1000",
-  "source_commit": "3c5444fcb67f9bddb0e0374168389f7276773938",
+  "source_commit": "9c350558600fc19b621c54e34fd6949402b23146",
   "artifact": "upload_artifacts\\hygon_bw1000\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "7f91f1d8b7f531a5700b100650e94a50684f98f34e4900d9d951015de1c16680",
   "sources": {
