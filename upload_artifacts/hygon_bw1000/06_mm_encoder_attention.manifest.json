@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "hygon_bw1000",
-  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
+  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
   "artifact": "upload_artifacts\\hygon_bw1000\\06_mm_encoder_attention.py",
   "artifact_sha256": "337e61a365701053beff53f8b64a2f984e1a610c29fc62419bf0b350b2cf4fe1",
   "sources": {

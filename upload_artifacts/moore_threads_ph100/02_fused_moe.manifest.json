@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "02_fused_moe",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
+  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
   "artifact": "upload_artifacts\\moore_threads_ph100\\02_fused_moe.py",
   "artifact_sha256": "0e1eab333e1f24dbffbc0fe6bd4292df3dbd86a4b876a8aa33a0ebfa06ffbe3b",
   "sources": {

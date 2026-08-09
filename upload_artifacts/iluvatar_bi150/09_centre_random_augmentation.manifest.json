@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
+  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
   "artifact": "upload_artifacts\\iluvatar_bi150\\09_centre_random_augmentation.py",
   "artifact_sha256": "b1e30c8e9807c8075039ca42acd5930336a31c3222b4177c2704c1c1a263558d",
   "sources": {

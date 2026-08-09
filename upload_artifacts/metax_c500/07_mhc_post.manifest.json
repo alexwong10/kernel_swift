@@ -3,7 +3,7 @@
   "builder_version": 2,
   "task_key": "07_mhc_post",
   "chip_key": "metax_c500",
-  "source_commit": "1ff74c09dba761fef192d0c98725c8229ad8f05c",
+  "source_commit": "0e4beb2734a6014d99dc995c580d1aafab943c22",
   "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
   "artifact_sha256": "e7b09465e8b0609dc4e74543557601024b48cf9ec835f5e3070998764df21f05",
   "sources": {
