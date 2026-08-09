@@ -47,7 +47,16 @@ def validate_interface(reference: Path, artifact: Path) -> None:
             raise AssertionError(f"{artifact}: forbidden local import")
 
     ref_cls = find_class(ref_tree, "Model")
-    artifact_cls = find_class(artifact_tree, "Model")
+    artifact_classes = [
+        node for node in artifact_tree.body if isinstance(node, ast.ClassDef)
+    ]
+    model_classes = [node for node in artifact_classes if node.name == "Model"]
+    model_new_classes = [node for node in artifact_classes if node.name == "ModelNew"]
+    if len(model_classes) != 1 or model_new_classes:
+        raise AssertionError(
+            f"{artifact}: KernelSwift upload must expose exactly one Model and no ModelNew"
+        )
+    artifact_cls = model_classes[0]
     for method_name in ("__init__", "forward"):
         ref_method = find_method(ref_cls, method_name)
         artifact_method = find_method(artifact_cls, method_name)
