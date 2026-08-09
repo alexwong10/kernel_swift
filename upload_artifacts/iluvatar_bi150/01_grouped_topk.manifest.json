@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "01_grouped_topk",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\01_grouped_topk.py",
+  "artifact_sha256": "6e1db81654419193ddc64779867f79fca7071f40c69847bd6e10c3df64863456",
+  "sources": {
+    "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
+    "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
+    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
+  },
+  "profile": {
+    "variant": "vector_reduce",
+    "config": {
+      "num_warps": 4
+    },
+    "fallback_variants": [
+      {
+        "variant": "manual_stable",
+        "config": {
+          "num_warps": 4
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "01_grouped_topk",
+    "chip_key": "iluvatar_bi150",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

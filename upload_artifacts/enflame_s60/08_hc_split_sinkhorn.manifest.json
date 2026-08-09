@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "357e39077a4dcd89e825e8becede58d8667a0ff3424f381afd1c0dd5b5c2723a",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
+    "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "scalar_hc4",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

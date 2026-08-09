@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "07_mhc_post",
+  "chip_key": "metax_c500",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
+  "artifact_sha256": "afde13139068670e6e9c9345e209ad6f82ab75ae0ee6057ea364946c444df85a",
+  "sources": {
+    "triton_kernels/07_mhc_post.py": "5ddcd95081146bf53a2ade7a747980de1ccbc76d7292406342e9d551672b0537",
+    "profiles/operators/07_mhc_post.json": "d0d38ad3412a6a460b4ae07394f6eb36e53a0b12c41eb76c223f2366bfbe854a",
+    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+  },
+  "profile": {
+    "variant": "flat_elementwise",
+    "config": {
+      "block": 256,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "07_mhc_post",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "02_fused_moe",
+  "chip_key": "cambricon_mlu590_m9d",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\02_fused_moe.py",
+  "artifact_sha256": "8563788183c54cc689052d1120789fd4015fb3dc15e62ef672b746eab52ada6c",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
+    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
+  },
+  "profile": {
+    "variant": "token_rank_reference",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "cambricon_mlu590_m9d",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "cambricon_mlu590_m9d",
+    "vendor": "寒武纪",
+    "model": "MLU590-M9D",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_mlu",
+      "torch_device": "mlu",
+      "accelerator_module": "mlu",
+      "bootstrap_imports": [
+        "torch_mlu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

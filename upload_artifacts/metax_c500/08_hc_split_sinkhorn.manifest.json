@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "metax_c500",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\metax_c500\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "5bc55dc653ac71c2015aba251aa98a5cc0b24bc6089219bd23ba5e333d9c592f",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
+    "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
+    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+  },
+  "profile": {
+    "variant": "scalar_hc4",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

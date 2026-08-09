@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "09_centre_random_augmentation",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
+  "artifact_sha256": "6cf3221bb22c82f6dc3ed878109c1bf02e804c85846a6423d26f64a2912664cd",
+  "sources": {
+    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
+    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "framework_rng_triton_geometry",
+    "config": {
+      "center_num_warps": 4,
+      "augment_block": 256,
+      "augment_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "09_centre_random_augmentation",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "03_flex_attention",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
+  "artifact_sha256": "a4618df5373c2d5e6f301530c8fe4732e650db9e8a4e2e9b7c0769ecd5d58934",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
+    "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
+    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+  },
+  "profile": {
+    "variant": "full_row_diagnostic",
+    "config": {
+      "num_warps": 8
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

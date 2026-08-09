@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "cambricon_mlu590_m9d",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "de873fa32754009136f42569fdadcdd5b24685dc81b9efaaea01f42002888b77",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
+    "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
+  },
+  "profile": {
+    "variant": "fused_elementwise",
+    "config": {
+      "block": 256,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "cambricon_mlu590_m9d",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "cambricon_mlu590_m9d",
+    "vendor": "寒武纪",
+    "model": "MLU590-M9D",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_mlu",
+      "torch_device": "mlu",
+      "accelerator_module": "mlu",
+      "bootstrap_imports": [
+        "torch_mlu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

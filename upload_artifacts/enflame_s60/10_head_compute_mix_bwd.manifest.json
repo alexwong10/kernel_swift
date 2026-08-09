@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "10_head_compute_mix_bwd",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\10_head_compute_mix_bwd.py",
+  "artifact_sha256": "e2a37303f0e45831c433cfc471bf02855c6b9789c625b6ff1828b61f5e056380",
+  "sources": {
+    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
+    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "chunked_deterministic",
+    "config": {
+      "block_rows": 256,
+      "num_warps": 4,
+      "reduce_num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "single_block_reduce",
+        "config": {
+          "num_warps": 8
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

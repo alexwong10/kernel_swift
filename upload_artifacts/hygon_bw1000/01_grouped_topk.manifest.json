@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "01_grouped_topk",
+  "chip_key": "hygon_bw1000",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
+  "artifact_sha256": "1e8fd5c4479be3b9601d9ab469f1022d60557742aca3e9712f3ad0c003c14a7f",
+  "sources": {
+    "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
+    "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
+    "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
+  },
+  "profile": {
+    "variant": "vector_reduce",
+    "config": {
+      "num_warps": 4
+    },
+    "fallback_variants": [
+      {
+        "variant": "manual_stable",
+        "config": {
+          "num_warps": 4
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "01_grouped_topk",
+    "chip_key": "hygon_bw1000",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "hygon_bw1000",
+    "vendor": "海光",
+    "model": "BW1000",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

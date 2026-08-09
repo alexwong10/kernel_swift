@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "10_head_compute_mix_bwd",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\10_head_compute_mix_bwd.py",
+  "artifact_sha256": "3592d71d31f982e5140c29597002b09ec4a00ddbbcdef83432bac8534d9f9ac5",
+  "sources": {
+    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
+    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
+  },
+  "profile": {
+    "variant": "chunked_deterministic",
+    "config": {
+      "block_rows": 256,
+      "num_warps": 4,
+      "reduce_num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "single_block_reduce",
+        "config": {
+          "num_warps": 8
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "iluvatar_bi150",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

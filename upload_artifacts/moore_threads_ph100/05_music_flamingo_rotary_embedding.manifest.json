@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "moore_threads_ph100",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\moore_threads_ph100\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "a899e62420334a92e638c55020a5ff2ecc19b9f53d08a7f9387897624c03feb1",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
+    "profiles/chips/moore_threads_ph100.json": "d7ed879a5d36eae212b809be5cb92161cd0484b34151af3971a5738b947a1581"
+  },
+  "profile": {
+    "variant": "fused_elementwise",
+    "config": {
+      "block": 256,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "moore_threads_ph100",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "moore_threads_ph100",
+    "vendor": "摩尔线程",
+    "model": "PH100",
+    "resource": "resource_path_unresolved",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "01_grouped_topk",
+  "chip_key": "ascend_a2_910b",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\ascend_a2_910b\\01_grouped_topk.py",
+  "artifact_sha256": "1b38ea3e2831dfd191de4a1906dd8771b152a12704c5c842ea3e15af576b155a",
+  "sources": {
+    "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
+    "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
+    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
+  },
+  "profile": {
+    "variant": "vector_reduce",
+    "config": {
+      "num_warps": 4
+    },
+    "fallback_variants": [
+      {
+        "variant": "manual_stable",
+        "config": {
+          "num_warps": 4
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "01_grouped_topk",
+    "chip_key": "ascend_a2_910b",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "ascend_a2_910b",
+    "vendor": "华为昇腾",
+    "model": "A2（910B）",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_npu",
+      "torch_device": "npu",
+      "accelerator_module": "npu",
+      "bootstrap_imports": [
+        "torch_npu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

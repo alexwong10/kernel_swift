@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "09_centre_random_augmentation",
+  "chip_key": "metax_c500",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\metax_c500\\09_centre_random_augmentation.py",
+  "artifact_sha256": "6a129706d7991573bfe81de3d9646375828106798188e40a9f0b377fce596fb9",
+  "sources": {
+    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
+    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+  },
+  "profile": {
+    "variant": "framework_rng_triton_geometry",
+    "config": {
+      "center_num_warps": 4,
+      "augment_block": 256,
+      "augment_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "09_centre_random_augmentation",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

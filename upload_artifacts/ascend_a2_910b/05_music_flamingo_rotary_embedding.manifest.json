@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "ascend_a2_910b",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\ascend_a2_910b\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "bfb1a40f22f4f026a2521ed0e17490249942fd18847a6d5f30cc21ba716b9539",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
+    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
+  },
+  "profile": {
+    "variant": "fused_elementwise",
+    "config": {
+      "block": 256,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "ascend_a2_910b",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "ascend_a2_910b",
+    "vendor": "华为昇腾",
+    "model": "A2（910B）",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_npu",
+      "torch_device": "npu",
+      "accelerator_module": "npu",
+      "bootstrap_imports": [
+        "torch_npu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "02_fused_moe",
+  "chip_key": "metax_c500",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
+  "artifact_sha256": "332d8a5416e76cce2796f78efdb8a7db60d24de863a2768666c3a474d0e9a39b",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
+    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+  },
+  "profile": {
+    "variant": "token_rank_reference",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

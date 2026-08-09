@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "02_fused_moe",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\02_fused_moe.py",
+  "artifact_sha256": "2717c2ce052aad846188f24742a60def5ab9bcb428a07ad6455aabdb0cc5ced9",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
+    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "token_rank_reference",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

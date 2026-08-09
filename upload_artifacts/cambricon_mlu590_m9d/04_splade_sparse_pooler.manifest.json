@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "04_splade_sparse_pooler",
+  "chip_key": "cambricon_mlu590_m9d",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "ea68395d390588879bc72de15a2acc8e80255449a8b2e4de43bac1e1071e4c96",
+  "sources": {
+    "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
+    "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
+    "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed",
+    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+  },
+  "profile": {
+    "variant": "staged_portable",
+    "config": {
+      "linear_block_m": 16,
+      "linear_block_n": 64,
+      "linear_block_k": 32,
+      "linear_num_warps": 4,
+      "layer_norm_num_warps_small": 4,
+      "layer_norm_num_warps_large": 8,
+      "pool_block_t": 32,
+      "pool_block_v": 128,
+      "pool_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "cambricon_mlu590_m9d",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "cambricon_mlu590_m9d",
+    "vendor": "寒武纪",
+    "model": "MLU590-M9D",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_mlu",
+      "torch_device": "mlu",
+      "accelerator_module": "mlu",
+      "bootstrap_imports": [
+        "torch_mlu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

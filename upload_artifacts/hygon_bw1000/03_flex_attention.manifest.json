@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "03_flex_attention",
+  "chip_key": "hygon_bw1000",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\hygon_bw1000\\03_flex_attention.py",
+  "artifact_sha256": "5e4edbc02d163b6792796e25438dbd3b39ed55b1baf4f4ec7472fbdfa3f1b025",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "e0e0f2d9caf9957cc249eec643c9e615d707a1acdeee755da3aa1d4be77afaa7",
+    "profiles/operators/03_flex_attention.json": "32888edc8c605884887eaba140472d09540b139438317acd13d48a9552069748",
+    "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c",
+    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+  },
+  "profile": {
+    "variant": "full_row_diagnostic",
+    "config": {
+      "num_warps": 8
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "hygon_bw1000",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "hygon_bw1000",
+    "vendor": "海光",
+    "model": "BW1000",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

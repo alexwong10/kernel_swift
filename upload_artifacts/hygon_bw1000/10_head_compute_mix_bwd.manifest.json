@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "10_head_compute_mix_bwd",
+  "chip_key": "hygon_bw1000",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
+  "artifact_sha256": "9010eaeefba3837932fd86fbacf303bedd65af213ab06efc55c5266447b472d8",
+  "sources": {
+    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
+    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
+  },
+  "profile": {
+    "variant": "chunked_deterministic",
+    "config": {
+      "block_rows": 256,
+      "num_warps": 4,
+      "reduce_num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "single_block_reduce",
+        "config": {
+          "num_warps": 8
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "hygon_bw1000",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "hygon_bw1000",
+    "vendor": "海光",
+    "model": "BW1000",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

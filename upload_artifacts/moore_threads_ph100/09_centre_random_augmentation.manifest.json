@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "09_centre_random_augmentation",
+  "chip_key": "moore_threads_ph100",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\moore_threads_ph100\\09_centre_random_augmentation.py",
+  "artifact_sha256": "b6d97a56781ee2fb8dfd7e27f3ed117a60faf71ac9e37dc80ca491bbe8820354",
+  "sources": {
+    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
+    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "profiles/chips/moore_threads_ph100.json": "d7ed879a5d36eae212b809be5cb92161cd0484b34151af3971a5738b947a1581"
+  },
+  "profile": {
+    "variant": "framework_rng_triton_geometry",
+    "config": {
+      "center_num_warps": 4,
+      "augment_block": 256,
+      "augment_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "09_centre_random_augmentation",
+    "chip_key": "moore_threads_ph100",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "moore_threads_ph100",
+    "vendor": "摩尔线程",
+    "model": "PH100",
+    "resource": "resource_path_unresolved",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

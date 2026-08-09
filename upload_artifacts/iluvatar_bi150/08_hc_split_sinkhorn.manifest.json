@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "b29ba8f9a04718a817f7dcda8f6b1f9d0d875540ab0362fce4e0790b268358f1",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
+    "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
+    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
+  },
+  "profile": {
+    "variant": "scalar_hc4",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "iluvatar_bi150",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

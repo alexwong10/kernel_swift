@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "06_mm_encoder_attention",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\06_mm_encoder_attention.py",
+  "artifact_sha256": "876d2c0c321cc758056941ec1c3c419be9c84c74848764ded18876ce4356489b",
+  "sources": {
+    "triton_kernels/06_mm_encoder_attention.py": "9b89941e19347c00950024bd5aeebe038e360705d9d47e8d79c2d0f7acb847dd",
+    "profiles/operators/06_mm_encoder_attention.json": "7400424a8e42b02668e69323bc5dac32a262d3614df25626a03cadc7d04073b9",
+    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44",
+    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+  },
+  "profile": {
+    "variant": "full_row_diagnostic",
+    "config": {
+      "num_warps": 8
+    },
+    "schema_version": 1,
+    "task_key": "06_mm_encoder_attention",
+    "chip_key": "iluvatar_bi150",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

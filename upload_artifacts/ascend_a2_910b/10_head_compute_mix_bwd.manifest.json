@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "10_head_compute_mix_bwd",
+  "chip_key": "ascend_a2_910b",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\ascend_a2_910b\\10_head_compute_mix_bwd.py",
+  "artifact_sha256": "d6a06adb842c5305f2d1ec9149c12b6f28d2731299bc64e7f1d830ea00906484",
+  "sources": {
+    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
+    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
+  },
+  "profile": {
+    "variant": "chunked_deterministic",
+    "config": {
+      "block_rows": 256,
+      "num_warps": 4,
+      "reduce_num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "single_block_reduce",
+        "config": {
+          "num_warps": 8
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "ascend_a2_910b",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "ascend_a2_910b",
+    "vendor": "华为昇腾",
+    "model": "A2（910B）",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_npu",
+      "torch_device": "npu",
+      "accelerator_module": "npu",
+      "bootstrap_imports": [
+        "torch_npu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

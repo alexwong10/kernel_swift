@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "01_grouped_topk",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\01_grouped_topk.py",
+  "artifact_sha256": "599f29b9e4b702f84d470152515f42f4ba1532b77e35490a0902b644a8c9bd84",
+  "sources": {
+    "triton_kernels/01_grouped_topk.py": "b92ec3d09c5147536985152de248b094601e8792eb59d33b287fe66bae784a19",
+    "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "vector_reduce",
+    "config": {
+      "num_warps": 4
+    },
+    "fallback_variants": [
+      {
+        "variant": "manual_stable",
+        "config": {
+          "num_warps": 4
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "01_grouped_topk",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

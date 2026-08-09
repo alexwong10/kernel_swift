@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "metax_c500",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\metax_c500\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "b16e56b67cdcc9b3c0e59d40e949d941b73aede9d3c22db7b3fd67c579c4589d",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
+    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+  },
+  "profile": {
+    "variant": "fused_elementwise",
+    "config": {
+      "block": 256,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

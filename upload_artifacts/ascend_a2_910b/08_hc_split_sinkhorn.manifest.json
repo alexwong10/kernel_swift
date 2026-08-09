@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "ascend_a2_910b",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\ascend_a2_910b\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "80271263cbb5b99ba7d4ce686d8e2d918c06abffc2c58c285fae53556666ad4d",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "22e45904280782b5f99ed62c5bc6e150ba25a2bdd91b5ecaaa91ffbc33b5c116",
+    "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
+    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
+  },
+  "profile": {
+    "variant": "scalar_hc4",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "ascend_a2_910b",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "ascend_a2_910b",
+    "vendor": "华为昇腾",
+    "model": "A2（910B）",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_npu",
+      "torch_device": "npu",
+      "accelerator_module": "npu",
+      "bootstrap_imports": [
+        "torch_npu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

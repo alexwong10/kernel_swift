@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "04_splade_sparse_pooler",
+  "chip_key": "enflame_s60",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "4c67e81d725d3d688ecdbf80010d60d96fda37f65ec6c6f29440c798c7cf57ad",
+  "sources": {
+    "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
+    "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
+    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+  },
+  "profile": {
+    "variant": "staged_portable",
+    "config": {
+      "linear_block_m": 16,
+      "linear_block_n": 64,
+      "linear_block_k": 32,
+      "linear_num_warps": 4,
+      "layer_norm_num_warps_small": 4,
+      "layer_norm_num_warps_large": 8,
+      "pool_block_t": 32,
+      "pool_block_v": 128,
+      "pool_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "enflame_s60",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

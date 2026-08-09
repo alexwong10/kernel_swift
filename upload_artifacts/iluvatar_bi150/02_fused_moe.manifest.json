@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "02_fused_moe",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\02_fused_moe.py",
+  "artifact_sha256": "67a0edf86fba1768f7800cdd9c11f500b9e263b570bae12af0f3c59b83eaae33",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
+    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
+  },
+  "profile": {
+    "variant": "token_rank_reference",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "iluvatar_bi150",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "builder_version": 1,
+  "task_key": "04_splade_sparse_pooler",
+  "chip_key": "ascend_a2_910b",
+  "source_commit": "0a45ab416df20fd9c9f228aca70a469b679472c2",
+  "artifact": "upload_artifacts\\ascend_a2_910b\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "da3b1de62038a59b4ad45cc9967ba8b29fe9265ea2bb34125dfe822f425ddacf",
+  "sources": {
+    "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
+    "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
+    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834",
+    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+  },
+  "profile": {
+    "variant": "staged_portable",
+    "config": {
+      "linear_block_m": 16,
+      "linear_block_n": 64,
+      "linear_block_k": 32,
+      "linear_num_warps": 4,
+      "layer_norm_num_warps_small": 4,
+      "layer_norm_num_warps_large": 8,
+      "pool_block_t": 32,
+      "pool_block_v": 128,
+      "pool_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "ascend_a2_910b",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "ascend_a2_910b",
+    "vendor": "华为昇腾",
+    "model": "A2（910B）",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_npu",
+      "torch_device": "npu",
+      "accelerator_module": "npu",
+      "bootstrap_imports": [
+        "torch_npu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  }
+}
