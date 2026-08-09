@@ -172,6 +172,8 @@ class ModelNew(nn.Module):
         self.topk_group = topk_group
         self.scoring_func = scoring_func
         self.routed_scaling_factor = routed_scaling_factor
+        if scoring_func not in {"softmax", "sigmoid"}:
+            raise ValueError(f"Unsupported scoring_func: {scoring_func}")
         profile = get_operator_profile("01_grouped_topk")
         if profile["variant"] not in {"vector_reduce", "manual_stable"}:
             raise ValueError(f"unsupported GroupedTopk variant: {profile['variant']}")
@@ -180,6 +182,16 @@ class ModelNew(nn.Module):
 
     def forward(self, hidden_states: torch.Tensor, gating_output: torch.Tensor):
         num_tokens, num_experts = gating_output.shape
+        if hidden_states.shape[0] != num_tokens:
+            raise ValueError("hidden_states and gating_output batch sizes must match")
+        if self.num_expert_group <= 0 or num_experts % self.num_expert_group != 0:
+            raise ValueError(
+                "num_experts must be divisible by num_expert_group"
+            )
+        if not 0 < self.topk <= num_experts:
+            raise ValueError("topk must be in the range [1, num_experts]")
+        if not 0 < self.topk_group <= self.num_expert_group:
+            raise ValueError("topk_group must be in the range [1, num_expert_group]")
         experts_per_group = num_experts // self.num_expert_group
         weights = torch.empty(
             (num_tokens, self.topk), device=gating_output.device, dtype=torch.float32
