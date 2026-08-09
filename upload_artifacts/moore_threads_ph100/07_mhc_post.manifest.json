@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "07_mhc_post",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\moore_threads_ph100\\07_mhc_post.py",
   "artifact_sha256": "483d9b8170dd5a2e51e89c3c85d735bb5382b833d0e1acc3ec6f403276e4b6e5",
   "sources": {

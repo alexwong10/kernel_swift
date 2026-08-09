@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "03_flex_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
   "artifact_sha256": "eb2c459d05f7c2dec3eca2299dc1f41335b45b00ddc16f32d7ea41ba892af8c4",
   "sources": {

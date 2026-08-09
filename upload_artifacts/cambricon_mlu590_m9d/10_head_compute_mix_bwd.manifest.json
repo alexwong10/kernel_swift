@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "d40efe120392c46c0d75c85b4be008fffec59755816d43b0f7e54718cef313d0",
   "sources": {

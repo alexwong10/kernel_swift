@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "enflame_s60",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
   "artifact_sha256": "b013ff6c898182c41a0d1e03b6252bb8038e8f2a6dcaf9f09a495c6f539608a9",
   "sources": {

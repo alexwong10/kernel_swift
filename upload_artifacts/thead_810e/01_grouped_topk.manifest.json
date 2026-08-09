@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "01_grouped_topk",
   "chip_key": "thead_810e",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\thead_810e\\01_grouped_topk.py",
   "artifact_sha256": "8c63cab84c7eabbdede69a22fcb3b363318299ffcbe5d60ff610c16576be04e9",
   "sources": {

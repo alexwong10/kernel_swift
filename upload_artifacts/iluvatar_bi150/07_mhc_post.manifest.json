@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "07_mhc_post",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\iluvatar_bi150\\07_mhc_post.py",
   "artifact_sha256": "003c8cab6f27bf69868aa121a2df51833e64b1abb4c87bd7313f754af19e553c",
   "sources": {

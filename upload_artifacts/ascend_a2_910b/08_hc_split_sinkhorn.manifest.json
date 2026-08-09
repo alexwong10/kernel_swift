@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\ascend_a2_910b\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "5a96f48c0246c4965756e70a123b4bf366f66d969fb22625fc4c07163f898f2b",
   "sources": {

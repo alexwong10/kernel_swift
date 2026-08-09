@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\04_splade_sparse_pooler.py",
   "artifact_sha256": "7d2118358b7cf1a6296dbb64120df7765537da022f487b362644191ce4da917a",
   "sources": {

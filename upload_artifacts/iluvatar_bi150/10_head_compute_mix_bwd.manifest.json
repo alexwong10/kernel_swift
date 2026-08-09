@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\iluvatar_bi150\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "ef843033562ab735ebf994125113ac18cc6b8c92a8685206a3fbfc2803848b3e",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 3,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "9a2bcaf7fbfed54d3bd132dfe54b46f9343a52ac",
+  "source_commit": "fce1d95073f8d7ba2695884e66fa8fc242136f85",
   "artifact": "upload_artifacts\\iluvatar_bi150\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "b6d4aebdd9ea5b8d5b4c4e4f033f269c26783eea5909482be13e79af45dae39d",
   "sources": {
