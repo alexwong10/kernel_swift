@@ -3,16 +3,16 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\02_fused_moe.py",
-  "artifact_sha256": "7f196853ab6ecd50718ae87332f911905aed80bf04cc5b8ef9bc066d2127afcc",
+  "artifact_sha256": "7ae87d1b43370addcb8ca066291d80e37a2d76f3062a62b9312c7461100cfa3c",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
-    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "triton_kernels/02_fused_moe.py": "5228af4e2e31a252287a2d167836c97c4c1dd37c2741511c8864705eb055156c",
+    "profiles/operators/02_fused_moe.json": "a5410d4c76907045201de19dfb22cc4ab79dedb4e68cccade440d56d12152b58",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
   "profile": {
-    "variant": "token_rank_reference",
+    "variant": "tiled_dot_fp16_reference",
     "config": {
       "route_num_warps": 1,
       "gate_up_num_warps": 4,
@@ -57,13 +57,13 @@
     ],
     "replacements": [
       {
-        "line": 266,
+        "line": 272,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"
       },
       {
-        "line": 267,
+        "line": 273,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"

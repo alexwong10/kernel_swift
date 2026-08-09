@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\ascend_a2_910b\\04_splade_sparse_pooler.py",
   "artifact_sha256": "5b99ccf506eac4e2be119289e5c3d881dafbb94a30a1403a27daa0aaed835e4f",
   "sources": {

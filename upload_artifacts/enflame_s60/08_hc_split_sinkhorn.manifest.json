@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "enflame_s60",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\enflame_s60\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "54152a433c299831236d207442964bdc0dad974d08daecfbebfdb6b85fcfd0e9",
   "sources": {

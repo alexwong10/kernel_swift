@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "hygon_bw1000",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\hygon_bw1000\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "5034ab6b8b716b79ea12d6c4337fec58ec772eb9cf25c0eab7abf628bccf66f9",
   "sources": {

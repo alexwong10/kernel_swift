@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "metax_c500",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\metax_c500\\09_centre_random_augmentation.py",
   "artifact_sha256": "735e9d728c317478a22fda9bd4c16abc14ad97f1ac568187ec6df69f370ee67b",
   "sources": {

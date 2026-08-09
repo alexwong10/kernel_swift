@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "hygon_bw1000",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\hygon_bw1000\\07_mhc_post.py",
   "artifact_sha256": "2eacdda0965ad7ca99321f7b6561f79b297664cfcccd0cd467c6eb002f9f388b",
   "sources": {

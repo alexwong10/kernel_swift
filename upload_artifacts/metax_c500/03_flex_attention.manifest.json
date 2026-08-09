@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "metax_c500",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\metax_c500\\03_flex_attention.py",
   "artifact_sha256": "858fefb3cc5051e345b9e14ee79fb5d300b43b66b16ef4a4149493c305510977",
   "sources": {

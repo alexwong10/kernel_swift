@@ -3,16 +3,16 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\iluvatar_bi150\\02_fused_moe.py",
-  "artifact_sha256": "627d9abe92e2d53764b629808383883e69ac7da057d19a4ab91eeb8de3691b7c",
+  "artifact_sha256": "0f3851a4a560cbd3c633b268c0695fd53f1e252f3d4825522e90bccad96edad5",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
-    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "triton_kernels/02_fused_moe.py": "5228af4e2e31a252287a2d167836c97c4c1dd37c2741511c8864705eb055156c",
+    "profiles/operators/02_fused_moe.json": "a5410d4c76907045201de19dfb22cc4ab79dedb4e68cccade440d56d12152b58",
     "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
   },
   "profile": {
-    "variant": "token_rank_reference",
+    "variant": "tiled_dot_fp16_reference",
     "config": {
       "route_num_warps": 1,
       "gate_up_num_warps": 4,

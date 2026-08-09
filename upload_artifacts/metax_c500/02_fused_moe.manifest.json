@@ -3,16 +3,16 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "metax_c500",
-  "source_commit": "08430ecd0b4c925e56bff9f28a4febe134e53258",
+  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
   "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
-  "artifact_sha256": "4fd1cc90f2906877b7b699d7ca8a488807ad9dc288bc80cb458a6b5cd9d2dab5",
+  "artifact_sha256": "ab714e01dab9b02c035f9c01ad3ebed7eea6f3b9665610ddb4c8f4135ea4cdfe",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "33545d4a374db0aea7a36d067fbce8057fc288b661fbcd83f30a3a44f4629de6",
-    "profiles/operators/02_fused_moe.json": "9dc8ed2bfa3ead0e48aec4005dd815eb1d8ac8806612e8dd07dec7511b2470de",
+    "triton_kernels/02_fused_moe.py": "5228af4e2e31a252287a2d167836c97c4c1dd37c2741511c8864705eb055156c",
+    "profiles/operators/02_fused_moe.json": "a5410d4c76907045201de19dfb22cc4ab79dedb4e68cccade440d56d12152b58",
     "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
   },
   "profile": {
-    "variant": "token_rank_reference",
+    "variant": "tiled_dot_fp16_reference",
     "config": {
       "route_num_warps": 1,
       "gate_up_num_warps": 4,
