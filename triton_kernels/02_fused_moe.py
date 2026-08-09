@@ -9,7 +9,7 @@ import triton.language as tl
 _KS_PROFILE = {
     "task_key": "02_fused_moe",
     "chip_key": "portable_default",
-    "variant": "token_rank_reference",
+    "variant": "tiled_dot_fp16_reference",
     "config": {
         "route_num_warps": 1,
         "gate_up_num_warps": 4,
@@ -78,13 +78,17 @@ def _moe_gate_up_kernel(
     i = tl.arange(0, BLOCK_I)
     h_mask = h < hidden_size
     i_mask = i < intermediate_size
-    x = tl.load(x_ptr + token * hidden_size + h, mask=h_mask, other=0.0).to(tl.float32)
+    # The reference first casts the parameter tensors to the input dtype and
+    # performs a GEMM.  Keep the operands in fp16 here so the dot path has the
+    # same input rounding as ``x_e @ w1[e].T`` rather than an fp32 outer
+    # product followed by a reduction.
+    x = tl.load(x_ptr + token * hidden_size + h, mask=h_mask, other=0.0)
     expert_base = expert * 2 * intermediate_size * hidden_size
     gate_w = tl.load(
         w1_ptr + expert_base + i[:, None] * hidden_size + h[None, :],
         mask=i_mask[:, None] & h_mask[None, :],
         other=0.0,
-    ).to(tl.float16).to(tl.float32)
+    ).to(tl.float16)
     up_w = tl.load(
         w1_ptr
         + expert_base
@@ -92,9 +96,9 @@ def _moe_gate_up_kernel(
         + h[None, :],
         mask=i_mask[:, None] & h_mask[None, :],
         other=0.0,
-    ).to(tl.float16).to(tl.float32)
-    gate = tl.sum(gate_w * x[None, :], axis=1)
-    up = tl.sum(up_w * x[None, :], axis=1)
+    ).to(tl.float16)
+    gate = tl.dot(gate_w, x[:, None])[:, 0].to(tl.float16)
+    up = tl.dot(up_w, x[:, None])[:, 0].to(tl.float16)
     act = gate * tl.sigmoid(gate) * up
     tl.store(
         act_ptr + (token * TOP_K + rank) * intermediate_size + i,
@@ -119,7 +123,9 @@ def _moe_down_kernel(
     token = tl.program_id(0)
     rank = tl.program_id(1)
     expert = tl.load(ids_ptr + token * TOP_K + rank)
-    route_weight = tl.load(route_weights_ptr + token * TOP_K + rank).to(tl.float32)
+    # ``topk_weights`` is converted to the hidden-state dtype by the
+    # reference before the expert output is weighted.
+    route_weight = tl.load(route_weights_ptr + token * TOP_K + rank).to(tl.float16)
     h = tl.arange(0, BLOCK_H)
     i = tl.arange(0, BLOCK_I)
     h_mask = h < hidden_size
@@ -128,14 +134,14 @@ def _moe_down_kernel(
         act_ptr + (token * TOP_K + rank) * intermediate_size + i,
         mask=i_mask,
         other=0.0,
-    ).to(tl.float32)
+    )
     expert_base = expert * hidden_size * intermediate_size
     w2 = tl.load(
         w2_ptr + expert_base + h[:, None] * intermediate_size + i[None, :],
         mask=h_mask[:, None] & i_mask[None, :],
         other=0.0,
-    ).to(tl.float16).to(tl.float32)
-    down = tl.sum(w2 * act[None, :], axis=1) * route_weight
+    ).to(tl.float16)
+    down = tl.dot(w2, act[:, None])[:, 0].to(tl.float16) * route_weight
     tl.store(
         contribution_ptr + (token * TOP_K + rank) * hidden_size + h,
         down.to(tl.float16),
@@ -187,7 +193,7 @@ class ModelNew(nn.Module):
         nn.init.normal_(self.w1, std=0.02)
         nn.init.normal_(self.w2, std=0.02)
         profile = get_operator_profile("02_fused_moe")
-        if profile["variant"] != "token_rank_reference":
+        if profile["variant"] != "tiled_dot_fp16_reference":
             raise ValueError(f"unsupported FusedMoE variant: {profile['variant']}")
         self._ks_config = profile["config"]
 

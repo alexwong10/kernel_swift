@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_key": "02_fused_moe",
   "default": {
-    "variant": "token_rank_reference",
+    "variant": "tiled_dot_fp16_reference",
     "config": {"route_num_warps": 1, "gate_up_num_warps": 4, "down_num_warps": 4, "reduce_block": 256, "reduce_num_warps": 4}
   },
   "chips": {
