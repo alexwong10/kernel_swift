@@ -39,6 +39,8 @@ def validate_interface(reference: Path, artifact: Path) -> None:
     artifact_source = artifact.read_text(encoding="utf-8")
     artifact_tree = ast.parse(artifact_source, filename=str(artifact))
     compile(artifact_source, str(artifact), "exec")
+    if "get_operator_profile" in artifact_source:
+        raise AssertionError(f"{artifact}: upload artifact must not expose profile helper")
 
     for node in ast.walk(artifact_tree):
         if isinstance(node, ast.ImportFrom) and node.module in {

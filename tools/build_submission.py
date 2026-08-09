@@ -23,7 +23,7 @@ from profile_runtime import (  # noqa: E402
 )
 
 
-BUILDER_VERSION = 3
+BUILDER_VERSION = 4
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -66,17 +66,20 @@ def _split_module(tree: ast.Module) -> tuple[list[ast.stmt], list[ast.stmt]]:
     return imports, body
 
 
+class _InlineProfileCallRewriter(ast.NodeTransformer):
+    """Replace source profile helper calls with the baked dictionary constant."""
+
+    def visit_Call(self, node: ast.Call) -> ast.AST:
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == "get_operator_profile":
+            return ast.copy_location(
+                ast.Name(id="_KS_BAKED_PROFILE", ctx=ast.Load()), node
+            )
+        return node
+
+
 def _baked_profile_nodes(profile: dict[str, Any]) -> list[ast.stmt]:
-    source = (
-        f"_KS_BAKED_PROFILE = {profile!r}\n\n"
-        "def get_operator_profile(task_key, chip_key=None):\n"
-        "    if task_key != _KS_BAKED_PROFILE['task_key']:\n"
-        "        raise ValueError(f'artifact profile is for {_KS_BAKED_PROFILE[\"task_key\"]}, not {task_key}')\n"
-        "    if chip_key is not None and chip_key != _KS_BAKED_PROFILE['chip_key']:\n"
-        "        raise ValueError(f'artifact profile is for {_KS_BAKED_PROFILE[\"chip_key\"]}, not {chip_key}')\n"
-        "    return _KS_BAKED_PROFILE\n"
-    )
-    return ast.parse(source).body
+    return ast.parse(f"_KS_BAKED_PROFILE = {profile!r}\n").body
 
 
 def _uses_common(tree: ast.Module) -> bool:
@@ -217,6 +220,8 @@ def build_submission(
     task_tree = ast.parse(task_path.read_text(encoding="utf-8"), filename=str(task_path))
     chip_profile = load_chip_profile(chip_key)
     task_tree, device_adaptation = _prepare_task_devices(task_tree, chip_profile)
+    task_tree = _InlineProfileCallRewriter().visit(task_tree)
+    ast.fix_missing_locations(task_tree)
     task_imports, task_body = _split_module(task_tree)
 
     common_imports: list[ast.stmt] = []
@@ -226,6 +231,8 @@ def build_submission(
         common_tree = ast.parse(
             common_path.read_text(encoding="utf-8"), filename=str(common_path)
         )
+        common_tree = _InlineProfileCallRewriter().visit(common_tree)
+        ast.fix_missing_locations(common_tree)
         common_imports, common_body = _split_module(common_tree)
 
     profile = get_operator_profile(task_key, chip_key)
