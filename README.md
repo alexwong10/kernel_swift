@@ -52,8 +52,9 @@ python -m compileall -q reference triton_kernels tools
 归约和公式；它只能发现代数错误，不能证明 Triton 可编译或芯片精度通过。逐算子风险见
 [`离线审查记录.md`](./离线审查记录.md)。
 
-`validate_artifacts.py` 在临时目录生成并校验全部 100 份芯片固化单文件：接口一致、无
-`common/profile_runtime` 本地导入、`Model` 上传入口、profile 身份和 SHA-256 一致。构建器还会
+`validate_artifacts.py` 在临时目录生成并校验全部 100 份芯片固化单文件，并再次校验仓库中
+实际用于上传的 `upload_artifacts/`：接口一致、无 `common/profile_runtime` 本地导入、`Model`
+上传入口、profile 身份、源文件哈希和 SHA-256 一致。构建器还会
 对已确认 runtime profile 的芯片改写输入构造中的设备别名，并把替换记录写入 manifest；这同样
 不等价于目标编译器验证。
 
