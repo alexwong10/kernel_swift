@@ -15,7 +15,12 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 from build_submission import build_submission  # noqa: E402
-from profile_runtime import CHIP_KEYS, TASK_KEYS  # noqa: E402
+from profile_runtime import (  # noqa: E402
+    CHIP_KEYS,
+    TASK_KEYS,
+    get_operator_profile,
+    load_chip_profile,
+)
 from static_validate import (  # noqa: E402
     find_class,
     find_method,
@@ -69,6 +74,39 @@ def validate_interface(reference: Path, artifact: Path) -> None:
         raise AssertionError(f"{artifact}: missing competition input helpers")
 
 
+def validate_persisted_artifacts(root: Path) -> None:
+    """Validate the files that will actually be selected in the upload UI."""
+    count = 0
+    for chip_key in CHIP_KEYS:
+        chip_profile = load_chip_profile(chip_key)
+        for task_key in TASK_KEYS:
+            artifact = root / chip_key / f"{task_key}.py"
+            manifest_path = artifact.with_suffix(".manifest.json")
+            if not artifact.is_file() or not manifest_path.is_file():
+                raise AssertionError(f"missing persisted artifact pair: {chip_key}/{task_key}")
+            validate_interface(ROOT / "reference" / f"{task_key}.py", artifact)
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if manifest["task_key"] != task_key or manifest["chip_key"] != chip_key:
+                raise AssertionError(f"{chip_key}/{task_key}: persisted manifest identity differs")
+            if manifest["artifact_sha256"] != sha256_file(artifact):
+                raise AssertionError(f"{chip_key}/{task_key}: persisted artifact hash differs")
+            profile = manifest["profile"]
+            expected_profile = get_operator_profile(task_key, chip_key)
+            if profile != expected_profile:
+                raise AssertionError(f"{chip_key}/{task_key}: persisted profile is stale")
+            if manifest["chip_profile"] != chip_profile:
+                raise AssertionError(f"{chip_key}/{task_key}: persisted chip profile is stale")
+            for relative, expected_hash in manifest["sources"].items():
+                source = ROOT / Path(relative)
+                if not source.is_file() or sha256_file(source) != expected_hash:
+                    raise AssertionError(f"{chip_key}/{task_key}: source hash is stale for {relative}")
+            count += 1
+    expected = len(CHIP_KEYS) * len(TASK_KEYS)
+    if count != expected:
+        raise AssertionError(f"validated {count} persisted artifacts, expected {expected}")
+    print(f"PASS persisted artifacts: {count}/{expected}")
+
+
 def main() -> None:
     count = 0
     with tempfile.TemporaryDirectory(prefix=".artifact-validation-", dir=ROOT) as temp:
@@ -102,6 +140,7 @@ def main() -> None:
     if count != expected:
         raise AssertionError(f"validated {count} artifacts, expected {expected}")
     print(f"PASS standalone artifacts: {count}/{expected}")
+    validate_persisted_artifacts(ROOT / "upload_artifacts")
 
 
 if __name__ == "__main__":
