@@ -339,6 +339,21 @@ def mhc_post() -> None:
                         got[a, b, out_mix, h] += comb[a, b, in_mix, out_mix] * residual[a, b, in_mix, h]
     assert_close("07_mhc_post", ref, got)
 
+    # Exercise the hidden-tile traversal used by the Triton variant.  A tile
+    # boundary that does not divide hidden makes the masked tail explicit.
+    block_h = 3
+    tiled = np.empty_like(ref)
+    for a in range(batch0):
+        for b in range(batch1):
+            token = a * batch1 + b
+            for out_mix in range(mult):
+                for tile_start in range(0, hidden, block_h):
+                    for h in range(tile_start, min(tile_start + block_h, hidden)):
+                        tiled[a, b, out_mix, h] = x[a, b, h] * post[a, b, out_mix, 0]
+                        for in_mix in range(mult):
+                            tiled[a, b, out_mix, h] += comb[a, b, in_mix, out_mix] * residual[a, b, in_mix, h]
+    assert_close("07_mhc_post_tiled_hidden", ref, tiled)
+
 
 def sinkhorn() -> None:
     rows, hc, eps, iterations = 6, 4, 1e-6, 20
