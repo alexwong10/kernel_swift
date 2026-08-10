@@ -500,6 +500,27 @@ def head_mix_bwd() -> None:
     assert_close("10_head_mix_grad_base", ref_base, got_base)
     assert_close("10_head_mix_grad_scale", ref_scale, np.array([partial_scale.sum()]))
 
+    # Mirror the two-dimensional row/mix tile used by the optimized kernel.
+    block_mixes = 2
+    tiled_input = np.empty_like(x)
+    tiled_base = np.zeros(4, dtype=np.float32)
+    tiled_scale_parts = np.zeros((num_chunks, 4), dtype=np.float32)
+    for chunk in range(num_chunks):
+        begin = chunk * block_rows
+        end = min(begin + block_rows, rows.shape[0])
+        for mix_start in range(0, 4, block_mixes):
+            for mix in range(mix_start, min(mix_start + block_mixes, 4)):
+                sig = 1.0 / (
+                    1.0 + np.exp(-(rows[begin:end, mix] * scale[0] + base[mix]))
+                )
+                gz = grads[begin:end, mix] * sig * (1 - sig)
+                tiled_input.reshape(-1, 4)[begin:end, mix] = gz * scale[0]
+                tiled_base[mix] += gz.sum()
+                tiled_scale_parts[chunk, mix] += (gz * rows[begin:end, mix]).sum()
+    assert_close("10_head_mix_grad_input_tiled", ref_input, tiled_input)
+    assert_close("10_head_mix_grad_base_tiled", ref_base, tiled_base)
+    assert_close("10_head_mix_grad_scale_tiled", ref_scale, np.array([tiled_scale_parts.sum()]))
+
 
 def main() -> None:
     grouped_topk()

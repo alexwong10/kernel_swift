@@ -2,8 +2,8 @@
   "schema_version": 1,
   "task_key": "10_head_compute_mix_bwd",
   "default": {
-    "variant": "chunked_deterministic",
-    "config": {"block_rows": 256, "num_warps": 4, "reduce_num_warps": 1},
+    "variant": "tiled_mix_chunked",
+    "config": {"block_rows": 256, "block_mixes": 4, "num_warps": 4, "reduce_num_warps": 1},
     "fallback_variants": [
       {"variant": "single_block_reduce", "config": {"num_warps": 8}}
     ]

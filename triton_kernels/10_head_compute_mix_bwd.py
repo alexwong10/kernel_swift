@@ -7,8 +7,13 @@ import triton.language as tl
 _KS_PROFILE = {
     "task_key": "10_head_compute_mix_bwd",
     "chip_key": "portable_default",
-    "variant": "chunked_deterministic",
-    "config": {"block_rows": 256, "num_warps": 4, "reduce_num_warps": 1},
+    "variant": "tiled_mix_chunked",
+    "config": {
+        "block_rows": 256,
+        "block_mixes": 4,
+        "num_warps": 4,
+        "reduce_num_warps": 1,
+    },
 }
 
 
@@ -77,6 +82,48 @@ def _head_mix_bwd_chunked_kernel(
 
 
 @triton.jit
+def _head_mix_bwd_tiled_kernel(
+    input_ptr,
+    scale_ptr,
+    base_ptr,
+    grad_out_ptr,
+    grad_input_ptr,
+    grad_scale_partial_ptr,
+    grad_base_partial_ptr,
+    rows,
+    mhc_mult: tl.constexpr,
+    BLOCK_ROWS: tl.constexpr,
+    BLOCK_MIXES: tl.constexpr,
+):
+    """Process a row chunk and all mix lanes in one program."""
+    mix = tl.program_id(0) * BLOCK_MIXES + tl.arange(0, BLOCK_MIXES)
+    mix_valid = mix < mhc_mult
+    chunk = tl.program_id(1)
+    row = chunk * BLOCK_ROWS + tl.arange(0, BLOCK_ROWS)[:, None]
+    row_valid = row < rows
+    valid = row_valid & mix_valid
+    offset = row * mhc_mult + mix[None, :]
+    x = tl.load(input_ptr + offset, mask=valid, other=0.0).to(tl.float32)
+    scale = tl.load(scale_ptr).to(tl.float32)
+    base = tl.load(base_ptr + mix, mask=mix_valid, other=0.0).to(tl.float32)
+    grad_out = tl.load(grad_out_ptr + offset, mask=valid, other=0.0).to(tl.float32)
+    sigmoid = tl.sigmoid(x * scale + base)
+    grad_z = grad_out * sigmoid * (1.0 - sigmoid)
+    tl.store(grad_input_ptr + offset, grad_z * scale, mask=valid)
+    partial_offset = chunk * mhc_mult + mix
+    tl.store(
+        grad_base_partial_ptr + partial_offset,
+        tl.sum(grad_z, axis=0),
+        mask=mix_valid,
+    )
+    tl.store(
+        grad_scale_partial_ptr + partial_offset,
+        tl.sum(grad_z * x, axis=0),
+        mask=mix_valid,
+    )
+
+
+@triton.jit
 def _reduce_head_mix_parts_kernel(
     grad_scale_partial_ptr,
     grad_base_partial_ptr,
@@ -113,7 +160,11 @@ class ModelNew(nn.Module):
     def __init__(self):
         super().__init__()
         profile = get_operator_profile("10_head_compute_mix_bwd")
-        if profile["variant"] not in {"single_block_reduce", "chunked_deterministic"}:
+        if profile["variant"] not in {
+            "single_block_reduce",
+            "chunked_deterministic",
+            "tiled_mix_chunked",
+        }:
             raise ValueError(f"unsupported head_compute_mix_bwd variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
         self._ks_config = profile["config"]
@@ -153,19 +204,40 @@ class ModelNew(nn.Module):
                 partial_shape, device=input_mix.device, dtype=torch.float32
             )
             grad_base_partial = torch.empty_like(grad_scale_partial)
-            _head_mix_bwd_chunked_kernel[(mhc_mult, num_chunks)](
-                input_mix,
-                mhc_scale,
-                mhc_base,
-                grad_out,
-                grad_input,
-                grad_scale_partial,
-                grad_base_partial,
-                rows,
-                mhc_mult,
-                BLOCK_ROWS=block_rows,
-                num_warps=int(self._ks_config["num_warps"]),
-            )
+            if self._ks_variant == "tiled_mix_chunked":
+                block_mixes = int(self._ks_config["block_mixes"])
+                if block_mixes <= 0:
+                    raise ValueError("block_mixes must be positive")
+                _head_mix_bwd_tiled_kernel[
+                    (triton.cdiv(mhc_mult, block_mixes), num_chunks)
+                ](
+                    input_mix,
+                    mhc_scale,
+                    mhc_base,
+                    grad_out,
+                    grad_input,
+                    grad_scale_partial,
+                    grad_base_partial,
+                    rows,
+                    mhc_mult,
+                    BLOCK_ROWS=block_rows,
+                    BLOCK_MIXES=block_mixes,
+                    num_warps=int(self._ks_config["num_warps"]),
+                )
+            else:
+                _head_mix_bwd_chunked_kernel[(mhc_mult, num_chunks)](
+                    input_mix,
+                    mhc_scale,
+                    mhc_base,
+                    grad_out,
+                    grad_input,
+                    grad_scale_partial,
+                    grad_base_partial,
+                    rows,
+                    mhc_mult,
+                    BLOCK_ROWS=block_rows,
+                    num_warps=int(self._ks_config["num_warps"]),
+                )
             block_chunks = triton.next_power_of_2(num_chunks)
             _reduce_head_mix_parts_kernel[(mhc_mult,)](
                 grad_scale_partial,
