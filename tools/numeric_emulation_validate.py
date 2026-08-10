@@ -321,6 +321,21 @@ def music_rope() -> None:
     assert_close("05_music_flamingo_cos", np.cos(phase_ref), np.cos(phase_flat))
     assert_close("05_music_flamingo_sin", np.sin(phase_ref), np.sin(phase_flat))
 
+    # Mirror the tiled-frequency grid, including a partial channel tile.
+    block_c = 5
+    phase_tiled = np.empty_like(phase_ref)
+    for b in range(batch):
+        for s in range(seq):
+            for c0 in range(0, 2 * dim, block_c):
+                for channel in range(c0, min(c0 + block_c, 2 * dim)):
+                    local = channel % dim
+                    frequency = (b / max_seq) * inv[local // 2]
+                    if channel >= dim:
+                        frequency = position_angles[s, local]
+                    phase_tiled[b, s, channel] = frequency * (-timestamps[b, s] * 2 * math.pi)
+    assert_close("05_music_flamingo_tiled_cos", np.cos(phase_ref), np.cos(phase_tiled))
+    assert_close("05_music_flamingo_tiled_sin", np.sin(phase_ref), np.sin(phase_tiled))
+
 
 def mhc_post() -> None:
     batch0, batch1, mult, hidden = 2, 3, 4, 7

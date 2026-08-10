@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_key": "05_music_flamingo_rotary_embedding",
-  "default": {"variant": "fused_elementwise", "config": {"block": 256, "num_warps": 4}},
+  "default": {"variant": "tiled_frequency", "config": {"block_channel": 128, "num_warps": 4}},
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},
