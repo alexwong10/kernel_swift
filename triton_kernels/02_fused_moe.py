@@ -97,8 +97,11 @@ def _moe_gate_up_kernel(
         mask=i_mask[:, None] & h_mask[None, :],
         other=0.0,
     ).to(tl.float16)
-    gate = tl.dot(gate_w, x[:, None])[:, 0].to(tl.float16)
-    up = tl.dot(up_w, x[:, None])[:, 0].to(tl.float16)
+    # Triton-Ascend does not accept constexpr indexing of a singleton dot
+    # dimension (``[:, 0]``).  Reducing that dimension is algebraically the
+    # same operation and keeps the tiled dot path portable across forks.
+    gate = tl.sum(tl.dot(gate_w, x[:, None]), axis=1).to(tl.float16)
+    up = tl.sum(tl.dot(up_w, x[:, None]), axis=1).to(tl.float16)
     act = gate * tl.sigmoid(gate) * up
     tl.store(
         act_ptr + (token * TOP_K + rank) * intermediate_size + i,
@@ -141,7 +144,7 @@ def _moe_down_kernel(
         mask=h_mask[:, None] & i_mask[None, :],
         other=0.0,
     ).to(tl.float16)
-    down = tl.dot(w2, act[:, None])[:, 0].to(tl.float16) * route_weight
+    down = tl.sum(tl.dot(w2, act[:, None]), axis=1).to(tl.float16) * route_weight
     tl.store(
         contribution_ptr + (token * TOP_K + rank) * hidden_size + h,
         down.to(tl.float16),

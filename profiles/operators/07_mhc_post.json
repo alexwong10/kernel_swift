@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_key": "07_mhc_post",
-  "default": {"variant": "tiled_hidden", "config": {"block_hidden": 256, "num_warps": 4}},
+  "default": {"variant": "tiled_hidden", "config": {"block_hidden": 256, "block_tokens": 4, "num_warps": 4}},
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},

@@ -8,7 +8,7 @@ _KS_PROFILE = {
     "task_key": "07_mhc_post",
     "chip_key": "portable_default",
     "variant": "tiled_hidden",
-    "config": {"block_hidden": 256, "num_warps": 4},
+    "config": {"block_hidden": 256, "block_tokens": 4, "num_warps": 4},
 }
 
 
@@ -70,32 +70,44 @@ def _mhc_post_tiled_kernel(
     out_ptr,
     hidden_size: tl.constexpr,
     mhc_mult: tl.constexpr,
+    token_count,
     BLOCK_H: tl.constexpr,
+    BLOCK_TOKENS: tl.constexpr,
 ):
-    """Compute one output mix and hidden tile per program.
+    """Compute a token tile, output mix and hidden tile per program.
 
     The post and combination coefficients are scalar for a hidden tile.  This
     grid therefore loads each coefficient once instead of repeating the load
-    for every flat output element, while retaining the reference's fp32
-    accumulation and bfloat16 output semantics.
+    for every flat output element.  Grouping tokens also keeps Ascend's
+    flattened ``coreDim`` below its 65535 launch limit for the reference
+    2x4096 input, while retaining the reference's fp32 accumulation and
+    bfloat16 output semantics.
     """
-    token = tl.program_id(0)
+    token = tl.program_id(0) * BLOCK_TOKENS + tl.arange(0, BLOCK_TOKENS)
     out_mix = tl.program_id(1)
     hidden_tile = tl.program_id(2)
     hidden = hidden_tile * BLOCK_H + tl.arange(0, BLOCK_H)
-    mask = hidden < hidden_size
+    token_mask = token < token_count
+    hidden_mask = hidden < hidden_size
+    mask = token_mask[:, None] & hidden_mask[None, :]
 
     x = tl.load(
-        x_ptr + token * hidden_size + hidden, mask=mask, other=0.0
+        x_ptr + token[:, None] * hidden_size + hidden[None, :],
+        mask=mask,
+        other=0.0,
     ).to(tl.float32)
-    post = tl.load(post_mix_ptr + token * mhc_mult + out_mix).to(tl.float32)
+    post = tl.load(
+        post_mix_ptr + token * mhc_mult + out_mix,
+        mask=token_mask,
+        other=0.0,
+    ).to(tl.float32)[:, None]
     result = x * post
     for in_mix in range(mhc_mult):
         residual = tl.load(
             residual_ptr
-            + token * mhc_mult * hidden_size
+            + token[:, None] * mhc_mult * hidden_size
             + in_mix * hidden_size
-            + hidden,
+            + hidden[None, :],
             mask=mask,
             other=0.0,
         ).to(tl.float32)
@@ -103,11 +115,13 @@ def _mhc_post_tiled_kernel(
             comb_mix_ptr
             + token * mhc_mult * mhc_mult
             + in_mix * mhc_mult
-            + out_mix
+            + out_mix,
+            mask=token_mask,
+            other=0.0,
         ).to(tl.float32)
-        result += coefficient * residual
+        result += coefficient[:, None] * residual
 
-    out_offset = (token * mhc_mult + out_mix) * hidden_size + hidden
+    out_offset = (token[:, None] * mhc_mult + out_mix) * hidden_size + hidden[None, :]
     tl.store(out_ptr + out_offset, result, mask=mask)
 
 
@@ -132,12 +146,15 @@ class ModelNew(nn.Module):
         out = torch.empty_like(residual)
         if self._ks_variant == "tiled_hidden":
             block_hidden = int(self._ks_config["block_hidden"])
+            block_tokens = int(self._ks_config.get("block_tokens", 1))
             if block_hidden <= 0:
                 raise ValueError("block_hidden must be positive")
+            if block_tokens <= 0:
+                raise ValueError("block_tokens must be positive")
             token_count = x.numel() // hidden_size
             _mhc_post_tiled_kernel[
                 (
-                    token_count,
+                    triton.cdiv(token_count, block_tokens),
                     mhc_mult,
                     triton.cdiv(hidden_size, block_hidden),
                 )
@@ -149,7 +166,9 @@ class ModelNew(nn.Module):
                 out,
                 hidden_size,
                 mhc_mult,
+                token_count,
                 BLOCK_H=block_hidden,
+                BLOCK_TOKENS=block_tokens,
                 num_warps=int(self._ks_config["num_warps"]),
             )
         else:
