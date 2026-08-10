@@ -56,7 +56,13 @@ def _pool_logits_kernel(
         pooled = tl.zeros((BLOCK_V,), tl.float32)
     for token_start in range(0, total_tokens, BLOCK_T):
         current_token = token_start + token
-        valid = (current_token[:, None] < length) & (vocab[None, :] < vocab_size)
+        # The reference inputs satisfy sum(seq_lens) == total_tokens, but keep
+        # the total-token guard so malformed lengths cannot read past logits.
+        valid = (
+            (current_token[:, None] < length)
+            & (current_token[:, None] < total_tokens)
+            & (vocab[None, :] < vocab_size)
+        )
         values = tl.load(
             logits_ptr
             + (start + current_token[:, None]) * vocab_size
