@@ -43,8 +43,8 @@ def _moe_gate_up_kernel(x_ptr, ids_ptr, w1_ptr, act_ptr, hidden_size: tl.constex
     expert_base = expert * 2 * intermediate_size * hidden_size
     gate_w = tl.load(w1_ptr + expert_base + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
     up_w = tl.load(w1_ptr + expert_base + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
-    gate = tl.dot(gate_w, x[:, None])[:, 0].to(tl.float16)
-    up = tl.dot(up_w, x[:, None])[:, 0].to(tl.float16)
+    gate = tl.sum(tl.dot(gate_w, x[:, None]), axis=1).to(tl.float16)
+    up = tl.sum(tl.dot(up_w, x[:, None]), axis=1).to(tl.float16)
     act = gate * tl.sigmoid(gate) * up
     tl.store(act_ptr + (token * TOP_K + rank) * intermediate_size + i, act.to(tl.float16), mask=i_mask)
 
@@ -61,7 +61,7 @@ def _moe_down_kernel(act_ptr, ids_ptr, route_weights_ptr, w2_ptr, contribution_p
     act = tl.load(act_ptr + (token * TOP_K + rank) * intermediate_size + i, mask=i_mask, other=0.0)
     expert_base = expert * hidden_size * intermediate_size
     w2 = tl.load(w2_ptr + expert_base + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
-    down = tl.dot(w2, act[:, None])[:, 0].to(tl.float16) * route_weight
+    down = tl.sum(tl.dot(w2, act[:, None]), axis=1).to(tl.float16) * route_weight
     tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
 
 @triton.jit

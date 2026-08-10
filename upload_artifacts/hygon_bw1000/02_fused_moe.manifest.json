@@ -3,11 +3,11 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "hygon_bw1000",
-  "source_commit": "6dec9ce8b60bb494f77104256d5ff951ca9e820e",
+  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
   "artifact": "upload_artifacts\\hygon_bw1000\\02_fused_moe.py",
-  "artifact_sha256": "0d4ed7dd6568aa6e6d081355e6c5656e63e0a77a05c80121f6cea4514070ebf3",
+  "artifact_sha256": "cb906979b7e5a8875b69329b326ba334912260381555bfe8e49acbb16352a620",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "5228af4e2e31a252287a2d167836c97c4c1dd37c2741511c8864705eb055156c",
+    "triton_kernels/02_fused_moe.py": "217a7ab8de8a5029c875cc8c9dcc1ec4d79e74952b84526ec8e92fe41216dc80",
     "profiles/operators/02_fused_moe.json": "a5410d4c76907045201de19dfb22cc4ab79dedb4e68cccade440d56d12152b58",
     "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
   },

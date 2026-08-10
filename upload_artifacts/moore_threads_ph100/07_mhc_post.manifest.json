@@ -3,18 +3,19 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "6dec9ce8b60bb494f77104256d5ff951ca9e820e",
+  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
   "artifact": "upload_artifacts\\moore_threads_ph100\\07_mhc_post.py",
-  "artifact_sha256": "ecd6906e693d9fba21d19b70455b52c333f98680ada8eda4e95b89e92b14655d",
+  "artifact_sha256": "2df3560c748d5bcd9fc77c552ebe9cb4220526efae52bd9864f2981bbefdc8a5",
   "sources": {
-    "triton_kernels/07_mhc_post.py": "2cb5abcdf00714f9d51217ea70eb6165b3e328fbbdb5de3fbeb1fab5f6b14f1e",
-    "profiles/operators/07_mhc_post.json": "d706ff422a8aa8a2d11c70fce916c19a2698db860de48d0e66c190a2dd8b37b1",
+    "triton_kernels/07_mhc_post.py": "4a1385024eeb36102fa963ad77a0363f1d256bb9e7c0bb6d67fa76d9982a442a",
+    "profiles/operators/07_mhc_post.json": "48f4f147167f84e779bd19faeddf0957132a9c98418bf0a6425b78c8440e22e3",
     "profiles/chips/moore_threads_ph100.json": "d7ed879a5d36eae212b809be5cb92161cd0484b34151af3971a5738b947a1581"
   },
   "profile": {
     "variant": "tiled_hidden",
     "config": {
       "block_hidden": 256,
+      "block_tokens": 4,
       "num_warps": 4
     },
     "schema_version": 1,
