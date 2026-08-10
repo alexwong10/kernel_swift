@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "enflame_s60",
-  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
+  "source_commit": "6dec9ce8b60bb494f77104256d5ff951ca9e820e",
   "artifact": "upload_artifacts\\enflame_s60\\07_mhc_post.py",
   "artifact_sha256": "040565a1aba6dafb9bd1bed1b92c372993c1c61e69c274d39215b40b34670c5d",
   "sources": {

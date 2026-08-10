@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "metax_c500",
-  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
+  "source_commit": "6dec9ce8b60bb494f77104256d5ff951ca9e820e",
   "artifact": "upload_artifacts\\metax_c500\\01_grouped_topk.py",
   "artifact_sha256": "8423df3df8415a1c11add173ed4f96580e201046e8c36cbecfe0d7fc1e11cb2b",
   "sources": {
