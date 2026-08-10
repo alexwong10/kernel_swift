@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "thead_810e",
-  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
+  "source_commit": "8d951f0af01193448547ef2ef8065af3217e9dd4",
   "artifact": "upload_artifacts\\thead_810e\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "f57099244f375df28a2b062f436c3806cd36e99d5579420e297de78e1ebc6411",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "enflame_s60",
-  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
+  "source_commit": "8d951f0af01193448547ef2ef8065af3217e9dd4",
   "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
   "artifact_sha256": "9867c9a644ae5db7822b31b4fe9fc3702fa460876c6359d251f64b17780e2ad3",
   "sources": {

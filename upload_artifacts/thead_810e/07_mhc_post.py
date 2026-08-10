@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'flat_elementwise', 'config': {'block': 256, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'thead_810e', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_hidden', 'config': {'block_hidden': 256, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'thead_810e', 'verified': False}
 
 @triton.jit
 def _mhc_post_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, hidden_size: tl.constexpr, mhc_mult: tl.constexpr, total: tl.constexpr, BLOCK: tl.constexpr):
@@ -22,22 +22,54 @@ def _mhc_post_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, h
         result += coefficient * residual
     tl.store(out_ptr + offsets, result, mask=mask)
 
+@triton.jit
+def _mhc_post_tiled_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, hidden_size: tl.constexpr, mhc_mult: tl.constexpr, BLOCK_H: tl.constexpr):
+    """Compute one output mix and hidden tile per program.
+
+    The post and combination coefficients are scalar for a hidden tile.  This
+    grid therefore loads each coefficient once instead of repeating the load
+    for every flat output element, while retaining the reference's fp32
+    accumulation and bfloat16 output semantics.
+    """
+    token = tl.program_id(0)
+    out_mix = tl.program_id(1)
+    hidden_tile = tl.program_id(2)
+    hidden = hidden_tile * BLOCK_H + tl.arange(0, BLOCK_H)
+    mask = hidden < hidden_size
+    x = tl.load(x_ptr + token * hidden_size + hidden, mask=mask, other=0.0).to(tl.float32)
+    post = tl.load(post_mix_ptr + token * mhc_mult + out_mix).to(tl.float32)
+    result = x * post
+    for in_mix in range(mhc_mult):
+        residual = tl.load(residual_ptr + token * mhc_mult * hidden_size + in_mix * hidden_size + hidden, mask=mask, other=0.0).to(tl.float32)
+        coefficient = tl.load(comb_mix_ptr + token * mhc_mult * mhc_mult + in_mix * mhc_mult + out_mix).to(tl.float32)
+        result += coefficient * residual
+    out_offset = (token * mhc_mult + out_mix) * hidden_size + hidden
+    tl.store(out_ptr + out_offset, result, mask=mask)
+
 class Model(nn.Module):
 
     def __init__(self):
         super().__init__()
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] != 'flat_elementwise':
+        if profile['variant'] not in {'tiled_hidden', 'flat_elementwise'}:
             raise ValueError(f"unsupported mhc_post variant: {profile['variant']}")
+        self._ks_variant = profile['variant']
         self._ks_config = profile['config']
 
     def forward(self, x: torch.Tensor, residual: torch.Tensor, post_layer_mix: torch.Tensor, comb_res_mix: torch.Tensor) -> torch.Tensor:
         hidden_size = x.shape[-1]
         mhc_mult = residual.shape[-2]
         out = torch.empty_like(residual)
-        total = out.numel()
-        block = int(self._ks_config['block'])
-        _mhc_post_kernel[triton.cdiv(total, block),](x, residual, post_layer_mix, comb_res_mix, out, hidden_size, mhc_mult, total, BLOCK=block, num_warps=int(self._ks_config['num_warps']))
+        if self._ks_variant == 'tiled_hidden':
+            block_hidden = int(self._ks_config['block_hidden'])
+            if block_hidden <= 0:
+                raise ValueError('block_hidden must be positive')
+            token_count = x.numel() // hidden_size
+            _mhc_post_tiled_kernel[token_count, mhc_mult, triton.cdiv(hidden_size, block_hidden)](x, residual, post_layer_mix, comb_res_mix, out, hidden_size, mhc_mult, BLOCK_H=block_hidden, num_warps=int(self._ks_config['num_warps']))
+        else:
+            total = out.numel()
+            block = int(self._ks_config['block'])
+            _mhc_post_kernel[triton.cdiv(total, block),](x, residual, post_layer_mix, comb_res_mix, out, hidden_size, mhc_mult, total, BLOCK=block, num_warps=int(self._ks_config['num_warps']))
         return out
 
 def get_inputs():

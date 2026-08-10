@@ -3,18 +3,18 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
+  "source_commit": "8d951f0af01193448547ef2ef8065af3217e9dd4",
   "artifact": "upload_artifacts\\iluvatar_bi150\\07_mhc_post.py",
-  "artifact_sha256": "904c15740b89fd23a20a645f79d05ac2627df5bc59295be52b96258510110462",
+  "artifact_sha256": "7268045c09f7d395c9ad1a7c8e60086173e9751539679d7b0f2d99b764cc3b80",
   "sources": {
-    "triton_kernels/07_mhc_post.py": "5ddcd95081146bf53a2ade7a747980de1ccbc76d7292406342e9d551672b0537",
-    "profiles/operators/07_mhc_post.json": "d0d38ad3412a6a460b4ae07394f6eb36e53a0b12c41eb76c223f2366bfbe854a",
+    "triton_kernels/07_mhc_post.py": "2cb5abcdf00714f9d51217ea70eb6165b3e328fbbdb5de3fbeb1fab5f6b14f1e",
+    "profiles/operators/07_mhc_post.json": "d706ff422a8aa8a2d11c70fce916c19a2698db860de48d0e66c190a2dd8b37b1",
     "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
   },
   "profile": {
-    "variant": "flat_elementwise",
+    "variant": "tiled_hidden",
     "config": {
-      "block": 256,
+      "block_hidden": 256,
       "num_warps": 4
     },
     "schema_version": 1,

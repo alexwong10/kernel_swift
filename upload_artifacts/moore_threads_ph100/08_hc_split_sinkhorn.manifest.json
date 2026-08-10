@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
+  "source_commit": "8d951f0af01193448547ef2ef8065af3217e9dd4",
   "artifact": "upload_artifacts\\moore_threads_ph100\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "5f36bc524cd6daaef855c9878568b9d591cffbbd97486bdd44ea87fa87f592e7",
   "sources": {
