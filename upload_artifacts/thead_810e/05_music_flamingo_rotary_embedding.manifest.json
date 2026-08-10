@@ -3,18 +3,18 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "thead_810e",
-  "source_commit": "8d951f0af01193448547ef2ef8065af3217e9dd4",
+  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
   "artifact": "upload_artifacts\\thead_810e\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "f57099244f375df28a2b062f436c3806cd36e99d5579420e297de78e1ebc6411",
+  "artifact_sha256": "47c5f5280152909b2277111efa89f6fb8273c4a4853f9650cd7c3ba843c38022",
   "sources": {
-    "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "f4069a0d28e274c5706a9d14a2b4f7c9dc48c47cb2013171859282de029dd91a",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
   },
   "profile": {
-    "variant": "fused_elementwise",
+    "variant": "tiled_frequency",
     "config": {
-      "block": 256,
+      "block_channel": 128,
       "num_warps": 4
     },
     "schema_version": 1,

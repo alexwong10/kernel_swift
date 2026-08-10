@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'fused_elementwise', 'config': {'block': 256, 'num_warps': 4}, 'schema_version': 1, 'task_key': '05_music_flamingo_rotary_embedding', 'chip_key': 'thead_810e', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_frequency', 'config': {'block_channel': 128, 'num_warps': 4}, 'schema_version': 1, 'task_key': '05_music_flamingo_rotary_embedding', 'chip_key': 'thead_810e', 'verified': False}
 
 @triton.jit
 def _music_rope_kernel(timestamps_ptr, inv_freq_ptr, position_angles_ptr, cos_ptr, sin_ptr, seq_len: tl.constexpr, dim: tl.constexpr, max_seq_len: tl.constexpr, total: tl.constexpr, BLOCK: tl.constexpr):
@@ -25,6 +25,25 @@ def _music_rope_kernel(timestamps_ptr, inv_freq_ptr, position_angles_ptr, cos_pt
     tl.store(cos_ptr + offsets, tl.cos(phase), mask=mask)
     tl.store(sin_ptr + offsets, tl.sin(phase), mask=mask)
 
+@triton.jit
+def _music_rope_tiled_kernel(timestamps_ptr, inv_freq_ptr, position_angles_ptr, cos_ptr, sin_ptr, seq_len: tl.constexpr, dim: tl.constexpr, max_seq_len: tl.constexpr, BLOCK_C: tl.constexpr):
+    """Compute one batch/position channel tile with shared scalar indexing."""
+    batch = tl.program_id(0)
+    position = tl.program_id(1)
+    channel = tl.program_id(2) * BLOCK_C + tl.arange(0, BLOCK_C)
+    channel_count = 2 * dim
+    mask = channel < channel_count
+    timestamp = tl.load(timestamps_ptr + batch * seq_len + position).to(tl.float32)
+    local_channel = channel % dim
+    inv = tl.load(inv_freq_ptr + local_channel // 2, mask=mask, other=0.0).to(tl.float32)
+    batch_freq = batch.to(tl.float32) / max_seq_len * inv
+    time_freq = tl.load(position_angles_ptr + position * dim + local_channel, mask=mask, other=0.0).to(tl.float32)
+    freq = tl.where(channel < dim, batch_freq, time_freq)
+    phase = freq * (-timestamp * 6.283185307179586)
+    output = (batch * seq_len + position) * channel_count + channel
+    tl.store(cos_ptr + output, tl.cos(phase), mask=mask)
+    tl.store(sin_ptr + output, tl.sin(phase), mask=mask)
+
 class Model(nn.Module):
 
     def __init__(self, dim: int=64, max_seq_len: int=256, base: float=10000.0):
@@ -37,8 +56,9 @@ class Model(nn.Module):
         position_angles = positions_norm.unsqueeze(-1) * inv_freq
         self.register_buffer('position_angles', position_angles.repeat_interleave(2, dim=-1))
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] != 'fused_elementwise':
+        if profile['variant'] not in {'fused_elementwise', 'tiled_frequency'}:
             raise ValueError(f"unsupported MusicFlamingo variant: {profile['variant']}")
+        self._ks_variant = profile['variant']
         self._ks_config = profile['config']
 
     def forward(self, timestamps: torch.Tensor, seq_len: int):
@@ -47,9 +67,15 @@ class Model(nn.Module):
         shape = (batch_size, seq_len, 2 * dim)
         cos = torch.empty(shape, device=timestamps.device, dtype=torch.float32)
         sin = torch.empty_like(cos)
-        total = cos.numel()
-        block = int(self._ks_config['block'])
-        _music_rope_kernel[triton.cdiv(total, block),](timestamps, self.inv_freq, self.position_angles, cos, sin, seq_len, dim, self.max_seq_len, total, BLOCK=block, num_warps=int(self._ks_config['num_warps']))
+        if self._ks_variant == 'tiled_frequency':
+            block_channel = int(self._ks_config['block_channel'])
+            if block_channel <= 0:
+                raise ValueError('block_channel must be positive')
+            _music_rope_tiled_kernel[batch_size, seq_len, triton.cdiv(2 * dim, block_channel)](timestamps, self.inv_freq, self.position_angles, cos, sin, seq_len, dim, self.max_seq_len, BLOCK_C=block_channel, num_warps=int(self._ks_config['num_warps']))
+        else:
+            total = cos.numel()
+            block = int(self._ks_config['block'])
+            _music_rope_kernel[triton.cdiv(total, block),](timestamps, self.inv_freq, self.position_angles, cos, sin, seq_len, dim, self.max_seq_len, total, BLOCK=block, num_warps=int(self._ks_config['num_warps']))
         return (cos, sin)
 
 def get_inputs():

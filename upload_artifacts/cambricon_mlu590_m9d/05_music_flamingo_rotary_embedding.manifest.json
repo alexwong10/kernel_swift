@@ -3,18 +3,18 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "8d951f0af01193448547ef2ef8065af3217e9dd4",
+  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "ee75c1b0a7d36bb1ebeb7b34725867fcd0d5df91e9d2f932b69871846b813c59",
+  "artifact_sha256": "d0fdfc9d17bef6a812588a7a1daee0acc7ccedea8b17c1f97b3b43c8f7c1f7f3",
   "sources": {
-    "triton_kernels/05_music_flamingo_rotary_embedding.py": "2c6ef3a0b045b9692a3565c888ad62b3987c9468fc5372c5b7b28947031c4df8",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "572701cc96f1d649bd3f97ab629912daae38b6f2637ec2317b695f564617ad19",
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "f4069a0d28e274c5706a9d14a2b4f7c9dc48c47cb2013171859282de029dd91a",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
   "profile": {
-    "variant": "fused_elementwise",
+    "variant": "tiled_frequency",
     "config": {
-      "block": 256,
+      "block_channel": 128,
       "num_warps": 4
     },
     "schema_version": 1,
@@ -54,7 +54,7 @@
     ],
     "replacements": [
       {
-        "line": 98,
+        "line": 157,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"
