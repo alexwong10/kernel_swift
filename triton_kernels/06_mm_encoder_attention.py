@@ -6,8 +6,8 @@ from common import triton_attention
 _KS_PROFILE = {
     "task_key": "06_mm_encoder_attention",
     "chip_key": "portable_default",
-    "variant": "full_row_diagnostic",
-    "config": {"num_warps": 8},
+    "variant": "tiled_online_softmax",
+    "config": {"num_warps": 8, "block_n": 64},
 }
 
 
@@ -25,7 +25,7 @@ class ModelNew(nn.Module):
         self.num_kv_heads = num_kv_heads
         self.scale = 1.0 / (head_size**0.5)
         profile = get_operator_profile("06_mm_encoder_attention")
-        if profile["variant"] != "full_row_diagnostic":
+        if profile["variant"] != "tiled_online_softmax":
             raise ValueError(f"unsupported MMEncoderAttention variant: {profile['variant']}")
         self._ks_attention_config = profile["config"]
 

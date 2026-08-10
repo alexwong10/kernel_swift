@@ -239,6 +239,39 @@ def attention() -> None:
                     got[b, query, head] = (p[:, None] * v[b, :, head]).sum(axis=0)
         assert_close(name, ref, got)
 
+        # Mirror the tiled online-softmax recurrence used by the Triton
+        # attention kernel.  This specifically exercises a kv length that
+        # spans multiple tiles and catches running-max/normalizer mistakes.
+        got_online = np.empty_like(ref)
+        tile_n = 3
+        for b in range(batch):
+            for query in range(q_len):
+                for head in range(heads):
+                    running_max = -np.inf
+                    running_norm = 0.0
+                    accumulator = np.zeros(dim, dtype=np.float64)
+                    for n_start in range(0, kv_len, tile_n):
+                        n = np.arange(n_start, min(n_start + tile_n, kv_len))
+                        valid = np.ones(n.shape, dtype=bool)
+                        if causal:
+                            valid &= n <= query
+                        tile_scores = (k[b, n, head] @ q[b, query, head]) * scale
+                        tile_scores = np.where(valid, tile_scores, -np.inf)
+                        tile_max = tile_scores.max()
+                        next_max = max(running_max, tile_max)
+                        old_scale = np.exp(running_max - next_max)
+                        probs = np.where(
+                            valid, np.exp(tile_scores - next_max), 0.0
+                        )
+                        accumulator = (
+                            accumulator * old_scale
+                            + (probs[:, None] * v[b, n, head]).sum(axis=0)
+                        )
+                        running_norm = running_norm * old_scale + probs.sum()
+                        running_max = next_max
+                    got_online[b, query, head] = accumulator / running_norm
+        assert_close(name + "_online", ref, got_online)
+
     # The MM encoder reference supports grouped-query attention.  Exercise the
     # same head expansion used by the Triton wrapper instead of only checking
     # the equal-head case from the default input generator.

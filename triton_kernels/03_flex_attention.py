@@ -6,8 +6,8 @@ from common import triton_attention
 _KS_PROFILE = {
     "task_key": "03_flex_attention",
     "chip_key": "portable_default",
-    "variant": "full_row_diagnostic",
-    "config": {"num_warps": 8},
+    "variant": "tiled_online_softmax",
+    "config": {"num_warps": 8, "block_n": 64},
 }
 
 
@@ -31,7 +31,7 @@ class ModelNew(nn.Module):
         self.scale = scale or 1.0 / (head_size**0.5)
         self.num_kv_heads = num_kv_heads
         profile = get_operator_profile("03_flex_attention")
-        if profile["variant"] != "full_row_diagnostic":
+        if profile["variant"] != "tiled_online_softmax":
             raise ValueError(f"unsupported FlexAttention variant: {profile['variant']}")
         self._ks_attention_config = profile["config"]
 

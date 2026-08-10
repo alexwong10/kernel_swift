@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_key": "06_mm_encoder_attention",
-  "default": {"variant": "full_row_diagnostic", "config": {"num_warps": 8}},
+  "default": {"variant": "tiled_online_softmax", "config": {"num_warps": 8, "block_n": 64}},
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},

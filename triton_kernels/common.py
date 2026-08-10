@@ -193,16 +193,14 @@ def _attention_kernel(
     stride_oh: tl.constexpr,
     stride_od: tl.constexpr,
     CAUSAL: tl.constexpr,
-    BLOCK_SEQ: tl.constexpr,
+    BLOCK_N: tl.constexpr,
     BLOCK_D: tl.constexpr,
 ):
     q_index = tl.program_id(0)
     head = tl.program_id(1)
     batch = tl.program_id(2)
     d = tl.arange(0, BLOCK_D)
-    n = tl.arange(0, BLOCK_SEQ)
     d_mask = d < head_dim
-    n_mask = n < kv_len
 
     q = tl.load(
         q_ptr
@@ -213,34 +211,49 @@ def _attention_kernel(
         mask=d_mask,
         other=0.0,
     ).to(tl.float32)
-    k = tl.load(
-        k_ptr
-        + batch * stride_kb
-        + n[:, None] * stride_ks
-        + head * stride_kh
-        + d[None, :] * stride_kd,
-        mask=n_mask[:, None] & d_mask[None, :],
-        other=0.0,
-    ).to(tl.float32)
-    scores = tl.sum(k * q[None, :], axis=1) * scale
-    valid = n_mask
-    if CAUSAL:
-        valid = valid & (n <= q_index)
-    scores = tl.where(valid, scores, -float("inf"))
-    scores = scores - tl.max(scores, axis=0)
-    probs = tl.exp(scores)
-    probs = probs / tl.sum(probs, axis=0)
 
-    v = tl.load(
-        v_ptr
-        + batch * stride_vb
-        + n[:, None] * stride_vs
-        + head * stride_vh
-        + d[None, :] * stride_vd,
-        mask=n_mask[:, None] & d_mask[None, :],
-        other=0.0,
-    ).to(tl.float32)
-    result = tl.sum(probs[:, None] * v, axis=0)
+    # Stream over key/value tiles so a query program never materializes the
+    # complete kv_len x head_dim row.  The running max and normalizer are the
+    # standard online-softmax recurrence and are algebraically equivalent to
+    # the full-row implementation for both causal and non-causal attention.
+    running_max = -float("inf")
+    running_norm = 0.0
+    result = tl.zeros((BLOCK_D,), tl.float32)
+    for n_start in range(0, kv_len, BLOCK_N):
+        n = n_start + tl.arange(0, BLOCK_N)
+        n_mask = n < kv_len
+        k = tl.load(
+            k_ptr
+            + batch * stride_kb
+            + n[:, None] * stride_ks
+            + head * stride_kh
+            + d[None, :] * stride_kd,
+            mask=n_mask[:, None] & d_mask[None, :],
+            other=0.0,
+        ).to(tl.float32)
+        scores = tl.sum(k * q[None, :], axis=1) * scale
+        valid = n_mask
+        if CAUSAL:
+            valid = valid & (n <= q_index)
+        scores = tl.where(valid, scores, -float("inf"))
+        tile_max = tl.max(scores, axis=0)
+        next_max = tl.maximum(running_max, tile_max)
+        old_scale = tl.exp(running_max - next_max)
+        probs = tl.where(valid, tl.exp(scores - next_max), 0.0)
+        v = tl.load(
+            v_ptr
+            + batch * stride_vb
+            + n[:, None] * stride_vs
+            + head * stride_vh
+            + d[None, :] * stride_vd,
+            mask=n_mask[:, None] & d_mask[None, :],
+            other=0.0,
+        ).to(tl.float32)
+        result = result * old_scale + tl.sum(probs[:, None] * v, axis=0)
+        running_norm = running_norm * old_scale + tl.sum(probs, axis=0)
+        running_max = next_max
+
+    result = result / running_norm
     tl.store(
         out_ptr
         + batch * stride_ob
@@ -271,7 +284,9 @@ def triton_attention(
     if key.shape[2] != num_heads or key.shape[3] != head_dim:
         raise ValueError("query/key/value heads and head dimensions must match")
     out = torch.empty_like(query)
-    block_seq = triton.next_power_of_2(kv_len)
+    block_n = int(config.get("block_n", 64))
+    if block_n <= 0:
+        raise ValueError("attention block_n must be positive")
     block_d = triton.next_power_of_2(head_dim)
     _attention_kernel[(q_len, num_heads, batch_size)](
         query,
@@ -301,7 +316,7 @@ def triton_attention(
         out.stride(2),
         out.stride(3),
         CAUSAL=causal,
-        BLOCK_SEQ=block_seq,
+        BLOCK_N=block_n,
         BLOCK_D=block_d,
         num_warps=int(config["num_warps"]),
     )
