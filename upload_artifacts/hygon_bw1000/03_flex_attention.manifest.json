@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "hygon_bw1000",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\hygon_bw1000\\03_flex_attention.py",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\03_flex_attention.py",
   "artifact_sha256": "37bfe01931d9db1387a1b87cf81c15fba92ad05f02470068a2be6ab4309e5748",
   "sources": {
     "triton_kernels/03_flex_attention.py": "7b2cc431ee6662a6dfbab868ee48856ddf9cc8233bdf98f8413cc390beaf4132",

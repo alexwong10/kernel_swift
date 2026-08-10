@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\iluvatar_bi150\\07_mhc_post.py",
-  "artifact_sha256": "44e46221303154309ffaed2a2093de343d4f5e6da8ce71bcbc31abe553be12bb",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\07_mhc_post.py",
+  "artifact_sha256": "9c6b9c7d0540fe85c4d80d5f4338c65d0af3b8c8a8778cc4f032bf1838a814d9",
   "sources": {
-    "triton_kernels/07_mhc_post.py": "4a1385024eeb36102fa963ad77a0363f1d256bb9e7c0bb6d67fa76d9982a442a",
-    "profiles/operators/07_mhc_post.json": "48f4f147167f84e779bd19faeddf0957132a9c98418bf0a6425b78c8440e22e3",
+    "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
+    "profiles/operators/07_mhc_post.json": "b7d027ebdad9b22f95424a5865ab4992cccce31a832ad80a20d386c648642d70",
     "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
   },
   "profile": {

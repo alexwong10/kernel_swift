@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "thead_810e",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\thead_810e\\02_fused_moe.py",
-  "artifact_sha256": "db3013dd61c249a8dccca051efcedf8701a851db10a0af1978b3f550b9199bb7",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\02_fused_moe.py",
+  "artifact_sha256": "9c2c31b96734046ccc6b55d0750d62f9ff2c1b612d0ab06292d4d9d0526edc08",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "217a7ab8de8a5029c875cc8c9dcc1ec4d79e74952b84526ec8e92fe41216dc80",
-    "profiles/operators/02_fused_moe.json": "a5410d4c76907045201de19dfb22cc4ab79dedb4e68cccade440d56d12152b58",
+    "triton_kernels/02_fused_moe.py": "0350a3c638339037ba88ca7e7631b008cddd3a37d7a8bc0a03a5e217fa675f04",
+    "profiles/operators/02_fused_moe.json": "2b6614887d7e2724454469b806a7c9739ff9cc4d4f85b2c3397bd24c8860bf1d",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
   },
   "profile": {

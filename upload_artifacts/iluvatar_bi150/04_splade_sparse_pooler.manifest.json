@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
   "artifact_sha256": "826fd6396bfe043a75c05d50620ae771d816d6682d9b933db74397ca8503c070",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "58e5040ce40903402a76a9ae00c978e404653423ccc839a4381c80a417b16507",

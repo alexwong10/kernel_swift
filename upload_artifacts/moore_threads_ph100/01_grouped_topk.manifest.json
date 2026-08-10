@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\moore_threads_ph100\\01_grouped_topk.py",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\01_grouped_topk.py",
   "artifact_sha256": "af3847a8ba36398fd8b9173552670c706ef8532b399b84cbb12d78bb550421dc",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",

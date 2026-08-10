@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\07_mhc_post.py",
-  "artifact_sha256": "cb35b9dc4eb95d22bd19a685ce9d4a4fc95f492505362f972bb30912739a82cf",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\cambricon_mlu590_m9d\\07_mhc_post.py",
+  "artifact_sha256": "154524f5c514432932ffdd4021bbd1d7d96330d79f667aa4a2adb016f5b1ee42",
   "sources": {
-    "triton_kernels/07_mhc_post.py": "4a1385024eeb36102fa963ad77a0363f1d256bb9e7c0bb6d67fa76d9982a442a",
-    "profiles/operators/07_mhc_post.json": "48f4f147167f84e779bd19faeddf0957132a9c98418bf0a6425b78c8440e22e3",
+    "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
+    "profiles/operators/07_mhc_post.json": "b7d027ebdad9b22f95424a5865ab4992cccce31a832ad80a20d386c648642d70",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
   "profile": {

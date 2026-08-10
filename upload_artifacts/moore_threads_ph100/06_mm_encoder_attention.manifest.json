@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
-  "artifact": "upload_artifacts\\moore_threads_ph100\\06_mm_encoder_attention.py",
+  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\06_mm_encoder_attention.py",
   "artifact_sha256": "93b10a83edbaae14739bd6ffbbd7995524eb6d114cf8d8773d1c4b9391123aa7",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "4d982c87976b709b7de84164aee765f7fab67d9e52f2719aaca424803977f0d6",
