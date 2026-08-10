@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\moore_threads_ph100\\09_centre_random_augmentation.py",
   "artifact_sha256": "1698f617ef2dd545c714d9a2196b432cd608b7c340663f101ea2118b0fbf85ec",
   "sources": {

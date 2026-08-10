@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\ascend_a2_910b\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "6b5278aa6dd46616b3a09d6dd591ba6220cc6ce5a9f590065c48977b7453257e",
   "sources": {

@@ -3,11 +3,11 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "enflame_s60",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "78da5271cb62faad50b786e5ab62b8d8a2c90c56991f46837a66562d06c5089b",
+  "artifact_sha256": "9867c9a644ae5db7822b31b4fe9fc3702fa460876c6359d251f64b17780e2ad3",
   "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
+    "triton_kernels/04_splade_sparse_pooler.py": "58e5040ce40903402a76a9ae00c978e404653423ccc839a4381c80a417b16507",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
@@ -62,13 +62,13 @@
     ],
     "replacements": [
       {
-        "line": 151,
+        "line": 157,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 152,
+        "line": 158,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"

@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "enflame_s60",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\enflame_s60\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "991a1713e3030046021e06298050d8f744c314f468728bb39fadebab7ddf6e90",
   "sources": {

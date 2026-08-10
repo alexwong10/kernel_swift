@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "thead_810e",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\thead_810e\\07_mhc_post.py",
   "artifact_sha256": "8d2f581147b750396507d11a8717e486870b17cc804fe12db626672da725586f",
   "sources": {

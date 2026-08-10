@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "hygon_bw1000",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
   "artifact_sha256": "f7218efd0b9c63dca610f7191eb9fc27524e670c3e38612fcb904996fa0f20ac",
   "sources": {

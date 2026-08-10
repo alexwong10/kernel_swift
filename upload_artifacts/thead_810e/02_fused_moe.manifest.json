@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "thead_810e",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\thead_810e\\02_fused_moe.py",
   "artifact_sha256": "08e0d83ce7615e1cc8fc9b9d534263fc0b29c75816639c93b9376d948f38f109",
   "sources": {

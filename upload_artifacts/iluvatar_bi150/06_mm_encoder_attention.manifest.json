@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\iluvatar_bi150\\06_mm_encoder_attention.py",
   "artifact_sha256": "6cbc7e595524272ebd56838f277535ce3834af4e905b05363470b707474b6425",
   "sources": {

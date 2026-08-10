@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
+  "source_commit": "1294de06d40de2c0856b757c03e6049b637413c1",
   "artifact": "upload_artifacts\\ascend_a2_910b\\02_fused_moe.py",
   "artifact_sha256": "4e039b2d4e73b1473d348a5f3dbc5b4bfb1492bb91dcfcc41ddb747c5e6b1bbe",
   "sources": {
