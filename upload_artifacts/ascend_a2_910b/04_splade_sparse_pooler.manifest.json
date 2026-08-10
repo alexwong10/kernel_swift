@@ -3,14 +3,14 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
+  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
   "artifact": "upload_artifacts\\ascend_a2_910b\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "5b99ccf506eac4e2be119289e5c3d881dafbb94a30a1403a27daa0aaed835e4f",
+  "artifact_sha256": "856b3d18ccf28463a35fe73b123a52567fd7bebf0365dae44727ed031622e7ae",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834",
-    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+    "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
     "variant": "staged_portable",

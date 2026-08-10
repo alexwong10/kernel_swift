@@ -3,14 +3,14 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
+  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "c586f5817fc0b8da126585a69e0d83b48719150da58be66e4da253232f33151a",
+  "artifact_sha256": "91997ae8d189ad28a6b2b4067e946a3588036016906d79b0d46af4d78aebbab4",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed",
-    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+    "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
     "variant": "staged_portable",

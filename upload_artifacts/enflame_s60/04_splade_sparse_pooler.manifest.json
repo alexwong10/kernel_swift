@@ -3,14 +3,14 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "enflame_s60",
-  "source_commit": "9317b8b9e6c43fa22bdd239ce8afa75a623b6a1f",
+  "source_commit": "d63ba901433ecf915c9d62458adab4d6fdcb82e1",
   "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "6fae646cc59154d5fd95a8376ddb1602d8dfa4cb221b4f91568ca5f9ef8bf615",
+  "artifact_sha256": "78da5271cb62faad50b786e5ab62b8d8a2c90c56991f46837a66562d06c5089b",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "a8df0d215316c3012ab791e3d6644953d2206d2e22d5c1605659f26477a86d3a",
     "profiles/operators/04_splade_sparse_pooler.json": "cf9a8bcb0c23328455bac0d9cee241b6fa56a22cec1cc6d4096cc8b46bde60aa",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
-    "triton_kernels/common.py": "9d9791a16242c807097551e331d17894e7594619b7343a13511cd337dd7d5e5e"
+    "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
     "variant": "staged_portable",

@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'full_row_diagnostic', 'config': {'num_warps': 8}, 'schema_version': 1, 'task_key': '06_mm_encoder_attention', 'chip_key': 'metax_c500', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 8, 'block_n': 64}, 'schema_version': 1, 'task_key': '06_mm_encoder_attention', 'chip_key': 'metax_c500', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -66,26 +66,34 @@ def gelu_layer_norm(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, e
     return out
 
 @triton.jit
-def _attention_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.constexpr, q_len: tl.constexpr, kv_len: tl.constexpr, num_heads: tl.constexpr, head_dim: tl.constexpr, scale, stride_qb: tl.constexpr, stride_qs: tl.constexpr, stride_qh: tl.constexpr, stride_qd: tl.constexpr, stride_kb: tl.constexpr, stride_ks: tl.constexpr, stride_kh: tl.constexpr, stride_kd: tl.constexpr, stride_vb: tl.constexpr, stride_vs: tl.constexpr, stride_vh: tl.constexpr, stride_vd: tl.constexpr, stride_ob: tl.constexpr, stride_os: tl.constexpr, stride_oh: tl.constexpr, stride_od: tl.constexpr, CAUSAL: tl.constexpr, BLOCK_SEQ: tl.constexpr, BLOCK_D: tl.constexpr):
+def _attention_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.constexpr, q_len: tl.constexpr, kv_len: tl.constexpr, num_heads: tl.constexpr, head_dim: tl.constexpr, scale, stride_qb: tl.constexpr, stride_qs: tl.constexpr, stride_qh: tl.constexpr, stride_qd: tl.constexpr, stride_kb: tl.constexpr, stride_ks: tl.constexpr, stride_kh: tl.constexpr, stride_kd: tl.constexpr, stride_vb: tl.constexpr, stride_vs: tl.constexpr, stride_vh: tl.constexpr, stride_vd: tl.constexpr, stride_ob: tl.constexpr, stride_os: tl.constexpr, stride_oh: tl.constexpr, stride_od: tl.constexpr, CAUSAL: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_D: tl.constexpr):
     q_index = tl.program_id(0)
     head = tl.program_id(1)
     batch = tl.program_id(2)
     d = tl.arange(0, BLOCK_D)
-    n = tl.arange(0, BLOCK_SEQ)
     d_mask = d < head_dim
-    n_mask = n < kv_len
     q = tl.load(q_ptr + batch * stride_qb + q_index * stride_qs + head * stride_qh + d * stride_qd, mask=d_mask, other=0.0).to(tl.float32)
-    k = tl.load(k_ptr + batch * stride_kb + n[:, None] * stride_ks + head * stride_kh + d[None, :] * stride_kd, mask=n_mask[:, None] & d_mask[None, :], other=0.0).to(tl.float32)
-    scores = tl.sum(k * q[None, :], axis=1) * scale
-    valid = n_mask
-    if CAUSAL:
-        valid = valid & (n <= q_index)
-    scores = tl.where(valid, scores, -float('inf'))
-    scores = scores - tl.max(scores, axis=0)
-    probs = tl.exp(scores)
-    probs = probs / tl.sum(probs, axis=0)
-    v = tl.load(v_ptr + batch * stride_vb + n[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_mask[:, None] & d_mask[None, :], other=0.0).to(tl.float32)
-    result = tl.sum(probs[:, None] * v, axis=0)
+    running_max = -float('inf')
+    running_norm = 0.0
+    result = tl.zeros((BLOCK_D,), tl.float32)
+    for n_start in range(0, kv_len, BLOCK_N):
+        n = n_start + tl.arange(0, BLOCK_N)
+        n_mask = n < kv_len
+        k = tl.load(k_ptr + batch * stride_kb + n[:, None] * stride_ks + head * stride_kh + d[None, :] * stride_kd, mask=n_mask[:, None] & d_mask[None, :], other=0.0).to(tl.float32)
+        scores = tl.sum(k * q[None, :], axis=1) * scale
+        valid = n_mask
+        if CAUSAL:
+            valid = valid & (n <= q_index)
+        scores = tl.where(valid, scores, -float('inf'))
+        tile_max = tl.max(scores, axis=0)
+        next_max = tl.maximum(running_max, tile_max)
+        old_scale = tl.exp(running_max - next_max)
+        probs = tl.where(valid, tl.exp(scores - next_max), 0.0)
+        v = tl.load(v_ptr + batch * stride_vb + n[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_mask[:, None] & d_mask[None, :], other=0.0).to(tl.float32)
+        result = result * old_scale + tl.sum(probs[:, None] * v, axis=0)
+        running_norm = running_norm * old_scale + tl.sum(probs, axis=0)
+        running_max = next_max
+    result = result / running_norm
     tl.store(out_ptr + batch * stride_ob + q_index * stride_os + head * stride_oh + d * stride_od, result, mask=d_mask)
 
 def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, *, scale: float, causal: bool, config: dict[str, int]) -> torch.Tensor:
@@ -99,9 +107,11 @@ def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor
     if key.shape[2] != num_heads or key.shape[3] != head_dim:
         raise ValueError('query/key/value heads and head dimensions must match')
     out = torch.empty_like(query)
-    block_seq = triton.next_power_of_2(kv_len)
+    block_n = int(config.get('block_n', 64))
+    if block_n <= 0:
+        raise ValueError('attention block_n must be positive')
     block_d = triton.next_power_of_2(head_dim)
-    _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_SEQ=block_seq, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+    _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
     return out
 
 class Model(nn.Module):
@@ -113,7 +123,7 @@ class Model(nn.Module):
         self.num_kv_heads = num_kv_heads
         self.scale = 1.0 / head_size ** 0.5
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] != 'full_row_diagnostic':
+        if profile['variant'] != 'tiled_online_softmax':
             raise ValueError(f"unsupported MMEncoderAttention variant: {profile['variant']}")
         self._ks_attention_config = profile['config']
 
