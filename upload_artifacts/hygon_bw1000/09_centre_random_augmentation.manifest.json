@@ -3,19 +3,19 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "hygon_bw1000",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\hygon_bw1000\\09_centre_random_augmentation.py",
-  "artifact_sha256": "3235c4f85e5ff5c846f6ad034f4b2a2801a4e3ed103b2dd556a767715ea6d2a6",
+  "artifact_sha256": "583f4fc54ccd0d5542e90c00359b82965dcb86dfa38e1b830d6aa8e09bdf0044",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
-    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
+    "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
     "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
   },
   "profile": {
-    "variant": "framework_rng_triton_geometry",
+    "variant": "framework_rng_tiled_geometry",
     "config": {
       "center_num_warps": 4,
-      "augment_block": 256,
+      "augment_block_atoms": 64,
       "augment_num_warps": 4
     },
     "schema_version": 1,

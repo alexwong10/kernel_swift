@@ -3,19 +3,19 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\iluvatar_bi150\\09_centre_random_augmentation.py",
-  "artifact_sha256": "2f1b2d69388275cf23af7c36b56f0fa328cc3d3caf54404a20cfb5a5355d3d3b",
+  "artifact_sha256": "be2e075a0c6dec0c7237c8e6e36a36754cf140e55fc80b9a889dd6111576b87f",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
-    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
+    "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
     "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
   },
   "profile": {
-    "variant": "framework_rng_triton_geometry",
+    "variant": "framework_rng_tiled_geometry",
     "config": {
       "center_num_warps": 4,
-      "augment_block": 256,
+      "augment_block_atoms": 64,
       "augment_num_warps": 4
     },
     "schema_version": 1,

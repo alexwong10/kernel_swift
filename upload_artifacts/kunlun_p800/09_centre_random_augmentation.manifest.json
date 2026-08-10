@@ -3,19 +3,19 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "kunlun_p800",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\kunlun_p800\\09_centre_random_augmentation.py",
-  "artifact_sha256": "dacc324797c15ebcbc6cf1c6add5cfee4c5cdd29685eb6b54c94b74dcc963491",
+  "artifact_sha256": "73a7bf6778137dc0e82b92dfa3d8ac32ca03342983ad1eb7f1bc2fe4e6bede7a",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
-    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
+    "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
     "profiles/chips/kunlun_p800.json": "c9a685b30e4af20e83e9975a5167348dd022c989f31a7304f46d8e58e48cce81"
   },
   "profile": {
-    "variant": "framework_rng_triton_geometry",
+    "variant": "framework_rng_tiled_geometry",
     "config": {
       "center_num_warps": 4,
-      "augment_block": 256,
+      "augment_block_atoms": 64,
       "augment_num_warps": 4
     },
     "schema_version": 1,

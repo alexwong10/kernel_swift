@@ -3,19 +3,19 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\09_centre_random_augmentation.py",
-  "artifact_sha256": "2fdea37e054870a829b695bbce172f7c2a4cd75e7a618ffd105b9218fb5d1dcb",
+  "artifact_sha256": "e0127bc670299fc37cd7cb000f39130fe93ed5f2dba483c188b00ae64b6adca7",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
-    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
+    "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
   "profile": {
-    "variant": "framework_rng_triton_geometry",
+    "variant": "framework_rng_tiled_geometry",
     "config": {
       "center_num_warps": 4,
-      "augment_block": 256,
+      "augment_block_atoms": 64,
       "augment_num_warps": 4
     },
     "schema_version": 1,
@@ -55,13 +55,13 @@
     ],
     "replacements": [
       {
-        "line": 165,
+        "line": 246,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"
       },
       {
-        "line": 166,
+        "line": 247,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"

@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "thead_810e",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\thead_810e\\06_mm_encoder_attention.py",
   "artifact_sha256": "f62206c34abf2e2c007bd1091440cfc3e4a6bb76b5bd3a305663d1cba55e9cbc",
   "sources": {

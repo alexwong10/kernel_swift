@@ -3,19 +3,19 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "thead_810e",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\thead_810e\\09_centre_random_augmentation.py",
-  "artifact_sha256": "a073d66b5247b59a944440431b2b69764d07715a91bf057ad8e6bd683f197b02",
+  "artifact_sha256": "d7189c6c3984df28c3fd8bceb36ea14db0275985cfb075f6dc8069e298aec6a8",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c2b663a4b2ce6a823061e27bed8211c0fabd04d8f6c5440f44a0b0ac3642d0ed",
-    "profiles/operators/09_centre_random_augmentation.json": "e42b3a3b4bdfaea6b68ad4c80e0f52ca64f40783e5f99f5c3ffdf6685a8f131a",
+    "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
+    "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
   },
   "profile": {
-    "variant": "framework_rng_triton_geometry",
+    "variant": "framework_rng_tiled_geometry",
     "config": {
       "center_num_warps": 4,
-      "augment_block": 256,
+      "augment_block_atoms": 64,
       "augment_num_warps": 4
     },
     "schema_version": 1,

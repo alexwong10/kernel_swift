@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "kunlun_p800",
-  "source_commit": "6bb117ffefa43439b3becb979e0e86c631beb17c",
+  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
   "artifact": "upload_artifacts\\kunlun_p800\\02_fused_moe.py",
   "artifact_sha256": "2f73d5d157b434850e85f67750c2412eb7d9817222969be238c629758562da20",
   "sources": {
