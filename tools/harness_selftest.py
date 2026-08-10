@@ -85,16 +85,21 @@ def upload_builder_scope() -> None:
         if ascend_manifest["device_adaptation"]["status"] != "rewritten":
             raise AssertionError("known runtime adaptation was not recorded")
 
-        metax_path = temp_root / "metax.py"
-        metax_manifest = build_submission(
-            "02_fused_moe", "metax_c500", metax_path
+        # MetaX has a target-runner device profile (``cuda``) even though its
+        # environment is not verified yet.  Use a genuinely unresolved chip
+        # here so this check continues to exercise the safety rule that the
+        # builder must not invent a device for an unknown runtime.
+        unresolved_path = temp_root / "unresolved.py"
+        unresolved_manifest = build_submission(
+            "02_fused_moe", "hygon_bw1000", unresolved_path
         )
-        metax_source = metax_path.read_text(encoding="utf-8")
+        unresolved_source = unresolved_path.read_text(encoding="utf-8")
         if not any(
-            token in metax_source for token in ("device='cuda'", 'device="cuda"')
+            token in unresolved_source
+            for token in ("device='cuda'", 'device="cuda"')
         ):
             raise AssertionError("unconfirmed runtime must not guess a device")
-        if metax_manifest["device_adaptation"]["status"] != "unconfirmed_runtime":
+        if unresolved_manifest["device_adaptation"]["status"] != "unconfirmed_runtime":
             raise AssertionError("unconfirmed runtime status was not recorded")
 
 
