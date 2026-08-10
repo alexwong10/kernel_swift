@@ -35,6 +35,9 @@ def main() -> None:
             if key.startswith(("BR", "BIREN", "SUPA", "CUDA", "TRITON", "LD_"))
         },
         "brsmi_gpu": command("brsmi", "gpu", "list"),
+        "brsw_inner_version": command("brsw", "-i"),
+        "brcc_version": command("brcc", "--version"),
+        "pip_triton": command("python3", "-m", "pip", "show", "triton"),
     }
     modules: dict[str, object] = {}
     for name in ("torch", "torch_br", "torch_biren", "triton", "triton_br", "biren", "bpex"):
@@ -49,6 +52,12 @@ def main() -> None:
             import torch_br  # type: ignore
 
             result["torch_br_version"] = getattr(torch_br, "__version__", "unknown")
+            try:
+                from torch_br.utils.utils import has_triton_on_supa  # type: ignore
+
+                result["torch_br_has_triton_on_supa"] = bool(has_triton_on_supa())
+            except Exception as exc:
+                result["torch_br_triton_probe_error"] = repr(exc)
         except Exception as exc:
             result["torch_br_import_error"] = repr(exc)
         import torch
