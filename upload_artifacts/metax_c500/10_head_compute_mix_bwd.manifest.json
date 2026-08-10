@@ -3,18 +3,19 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "metax_c500",
-  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
+  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
   "artifact": "upload_artifacts\\metax_c500\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "3f9ee9a91f33d601b8c1236d5b83f25615651efaefeb506195e004e2f0efb358",
+  "artifact_sha256": "a475da84d4c6f94b175079a91439d751cf2a9e65847efc15b2b49b6dc4bc4c84",
   "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
-    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
+    "profiles/operators/10_head_compute_mix_bwd.json": "1ecf55585079f10bdfb7fb525055faf3eeb2c257c797c8df75994a874db8157c",
     "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
   },
   "profile": {
-    "variant": "chunked_deterministic",
+    "variant": "tiled_mix_chunked",
     "config": {
       "block_rows": 256,
+      "block_mixes": 4,
       "num_warps": 4,
       "reduce_num_warps": 1
     },

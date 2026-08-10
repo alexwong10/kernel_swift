@@ -3,18 +3,19 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
+  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
   "artifact": "upload_artifacts\\moore_threads_ph100\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "89adfb8b2fcb5255460623987749ef9a4c474c5d36a9d26e9d9e96aeeaba674f",
+  "artifact_sha256": "554c98c5c74864ee3f481a722bd9ca11daa666de55dfff300e106181e6e60300",
   "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
-    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
+    "profiles/operators/10_head_compute_mix_bwd.json": "1ecf55585079f10bdfb7fb525055faf3eeb2c257c797c8df75994a874db8157c",
     "profiles/chips/moore_threads_ph100.json": "d7ed879a5d36eae212b809be5cb92161cd0484b34151af3971a5738b947a1581"
   },
   "profile": {
-    "variant": "chunked_deterministic",
+    "variant": "tiled_mix_chunked",
     "config": {
       "block_rows": 256,
+      "block_mixes": 4,
       "num_warps": 4,
       "reduce_num_warps": 1
     },

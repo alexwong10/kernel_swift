@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "enflame_s60",
-  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
+  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
   "artifact": "upload_artifacts\\enflame_s60\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "9f3d9fb0369dca395679fbe5e499a6ded4c57ca8bc65cde812f5da1036f1b2be",
   "sources": {

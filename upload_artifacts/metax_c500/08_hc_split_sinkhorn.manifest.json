@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "metax_c500",
-  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
+  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
   "artifact": "upload_artifacts\\metax_c500\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "6f21f3b70d97e623cb127114f487e53cf4446a4c28308a4f1a75e1f094a14cc5",
   "sources": {

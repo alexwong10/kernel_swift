@@ -3,18 +3,19 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "hygon_bw1000",
-  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
+  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
   "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "4f09c49d3cd8a579d69c48640141ab1aa73b3311659169612721fab409269d8d",
+  "artifact_sha256": "add053a4a0c28618dfc88fbdbecf97ff5029afb8a2f84ae199737c75ea0530dd",
   "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "33e6f9740dda03d08da1a08ce96acd256cdb6199fe76eef1d170649897f2af4f",
-    "profiles/operators/10_head_compute_mix_bwd.json": "bde5ea285739d4b4902007d3fe3c2bd603ee4957128cdcac6ebfd20ae966e2b3",
+    "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
+    "profiles/operators/10_head_compute_mix_bwd.json": "1ecf55585079f10bdfb7fb525055faf3eeb2c257c797c8df75994a874db8157c",
     "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
   },
   "profile": {
-    "variant": "chunked_deterministic",
+    "variant": "tiled_mix_chunked",
     "config": {
       "block_rows": 256,
+      "block_mixes": 4,
       "num_warps": 4,
       "reduce_num_warps": 1
     },

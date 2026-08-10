@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "thead_810e",
-  "source_commit": "ff30eb03c8a3155a9031a4275e66ee408ed6ad98",
+  "source_commit": "61830a1b00aef90f411c6c8575fb2ec12a45ba29",
   "artifact": "upload_artifacts\\thead_810e\\03_flex_attention.py",
   "artifact_sha256": "d9b9c910193c706295a85ed2fec05655c550ee838d2479107187c042e9b42dd3",
   "sources": {
