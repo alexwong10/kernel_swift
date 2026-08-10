@@ -5,12 +5,12 @@
   "model": "BR106M",
   "resource": "self_hosted_required",
   "runtime": {
-    "family": "unconfirmed",
-    "torch_device": null,
-    "accelerator_module": null,
-    "bootstrap_imports": [],
-    "source_device_aliases": [],
-    "evaluator_support": "unconfirmed",
+    "family": "biren_supa",
+    "torch_device": "supa",
+    "accelerator_module": "torch_br",
+    "bootstrap_imports": ["torch_br"],
+    "source_device_aliases": ["cuda"],
+    "evaluator_support": "blocked_missing_triton_backend",
     "verified": false
   },
   "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
