@@ -428,6 +428,15 @@ def centre_augmentation() -> None:
             got[sample, atom] = matrices[sample] @ centered[atom] + translation[sample]
     assert_close("09_centre_random_augmentation", ref, got)
 
+    # Mirror the tiled geometry grid, including an atom tile tail.
+    block_atoms = 5
+    tiled = np.empty_like(ref)
+    for sample in range(samples):
+        for atom_start in range(0, atoms, block_atoms):
+            for atom in range(atom_start, min(atom_start + block_atoms, atoms)):
+                tiled[sample, atom] = matrices[sample] @ centered[atom] + translation[sample]
+    assert_close("09_centre_random_augmentation_tiled", ref, tiled)
+
     # The reference's centre-only branch returns centered coordinates before
     # applying the output mask.  A sparse mask therefore affects the center,
     # but masked atoms remain present in the returned coordinates.
@@ -448,6 +457,14 @@ def centre_augmentation() -> None:
         centre_only_ref,
         centre_only_got,
     )
+
+    # Rotation/translation paths multiply the final coordinates by a sparse
+    # mask; an all-zero mask must still produce a finite zero center.
+    zero_mask = np.zeros(atoms, dtype=np.float32)
+    zero_center = (coords * zero_mask[:, None]).sum(axis=0, keepdims=True) / (
+        zero_mask.sum() + 1e-12
+    )
+    assert_close("09_centre_random_augmentation_zero_mask_center", zero_center, np.zeros((1, 3)))
 
 
 def head_mix_bwd() -> None:

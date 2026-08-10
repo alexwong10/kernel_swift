@@ -10,8 +10,8 @@ import triton.language as tl
 _KS_PROFILE = {
     "task_key": "09_centre_random_augmentation",
     "chip_key": "portable_default",
-    "variant": "framework_rng_triton_geometry",
-    "config": {"center_num_warps": 4, "augment_block": 256, "augment_num_warps": 4},
+    "variant": "framework_rng_tiled_geometry",
+    "config": {"center_num_warps": 4, "augment_block_atoms": 64, "augment_num_warps": 4},
 }
 
 
@@ -94,6 +94,61 @@ def _augment_kernel(
     tl.store(out_ptr + offsets, result, mask=valid)
 
 
+@triton.jit
+def _augment_tiled_kernel(
+    coords_ptr,
+    mask_ptr,
+    center_ptr,
+    u1_ptr,
+    u2_ptr,
+    u3_ptr,
+    translation_ptr,
+    out_ptr,
+    n_atoms: tl.constexpr,
+    HAS_MASK: tl.constexpr,
+    CENTRE_ONLY: tl.constexpr,
+    BLOCK_A: tl.constexpr,
+):
+    """Generate all three coordinates for one sample/atom tile."""
+    sample = tl.program_id(0)
+    atom = tl.program_id(1) * BLOCK_A + tl.arange(0, BLOCK_A)
+    valid = atom < n_atoms
+    base = atom * 3
+    x0 = tl.load(coords_ptr + base, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr)
+    x1 = tl.load(coords_ptr + base + 1, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 1)
+    x2 = tl.load(coords_ptr + base + 2, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 2)
+
+    if CENTRE_ONLY:
+        y0, y1, y2 = x0, x1, x2
+    else:
+        u1 = tl.load(u1_ptr + sample).to(tl.float32)
+        u2 = tl.load(u2_ptr + sample).to(tl.float32)
+        u3 = tl.load(u3_ptr + sample).to(tl.float32)
+        qx = tl.sqrt(1.0 - u1) * tl.sin(6.283185307179586 * u2)
+        qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
+        qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
+        qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
+        xx, yy, zz = qx * qx, qy * qy, qz * qz
+        xy, xz, yz = qx * qy, qx * qz, qy * qz
+        wx, wy, wz = qw * qx, qw * qy, qw * qz
+        y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
+        y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
+        y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
+        y0 += tl.load(translation_ptr + sample * 3).to(tl.float32)
+        y1 += tl.load(translation_ptr + sample * 3 + 1).to(tl.float32)
+        y2 += tl.load(translation_ptr + sample * 3 + 2).to(tl.float32)
+        if HAS_MASK:
+            weight = tl.load(mask_ptr + atom, mask=valid, other=0.0).to(tl.float32)
+            y0 *= weight
+            y1 *= weight
+            y2 *= weight
+
+    output = sample * n_atoms * 3 + base
+    tl.store(out_ptr + output, y0, mask=valid)
+    tl.store(out_ptr + output + 1, y1, mask=valid)
+    tl.store(out_ptr + output + 2, y2, mask=valid)
+
+
 class ModelNew(nn.Module):
     def __init__(self, n_sample: int = 1, s_trans: float = 1.0, centre_only: bool = False):
         super().__init__()
@@ -101,8 +156,12 @@ class ModelNew(nn.Module):
         self.s_trans = s_trans
         self.centre_only = centre_only
         profile = get_operator_profile("09_centre_random_augmentation")
-        if profile["variant"] != "framework_rng_triton_geometry":
+        if profile["variant"] not in {
+            "framework_rng_triton_geometry",
+            "framework_rng_tiled_geometry",
+        }:
             raise ValueError(f"unsupported CentreRandomAugmentation variant: {profile['variant']}")
+        self._ks_variant = profile["variant"]
         self._ks_config = profile["config"]
 
     def forward(
@@ -139,24 +198,46 @@ class ModelNew(nn.Module):
             device=x_input_coords.device,
             dtype=x_input_coords.dtype,
         )
-        total = out.numel()
-        block = int(self._ks_config["augment_block"])
-        _augment_kernel[(triton.cdiv(total, block),)](
-            x_input_coords,
-            mask_arg,
-            center,
-            u1,
-            u2,
-            u3,
-            translation,
-            out,
-            n_atoms,
-            HAS_MASK=mask is not None,
-            CENTRE_ONLY=self.centre_only,
-            total=total,
-            BLOCK=block,
-            num_warps=int(self._ks_config["augment_num_warps"]),
-        )
+        if self._ks_variant == "framework_rng_tiled_geometry":
+            block_atoms = int(self._ks_config["augment_block_atoms"])
+            if block_atoms <= 0:
+                raise ValueError("augment_block_atoms must be positive")
+            _augment_tiled_kernel[
+                (self.n_sample, triton.cdiv(n_atoms, block_atoms))
+            ](
+                x_input_coords,
+                mask_arg,
+                center,
+                u1,
+                u2,
+                u3,
+                translation,
+                out,
+                n_atoms,
+                HAS_MASK=mask is not None,
+                CENTRE_ONLY=self.centre_only,
+                BLOCK_A=block_atoms,
+                num_warps=int(self._ks_config["augment_num_warps"]),
+            )
+        else:
+            total = out.numel()
+            block = int(self._ks_config["augment_block"])
+            _augment_kernel[(triton.cdiv(total, block),)](
+                x_input_coords,
+                mask_arg,
+                center,
+                u1,
+                u2,
+                u3,
+                translation,
+                out,
+                n_atoms,
+                HAS_MASK=mask is not None,
+                CENTRE_ONLY=self.centre_only,
+                total=total,
+                BLOCK=block,
+                num_warps=int(self._ks_config["augment_num_warps"]),
+            )
         return out
 
 
