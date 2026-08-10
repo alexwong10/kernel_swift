@@ -3,16 +3,16 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "metax_c500",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
+  "source_commit": "7843fbee040db3715b36619a5c46e18a11f5edb5",
   "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
-  "artifact_sha256": "8ee5a64a89c4d19529360d8860699d39acd662cc5fa8b5169df1eb44a024ebb8",
+  "artifact_sha256": "f4955178e4648b84fd80b551fd857a6c4217200073bf6100081f6823421ed7ea",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "217a7ab8de8a5029c875cc8c9dcc1ec4d79e74952b84526ec8e92fe41216dc80",
-    "profiles/operators/02_fused_moe.json": "a5410d4c76907045201de19dfb22cc4ab79dedb4e68cccade440d56d12152b58",
-    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+    "triton_kernels/02_fused_moe.py": "0350a3c638339037ba88ca7e7631b008cddd3a37d7a8bc0a03a5e217fa675f04",
+    "profiles/operators/02_fused_moe.json": "2b6614887d7e2724454469b806a7c9739ff9cc4d4f85b2c3397bd24c8860bf1d",
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {
-    "variant": "tiled_dot_fp16_reference",
+    "variant": "scalar_elementwise_fallback",
     "config": {
       "route_num_warps": 1,
       "gate_up_num_warps": 4,
@@ -32,12 +32,14 @@
     "model": "C500",
     "resource": "kernelswift_option_observed",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "metax_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
@@ -47,9 +49,24 @@
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
-    "replacements": [],
-    "status": "unconfirmed_runtime"
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 378,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 379,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

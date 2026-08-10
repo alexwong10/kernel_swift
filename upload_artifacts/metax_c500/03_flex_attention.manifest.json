@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "metax_c500",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
+  "source_commit": "7843fbee040db3715b36619a5c46e18a11f5edb5",
   "artifact": "upload_artifacts\\metax_c500\\03_flex_attention.py",
   "artifact_sha256": "99cfd30b357296bc17b1c6f048fb087bd17380b298ee9641b55f59f169768342",
   "sources": {
     "triton_kernels/03_flex_attention.py": "7b2cc431ee6662a6dfbab868ee48856ddf9cc8233bdf98f8413cc390beaf4132",
     "profiles/operators/03_flex_attention.json": "f043d7c2a9107b5ce6e3ea6befd499a51383ed871405cc6c8b6f6d41fdf00199",
-    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c",
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
@@ -30,12 +30,14 @@
     "model": "C500",
     "resource": "kernelswift_option_observed",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "metax_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
@@ -45,9 +47,30 @@
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
-    "replacements": [],
-    "status": "unconfirmed_runtime"
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 67,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 69,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

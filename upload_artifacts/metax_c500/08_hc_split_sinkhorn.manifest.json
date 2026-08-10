@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "metax_c500",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
+  "source_commit": "7843fbee040db3715b36619a5c46e18a11f5edb5",
   "artifact": "upload_artifacts\\metax_c500\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "6f21f3b70d97e623cb127114f487e53cf4446a4c28308a4f1a75e1f094a14cc5",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
-    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {
     "variant": "scalar_hc4",
@@ -36,12 +36,14 @@
     "model": "C500",
     "resource": "kernelswift_option_observed",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "metax_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
@@ -51,9 +53,11 @@
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
     "replacements": [],
-    "status": "unconfirmed_runtime"
+    "status": "no_matches"
   }
 }

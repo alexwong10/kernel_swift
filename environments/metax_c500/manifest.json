@@ -1,1 +1,19 @@
-{"schema_version":1,"chip_key":"metax_c500","status":"unverified","source":null,"image":{"identifier":null,"digest":null},"python":null,"packages":{},"driver":null,"compiler":null,"captured_at_utc":null,"evidence":null}
+{
+  "schema_version": 1,
+  "chip_key": "metax_c500",
+  "status": "unverified",
+  "image": {
+    "identifier": null,
+    "digest": null
+  },
+  "python": "3.10.10",
+  "packages": {
+    "torch": "2.8.0+metax3.3.0.2",
+    "triton": "3.0.0",
+    "maca": "/opt/maca-3.3.0"
+  },
+  "driver": "mx-smi 2.2.9; MXC500 GPU#0",
+  "compiler": "Triton MetaX backend",
+  "captured_at_utc": "2026-08-10T00:00:00Z",
+  "evidence": "results/metax_c500/7843fbee040db3715b36619a5c46e18a11f5edb5/summary.json; target-device runner, not official evaluator"
+}

@@ -7,7 +7,19 @@
   },
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {
+      "verified": false,
+      "overrides": {
+        "variant": "scalar_elementwise_fallback",
+        "config": {
+          "route_num_warps": 1,
+          "gate_up_num_warps": 4,
+          "down_num_warps": 4,
+          "reduce_block": 256,
+          "reduce_num_warps": 4
+        }
+      }
+    },
     "iluvatar_bi150": {"verified": false, "overrides": {}},
     "enflame_s60": {"verified": false, "overrides": {}},
     "thead_810e": {"verified": false, "overrides": {}},

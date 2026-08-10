@@ -4,7 +4,13 @@
   "default": {"variant": "tiled_hidden", "config": {"block_hidden": 256, "block_tokens": 4, "num_warps": 4}},
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {
+      "verified": false,
+      "overrides": {
+        "variant": "fp32_input_tiled",
+        "config": {"block_hidden": 256, "block_tokens": 4, "num_warps": 4}
+      }
+    },
     "iluvatar_bi150": {"verified": false, "overrides": {}},
     "enflame_s60": {"verified": false, "overrides": {}},
     "thead_810e": {"verified": false, "overrides": {}},

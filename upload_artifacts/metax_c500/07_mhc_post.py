@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_hidden', 'config': {'block_hidden': 256, 'block_tokens': 4, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'metax_c500', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'fp32_input_tiled', 'config': {'block_hidden': 256, 'block_tokens': 4, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'metax_c500', 'verified': False}
 
 @triton.jit
 def _mhc_post_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, hidden_size: tl.constexpr, mhc_mult: tl.constexpr, total: tl.constexpr, BLOCK: tl.constexpr):
@@ -20,7 +20,7 @@ def _mhc_post_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, h
         residual = tl.load(residual_ptr + token * mhc_mult * hidden_size + in_mix * hidden_size + hidden, mask=mask, other=0.0).to(tl.float32)
         coefficient = tl.load(comb_mix_ptr + token * mhc_mult * mhc_mult + in_mix * mhc_mult + out_mix, mask=mask, other=0.0).to(tl.float32)
         result += coefficient * residual
-    tl.store(out_ptr + offsets, result, mask=mask)
+    tl.store(out_ptr + offsets, result.to(tl.bfloat16), mask=mask)
 
 @triton.jit
 def _mhc_post_tiled_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, hidden_size: tl.constexpr, mhc_mult: tl.constexpr, token_count, BLOCK_H: tl.constexpr, BLOCK_TOKENS: tl.constexpr):
@@ -48,14 +48,14 @@ def _mhc_post_tiled_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_
         coefficient = tl.load(comb_mix_ptr + token * mhc_mult * mhc_mult + in_mix * mhc_mult + out_mix, mask=token_mask, other=0.0).to(tl.float32)
         result += coefficient[:, None] * residual
     out_offset = (token[:, None] * mhc_mult + out_mix) * hidden_size + hidden[None, :]
-    tl.store(out_ptr + out_offset, result, mask=mask)
+    tl.store(out_ptr + out_offset, result.to(tl.bfloat16), mask=mask)
 
 class Model(nn.Module):
 
     def __init__(self):
         super().__init__()
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'tiled_hidden', 'flat_elementwise'}:
+        if profile['variant'] not in {'tiled_hidden', 'flat_elementwise', 'fp32_input_tiled'}:
             raise ValueError(f"unsupported mhc_post variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         self._ks_config = profile['config']
@@ -63,8 +63,19 @@ class Model(nn.Module):
     def forward(self, x: torch.Tensor, residual: torch.Tensor, post_layer_mix: torch.Tensor, comb_res_mix: torch.Tensor) -> torch.Tensor:
         hidden_size = x.shape[-1]
         mhc_mult = residual.shape[-2]
-        out = torch.empty_like(residual)
-        if self._ks_variant == 'tiled_hidden':
+        if self._ks_variant == 'fp32_input_tiled':
+            out = torch.empty_like(residual.contiguous())
+            kernel_x = x.float().contiguous()
+            kernel_residual = residual.float().contiguous()
+            kernel_post = post_layer_mix.contiguous()
+            kernel_comb = comb_res_mix.contiguous()
+        else:
+            out = torch.empty_like(residual)
+            kernel_x = x
+            kernel_residual = residual
+            kernel_post = post_layer_mix
+            kernel_comb = comb_res_mix
+        if self._ks_variant in {'tiled_hidden', 'fp32_input_tiled'}:
             block_hidden = int(self._ks_config['block_hidden'])
             block_tokens = int(self._ks_config.get('block_tokens', 1))
             if block_hidden <= 0:
@@ -72,7 +83,7 @@ class Model(nn.Module):
             if block_tokens <= 0:
                 raise ValueError('block_tokens must be positive')
             token_count = x.numel() // hidden_size
-            _mhc_post_tiled_kernel[triton.cdiv(token_count, block_tokens), mhc_mult, triton.cdiv(hidden_size, block_hidden)](x, residual, post_layer_mix, comb_res_mix, out, hidden_size, mhc_mult, token_count, BLOCK_H=block_hidden, BLOCK_TOKENS=block_tokens, num_warps=int(self._ks_config['num_warps']))
+            _mhc_post_tiled_kernel[triton.cdiv(token_count, block_tokens), mhc_mult, triton.cdiv(hidden_size, block_hidden)](kernel_x, kernel_residual, kernel_post, kernel_comb, out, hidden_size, mhc_mult, token_count, BLOCK_H=block_hidden, BLOCK_TOKENS=block_tokens, num_warps=int(self._ks_config['num_warps']))
         else:
             total = out.numel()
             block = int(self._ks_config['block'])

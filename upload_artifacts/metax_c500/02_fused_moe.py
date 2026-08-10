@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_dot_fp16_reference', 'config': {'route_num_warps': 1, 'gate_up_num_warps': 4, 'down_num_warps': 4, 'reduce_block': 256, 'reduce_num_warps': 4}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'metax_c500', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'scalar_elementwise_fallback', 'config': {'route_num_warps': 1, 'gate_up_num_warps': 4, 'down_num_warps': 4, 'reduce_block': 256, 'reduce_num_warps': 4}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'metax_c500', 'verified': False}
 
 @triton.jit
 def _moe_route_kernel(logits_ptr, ids_ptr, weights_ptr, num_experts: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr):
@@ -65,6 +65,42 @@ def _moe_down_kernel(act_ptr, ids_ptr, route_weights_ptr, w2_ptr, contribution_p
     tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
 
 @triton.jit
+def _moe_gate_up_scalar_kernel(x_ptr, ids_ptr, w1_ptr, act_ptr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr):
+    """Elementwise GEMV fallback for backends whose dot N dimension is < 16."""
+    token = tl.program_id(0)
+    rank = tl.program_id(1)
+    expert = tl.load(ids_ptr + token * TOP_K + rank)
+    h = tl.arange(0, BLOCK_H)
+    i = tl.arange(0, BLOCK_I)
+    h_mask = h < hidden_size
+    i_mask = i < intermediate_size
+    x = tl.load(x_ptr + token * hidden_size + h, mask=h_mask, other=0.0).to(tl.float16)
+    expert_base = expert * 2 * intermediate_size * hidden_size
+    gate_w = tl.load(w1_ptr + expert_base + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    up_w = tl.load(w1_ptr + expert_base + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    gate = tl.sum(gate_w * x[None, :], axis=1).to(tl.float16)
+    up = tl.sum(up_w * x[None, :], axis=1).to(tl.float16)
+    act = gate * tl.sigmoid(gate.to(tl.float32)).to(tl.float16) * up
+    tl.store(act_ptr + (token * TOP_K + rank) * intermediate_size + i, act.to(tl.float16), mask=i_mask)
+
+@triton.jit
+def _moe_down_scalar_kernel(act_ptr, ids_ptr, route_weights_ptr, w2_ptr, contribution_ptr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr):
+    """Elementwise GEMV fallback matching ``_moe_down_kernel``."""
+    token = tl.program_id(0)
+    rank = tl.program_id(1)
+    expert = tl.load(ids_ptr + token * TOP_K + rank)
+    route_weight = tl.load(route_weights_ptr + token * TOP_K + rank).to(tl.float16)
+    h = tl.arange(0, BLOCK_H)
+    i = tl.arange(0, BLOCK_I)
+    h_mask = h < hidden_size
+    i_mask = i < intermediate_size
+    act = tl.load(act_ptr + (token * TOP_K + rank) * intermediate_size + i, mask=i_mask, other=0.0).to(tl.float16)
+    expert_base = expert * hidden_size * intermediate_size
+    w2 = tl.load(w2_ptr + expert_base + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
+    down = tl.sum(w2 * act[None, :], axis=1).to(tl.float16) * route_weight
+    tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
+
+@triton.jit
 def _moe_reduce_kernel(contribution_ptr, out_ptr, total: tl.constexpr, hidden_size: tl.constexpr, TOP_K: tl.constexpr, BLOCK: tl.constexpr):
     offsets = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
     valid = offsets < total
@@ -90,8 +126,9 @@ class Model(nn.Module):
         nn.init.normal_(self.w1, std=0.02)
         nn.init.normal_(self.w2, std=0.02)
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] != 'tiled_dot_fp16_reference':
+        if profile['variant'] not in {'tiled_dot_fp16_reference', 'scalar_elementwise_fallback'}:
             raise ValueError(f"unsupported FusedMoE variant: {profile['variant']}")
+        self._ks_variant = profile['variant']
         self._ks_config = profile['config']
 
     def forward(self, hidden_states: torch.Tensor, router_logits: torch.Tensor):
@@ -103,9 +140,11 @@ class Model(nn.Module):
         act = torch.empty((num_tokens, self.top_k, self.intermediate_size), device=hidden_states.device, dtype=hidden_states.dtype)
         block_h = triton.next_power_of_2(self.hidden_size)
         block_i = triton.next_power_of_2(self.intermediate_size)
-        _moe_gate_up_kernel[num_tokens, self.top_k](hidden_states, ids, self.w1, act, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
+        gate_up_kernel = _moe_gate_up_scalar_kernel if self._ks_variant == 'scalar_elementwise_fallback' else _moe_gate_up_kernel
+        gate_up_kernel[num_tokens, self.top_k](hidden_states, ids, self.w1, act, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
         contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
-        _moe_down_kernel[num_tokens, self.top_k](act, ids, route_weights, self.w2, contributions, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['down_num_warps']))
+        down_kernel = _moe_down_scalar_kernel if self._ks_variant == 'scalar_elementwise_fallback' else _moe_down_kernel
+        down_kernel[num_tokens, self.top_k](act, ids, route_weights, self.w2, contributions, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['down_num_warps']))
         out = torch.empty_like(hidden_states)
         total = out.numel()
         block = int(self._ks_config['reduce_block'])

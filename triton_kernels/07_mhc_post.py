@@ -58,7 +58,7 @@ def _mhc_post_kernel(
             other=0.0,
         ).to(tl.float32)
         result += coefficient * residual
-    tl.store(out_ptr + offsets, result, mask=mask)
+    tl.store(out_ptr + offsets, result.to(tl.bfloat16), mask=mask)
 
 
 @triton.jit
@@ -122,14 +122,18 @@ def _mhc_post_tiled_kernel(
         result += coefficient[:, None] * residual
 
     out_offset = (token[:, None] * mhc_mult + out_mix) * hidden_size + hidden[None, :]
-    tl.store(out_ptr + out_offset, result, mask=mask)
+    tl.store(out_ptr + out_offset, result.to(tl.bfloat16), mask=mask)
 
 
 class ModelNew(nn.Module):
     def __init__(self):
         super().__init__()
         profile = get_operator_profile("07_mhc_post")
-        if profile["variant"] not in {"tiled_hidden", "flat_elementwise"}:
+        if profile["variant"] not in {
+            "tiled_hidden",
+            "flat_elementwise",
+            "fp32_input_tiled",
+        }:
             raise ValueError(f"unsupported mhc_post variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
         self._ks_config = profile["config"]
@@ -143,8 +147,23 @@ class ModelNew(nn.Module):
     ) -> torch.Tensor:
         hidden_size = x.shape[-1]
         mhc_mult = residual.shape[-2]
-        out = torch.empty_like(residual)
-        if self._ks_variant == "tiled_hidden":
+        if self._ks_variant == "fp32_input_tiled":
+            # MetaX's torch.cuda() transfer may expose the mix dimension as
+            # stride 1 (rather than a standard contiguous [token, mix, h]
+            # layout).  The Triton pointer arithmetic below is intentionally
+            # contiguous, so normalize all inputs and the destination first.
+            out = torch.empty_like(residual.contiguous())
+            kernel_x = x.float().contiguous()
+            kernel_residual = residual.float().contiguous()
+            kernel_post = post_layer_mix.contiguous()
+            kernel_comb = comb_res_mix.contiguous()
+        else:
+            out = torch.empty_like(residual)
+            kernel_x = x
+            kernel_residual = residual
+            kernel_post = post_layer_mix
+            kernel_comb = comb_res_mix
+        if self._ks_variant in {"tiled_hidden", "fp32_input_tiled"}:
             block_hidden = int(self._ks_config["block_hidden"])
             block_tokens = int(self._ks_config.get("block_tokens", 1))
             if block_hidden <= 0:
@@ -159,10 +178,10 @@ class ModelNew(nn.Module):
                     triton.cdiv(hidden_size, block_hidden),
                 )
             ](
-                x,
-                residual,
-                post_layer_mix,
-                comb_res_mix,
+                kernel_x,
+                kernel_residual,
+                kernel_post,
+                kernel_comb,
                 out,
                 hidden_size,
                 mhc_mult,

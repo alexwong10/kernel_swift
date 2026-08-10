@@ -3,16 +3,16 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "metax_c500",
-  "source_commit": "f595d21d476a8ad658cc76392f1ee5535eedd5a4",
+  "source_commit": "7843fbee040db3715b36619a5c46e18a11f5edb5",
   "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
-  "artifact_sha256": "0db6b10337c05db44c656441d6f43876598b6182cfa99f26700c02d6650a0bbc",
+  "artifact_sha256": "ef8eaae811407f94184aaa586b3d8e3876ff0b360641a00e7517cd2eae4f3f46",
   "sources": {
-    "triton_kernels/07_mhc_post.py": "4a1385024eeb36102fa963ad77a0363f1d256bb9e7c0bb6d67fa76d9982a442a",
-    "profiles/operators/07_mhc_post.json": "48f4f147167f84e779bd19faeddf0957132a9c98418bf0a6425b78c8440e22e3",
-    "profiles/chips/metax_c500.json": "91da574d7d9791f3d4b955fa532aa09b4fb98c2763203d2d0736e0867abaff3c"
+    "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
+    "profiles/operators/07_mhc_post.json": "b7d027ebdad9b22f95424a5865ab4992cccce31a832ad80a20d386c648642d70",
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {
-    "variant": "tiled_hidden",
+    "variant": "fp32_input_tiled",
     "config": {
       "block_hidden": 256,
       "block_tokens": 4,
@@ -30,12 +30,14 @@
     "model": "C500",
     "resource": "kernelswift_option_observed",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "metax_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
@@ -45,9 +47,11 @@
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
     "replacements": [],
-    "status": "unconfirmed_runtime"
+    "status": "no_matches"
   }
 }
