@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "enflame_s60",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\10_head_compute_mix_bwd.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\enflame_s60\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "8508b4dfdaaf04aae3e3fb8fb2be4baff9207e6b09dda45f165a063b54185a01",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",

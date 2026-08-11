@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\03_flex_attention.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
   "artifact_sha256": "b58298e5d5da8ac54bba338a452029b9879a24c8c79af4f03aed21dae847d8c7",
   "sources": {
     "triton_kernels/03_flex_attention.py": "7b2cc431ee6662a6dfbab868ee48856ddf9cc8233bdf98f8413cc390beaf4132",

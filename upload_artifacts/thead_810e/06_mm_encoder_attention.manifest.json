@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "thead_810e",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\06_mm_encoder_attention.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\thead_810e\\06_mm_encoder_attention.py",
   "artifact_sha256": "f62206c34abf2e2c007bd1091440cfc3e4a6bb76b5bd3a305663d1cba55e9cbc",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "4d982c87976b709b7de84164aee765f7fab67d9e52f2719aaca424803977f0d6",

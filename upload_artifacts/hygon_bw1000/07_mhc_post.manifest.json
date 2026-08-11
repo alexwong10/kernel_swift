@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "hygon_bw1000",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\07_mhc_post.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\hygon_bw1000\\07_mhc_post.py",
   "artifact_sha256": "481e81894bcf5888be903b2f5e3534201265e60883992f00c6b0247fc03948db",
   "sources": {
     "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",

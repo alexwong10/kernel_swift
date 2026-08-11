@@ -187,8 +187,8 @@ def _moe_gate_up_scalar_kernel(
         mask=i_mask[:, None] & h_mask[None, :],
         other=0.0,
     ).to(tl.float16)
-    # MetaX Triton 3.0 rejects tl.dot for a [I,H] x [H,1] GEMV because the
-    # non-batch N dimension is one.  The broadcasted product is equivalent
+    # Some vendor Triton forks reject tl.dot for a [I,H] x [H,1] GEMV because
+    # the non-batch N dimension is one.  The broadcasted product is equivalent
     # and keeps the reduction in the same fp16-input/fp32-accumulation domain.
     gate = tl.sum(gate_w * x[None, :], axis=1).to(tl.float16)
     up = tl.sum(up_w * x[None, :], axis=1).to(tl.float16)

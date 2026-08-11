@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "metax_c500",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\05_music_flamingo_rotary_embedding.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\metax_c500\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "17f8d0e4e47ace6bc0ad29ab0993593531f464afc97656695edc7556d0fab1d3",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",

@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "thead_810e",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\07_mhc_post.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\thead_810e\\07_mhc_post.py",
   "artifact_sha256": "e03c9a04f6b7cd14f8d948e55b63c6a602c6550305d6d516569b61818577725d",
   "sources": {
     "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",

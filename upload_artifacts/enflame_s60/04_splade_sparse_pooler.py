@@ -8,7 +8,7 @@ import triton.language as tl
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 16, 'linear_block_n': 64, 'linear_block_k': 32, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 4}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'enflame_s60', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 16, 'linear_block_n': 128, 'linear_block_k': 32, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 4}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'enflame_s60', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit

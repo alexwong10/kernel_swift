@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\05_music_flamingo_rotary_embedding.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\moore_threads_ph100\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "ff07bca97c514fb8a37f9edfabbd14886b34d37e80bfb5737dfb2a8bbbfd2fa3",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",

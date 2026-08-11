@@ -3,8 +3,8 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fe5fa157c5ab4d55ec125c2be0a4cc6489206401",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\10_head_compute_mix_bwd.py",
+  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "artifact": "upload_artifacts\\moore_threads_ph100\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "554c98c5c74864ee3f481a722bd9ca11daa666de55dfff300e106181e6e60300",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",

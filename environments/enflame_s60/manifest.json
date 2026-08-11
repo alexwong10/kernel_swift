@@ -1,1 +1,20 @@
-{"schema_version":1,"chip_key":"enflame_s60","status":"unverified","source":null,"image":{"identifier":null,"digest":null},"python":null,"packages":{},"driver":null,"compiler":null,"captured_at_utc":null,"evidence":null}
+{
+  "schema_version": 1,
+  "chip_key": "enflame_s60",
+  "status": "unverified",
+  "image": {
+    "identifier": "d044e64167ca",
+    "digest": null
+  },
+  "python": "3.12.3",
+  "packages": {
+    "torch": "2.10.0+cpu",
+    "torch_gcu": "2.10.0+3.8.0.2",
+    "triton": "3.6.0",
+    "triton_gcu": "3.6.0+1.0.20260722"
+  },
+  "driver": "GCU device #0 (device name reported as GCU); torch.gcu.device_count=1",
+  "compiler": "triton_gcu 3.6.0+1.0.20260722",
+  "captured_at_utc": "2026-08-11T13:04:38Z",
+  "evidence": "results/enflame_s60/20260811_s60_batch_v2/summary.json; target-device runner, not official evaluator"
+}
