@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
+  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
   "artifact": "upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
   "artifact_sha256": "826fd6396bfe043a75c05d50620ae771d816d6682d9b933db74397ca8503c070",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "58e5040ce40903402a76a9ae00c978e404653423ccc839a4381c80a417b16507",
     "profiles/operators/04_splade_sparse_pooler.json": "c521b059e1088af4e0d9b157b4c81eb8d380d5d3bc84c3e36c4a4faad919e503",
-    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44",
+    "profiles/chips/iluvatar_bi150.json": "616c64dcd19322fdacfdd496210c330d72560de4fb5baf6accf281a02dda7793",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
@@ -37,12 +37,12 @@
     "model": "BI150",
     "resource": "kernelswift_option_observed",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "corex_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
       "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
@@ -52,9 +52,9 @@
     }
   },
   "device_adaptation": {
-    "target_device": null,
+    "target_device": "cuda",
     "source_aliases": [],
     "replacements": [],
-    "status": "unconfirmed_runtime"
+    "status": "no_source_aliases"
   }
 }

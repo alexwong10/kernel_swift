@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
+  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
   "artifact": "upload_artifacts\\iluvatar_bi150\\09_centre_random_augmentation.py",
   "artifact_sha256": "be2e075a0c6dec0c7237c8e6e36a36754cf140e55fc80b9a889dd6111576b87f",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
     "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
-    "profiles/chips/iluvatar_bi150.json": "b816f8164decf353109b8cb2a6e191f69c740d03672efd0748159a1ce7c4fd44"
+    "profiles/chips/iluvatar_bi150.json": "616c64dcd19322fdacfdd496210c330d72560de4fb5baf6accf281a02dda7793"
   },
   "profile": {
     "variant": "framework_rng_tiled_geometry",
@@ -30,12 +30,12 @@
     "model": "BI150",
     "resource": "kernelswift_option_observed",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "corex_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
       "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
@@ -45,9 +45,9 @@
     }
   },
   "device_adaptation": {
-    "target_device": null,
+    "target_device": "cuda",
     "source_aliases": [],
     "replacements": [],
-    "status": "unconfirmed_runtime"
+    "status": "no_source_aliases"
   }
 }

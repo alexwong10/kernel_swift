@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
+  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\07_mhc_post.py",
   "artifact_sha256": "154524f5c514432932ffdd4021bbd1d7d96330d79f667aa4a2adb016f5b1ee42",
   "sources": {

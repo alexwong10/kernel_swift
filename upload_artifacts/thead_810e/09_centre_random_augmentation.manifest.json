@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "thead_810e",
-  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
+  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
   "artifact": "upload_artifacts\\thead_810e\\09_centre_random_augmentation.py",
   "artifact_sha256": "d7189c6c3984df28c3fd8bceb36ea14db0275985cfb075f6dc8069e298aec6a8",
   "sources": {

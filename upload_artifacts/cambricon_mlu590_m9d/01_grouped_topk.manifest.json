@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
+  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\01_grouped_topk.py",
   "artifact_sha256": "6ee3a0185af7b987b0b68de8f818febcf2de7fb0fade897144d7dccdce1d1bf4",
   "sources": {
