@@ -14,5 +14,5 @@
   "driver": "IX-ML 4.4.0; Iluvatar BI-V150; CUDA compatibility layer 10.2; device_count=1",
   "compiler": "CoreX Triton 3.1.0+corex.4.4.0; /usr/local/corex/bin/clang++",
   "captured_at_utc": "2026-08-11T13:52:49Z",
-  "evidence": "results/iluvatar_bi150/20260811_bi150_batch_v2/summary.json; target-device runner, not official evaluator"
+  "evidence": "results/iluvatar_bi150/20260811_bi150_batch_v3/summary.json; target-device runner, not official evaluator"
 }
