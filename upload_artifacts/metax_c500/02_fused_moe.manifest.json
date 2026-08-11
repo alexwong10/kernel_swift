@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "metax_c500",
-  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
   "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
   "artifact_sha256": "f4955178e4648b84fd80b551fd857a6c4217200073bf6100081f6823421ed7ea",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "4f082883c95f117fcbc09fd5f5c9669782a3e7e5",
+  "source_commit": "5e6a185a950f8776c19150331e5aca4c4511c54c",
   "artifact": "upload_artifacts\\moore_threads_ph100\\01_grouped_topk.py",
   "artifact_sha256": "af3847a8ba36398fd8b9173552670c706ef8532b399b84cbb12d78bb550421dc",
   "sources": {
