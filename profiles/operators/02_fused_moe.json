@@ -20,7 +20,19 @@
         }
       }
     },
-    "iluvatar_bi150": {"verified": false, "overrides": {}},
+    "iluvatar_bi150": {
+      "verified": false,
+      "overrides": {
+        "variant": "scalar_elementwise_fallback",
+        "config": {
+          "route_num_warps": 1,
+          "gate_up_num_warps": 4,
+          "down_num_warps": 4,
+          "reduce_block": 256,
+          "reduce_num_warps": 4
+        }
+      }
+    },
     "enflame_s60": {
       "verified": false,
       "overrides": {"variant": "scalar_elementwise_fallback"}

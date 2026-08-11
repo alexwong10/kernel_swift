@@ -5,12 +5,12 @@
   "model": "BI150",
   "resource": "kernelswift_option_observed",
   "runtime": {
-    "family": "unconfirmed",
-    "torch_device": null,
+    "family": "corex_cuda",
+    "torch_device": "cuda",
     "accelerator_module": null,
     "bootstrap_imports": [],
     "source_device_aliases": [],
-    "evaluator_support": "unconfirmed",
+    "evaluator_support": "target_runner_only",
     "verified": false
   },
   "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
