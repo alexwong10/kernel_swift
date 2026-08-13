@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import secrets
 import subprocess
 import sys
@@ -32,15 +31,15 @@ from coverage_lib import (  # noqa: E402
     validate_coverage,
     write_coverage,
 )
+from evaluator_contract import (  # noqa: E402
+    EVALUATION_MODE,
+    EVALUATOR_URL,
+    official_command,
+    parse_official_pass,
+    verify_official_evaluator,
+)
 from prepare_case import prepare_pair  # noqa: E402
 from probe_environment import probe_environment  # noqa: E402
-
-
-PASS_PATTERN = re.compile(
-    r"PASS accuracy;\s*v0=(?P<reference_ms>[0-9.eE+-]+)\s*ms,\s*"
-    r"v1=(?P<optimized_ms>[0-9.eE+-]+)\s*ms,\s*"
-    r"speedup=(?P<speedup>[0-9.eE+-]+)x"
-)
 
 
 def parse_args() -> argparse.Namespace:
@@ -59,6 +58,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-update-coverage", action="store_true")
     parser.add_argument("--allow-dirty", action="store_true")
     parser.add_argument("--allow-evaluator-mismatch", action="store_true")
+    parser.add_argument(
+        "--diagnostic",
+        action="store_true",
+        help="run the official evaluator without changing coverage (alias for --no-update-coverage)",
+    )
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -85,46 +89,6 @@ def source_state() -> tuple[str, bool]:
     commit = git_output("rev-parse", "HEAD").stdout.strip() or "unknown"
     dirty = bool(git_output("status", "--porcelain").stdout.strip())
     return commit, dirty
-
-
-def verify_evaluator(bench: Path) -> dict[str, Any]:
-    top = subprocess.run(
-        ["git", "-C", str(bench.parent), "rev-parse", "--show-toplevel"],
-        text=True,
-        capture_output=True,
-    )
-    if top.returncode != 0:
-        return {"verified": False, "detail": "evaluator is not inside a Git checkout"}
-    repo = Path(top.stdout.strip()).resolve()
-    try:
-        relative = bench.relative_to(repo).as_posix()
-    except ValueError:
-        return {"verified": False, "detail": "evaluator path is outside its Git root"}
-    expected = subprocess.run(
-        ["git", "-C", str(repo), "show", f"{EVALUATOR_COMMIT}:{relative}"],
-        capture_output=True,
-    )
-    if expected.returncode != 0:
-        return {
-            "verified": False,
-            "detail": f"pinned commit does not contain {relative}",
-            "repo": str(repo),
-        }
-    verified = expected.stdout == bench.read_bytes()
-    return {
-        "verified": verified,
-        "detail": "exact pinned file" if verified else "working-tree evaluator differs from pinned file",
-        "repo": str(repo),
-        "relative_path": relative,
-        "commit": EVALUATOR_COMMIT,
-    }
-
-
-def parse_metrics(output: str) -> dict[str, float] | None:
-    match = PASS_PATTERN.search(output)
-    if match is None:
-        return None
-    return {key: float(value) for key, value in match.groupdict().items()}
 
 
 def failure_status(output: str, timed_out: bool, returncode: int | None) -> str:
@@ -156,38 +120,25 @@ def relative_or_absolute(path: Path) -> str:
         return str(path.resolve())
 
 
-def build_command(bench: Path, reference: Path, artifact: Path, args: argparse.Namespace) -> list[str]:
-    return [
-        sys.executable,
-        str(bench),
-        "--v0_file",
-        str(reference),
-        "--v1_file",
-        str(artifact),
-        "--seed",
-        str(args.seed),
-        "--atol",
-        str(args.atol),
-        "--rtol",
-        str(args.rtol),
-        "--warmup",
-        str(args.warmup),
-        "--repeat",
-        str(args.repeat),
-        "--full-traceback",
-    ]
-
-
 def main() -> int:
     args = parse_args()
+    if args.diagnostic:
+        args.no_update_coverage = True
+        # A diagnostic is explicitly non-scoring, so it may inspect the
+        # current uncommitted candidate without weakening score-bearing runs.
+        args.allow_dirty = True
     if args.warmup < 0 or args.repeat <= 0 or args.timeout < 0:
         raise SystemExit("warmup >= 0, repeat > 0 and timeout >= 0 are required")
     validate_all_profiles()
     chip_profile = load_chip_profile(args.chip)
     environment_manifest = load_environment_manifest(args.chip)
-    if chip_profile["runtime"]["evaluator_support"] != "native_after_case_preparation":
+    if (
+        chip_profile["runtime"]["evaluator_support"] != "native_after_case_preparation"
+        and not args.no_update_coverage
+    ):
         raise SystemExit(
-            f"{args.chip}: evaluator/runtime path is unconfirmed; update the chip profile first"
+            f"{args.chip}: evaluator/runtime path is unconfirmed; use --diagnostic "
+            "until an official PASS proves the path"
         )
     if not args.no_update_coverage and chip_profile["runtime"]["verified"] is not True:
         raise SystemExit(
@@ -201,7 +152,7 @@ def main() -> int:
     bench = args.bench.resolve()
     if not bench.is_file():
         raise SystemExit(f"evaluator not found: {bench}")
-    evaluator = verify_evaluator(bench)
+    evaluator = verify_official_evaluator(bench)
     if not evaluator["verified"] and not args.allow_evaluator_mismatch:
         raise SystemExit(f"evaluator verification failed: {evaluator['detail']}")
     if not evaluator["verified"] and not args.no_update_coverage:
@@ -224,6 +175,8 @@ def main() -> int:
                     "dirty": dirty,
                     "evaluator": evaluator,
                     "runtime": chip_profile["runtime"],
+                    "evaluation_mode": EVALUATION_MODE,
+                    "evaluator_url": EVALUATOR_URL,
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -266,7 +219,17 @@ def main() -> int:
         prepare_pair(reference, artifact_path, prepared_dir, args.chip)
         prepared_reference = prepared_dir / "reference.py"
         prepared_artifact = prepared_dir / "artifact.py"
-        command = build_command(bench, prepared_reference, prepared_artifact, args)
+        command = official_command(
+            bench,
+            prepared_reference,
+            prepared_artifact,
+            seed=args.seed,
+            atol=args.atol,
+            rtol=args.rtol,
+            warmup=args.warmup,
+            repeat=args.repeat,
+            python=sys.executable,
+        )
         process_env = os.environ.copy()
         process_env["KERNELSWIFT_CHIP_KEY"] = args.chip
         timed_out = False
@@ -293,7 +256,7 @@ def main() -> int:
 
         log_path = task_dir / "evaluator.log"
         log_path.write_text(output, encoding="utf-8")
-        metrics = parse_metrics(output)
+        metrics = parse_official_pass(output)
         passed = returncode == 0 and metrics is not None
         all_passed &= passed
         status = "passed" if passed else failure_status(output, timed_out, returncode)
@@ -304,6 +267,8 @@ def main() -> int:
             "returncode": returncode,
             "timed_out": timed_out,
             "metrics": metrics,
+            "evaluation_mode": EVALUATION_MODE,
+            "official_pass": passed,
             "command": command,
             "artifact_manifest": relative_or_absolute(artifact_manifest_path),
             "log": relative_or_absolute(log_path),
@@ -321,6 +286,8 @@ def main() -> int:
                 "reference_ms": metrics["reference_ms"],
                 "optimized_ms": metrics["optimized_ms"],
                 "speedup": metrics["speedup"],
+                "evaluation_mode": EVALUATION_MODE,
+                "official_pass": True,
                 "git_commit": commit,
                 "evaluator_commit": EVALUATOR_COMMIT,
                 "artifact_sha256": artifact_manifest["artifact_sha256"],
@@ -347,6 +314,11 @@ def main() -> int:
         "source_commit": commit,
         "source_dirty": dirty,
         "evaluator": evaluator,
+        "evaluator_url": EVALUATOR_URL,
+        "evaluation_mode": EVALUATION_MODE,
+        "official_pass_count": sum(
+            item.get("official_pass") is True for item in task_summaries
+        ),
         "environment": relative_or_absolute(environment_path),
         "warmup": args.warmup,
         "repeat": args.repeat,

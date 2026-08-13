@@ -14,18 +14,21 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 from coverage_lib import EVALUATOR_COMMIT, load_coverage, update_cell, validate_coverage  # noqa: E402
 from build_submission import build_submission  # noqa: E402
+from evaluator_contract import parse_official_pass  # noqa: E402
 from prepare_case import prepare_source  # noqa: E402
 from profile_runtime import CHIP_KEYS, TASK_KEYS  # noqa: E402
-from run_all import failure_status, parse_metrics  # noqa: E402
+from run_all import failure_status  # noqa: E402
 
 
 def evaluator_parser() -> None:
     output = "PASS accuracy; v0=1.2500 ms, v1=5.0e-1 ms, speedup=2.5000x"
-    metrics = parse_metrics(output)
+    metrics = parse_official_pass(output)
     if metrics != {"reference_ms": 1.25, "optimized_ms": 0.5, "speedup": 2.5}:
         raise AssertionError(f"unexpected parsed metrics: {metrics}")
-    if parse_metrics("PASS accuracy without timing") is not None:
+    if parse_official_pass("PASS accuracy without timing") is not None:
         raise AssertionError("partial PASS must not produce metrics")
+    if parse_official_pass("PASS accuracy; v0=1 ms, v1=1 ms, speedup=9x") is not None:
+        raise AssertionError("inconsistent official speedup must not produce metrics")
     expected = {
         "timeout": failure_status("", True, None),
         "import": failure_status("Failed to load definitions", False, 1),
@@ -124,6 +127,8 @@ def coverage_updates() -> None:
             "speedup": 2.0,
             "git_commit": "selftest",
             "evaluator_commit": EVALUATOR_COMMIT,
+            "evaluation_mode": "official_auto_bench",
+            "official_pass": True,
             "artifact_sha256": "selftest",
             "environment": str(environment),
             "log": str(log),

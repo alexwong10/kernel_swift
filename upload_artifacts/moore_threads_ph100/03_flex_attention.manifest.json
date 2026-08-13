@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
+  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
   "artifact": "upload_artifacts\\moore_threads_ph100\\03_flex_attention.py",
   "artifact_sha256": "fe20c4339071a15d56565d324a0d18031c6d67f1d56dec4c2e6003114c96701b",
   "sources": {
     "triton_kernels/03_flex_attention.py": "7b2cc431ee6662a6dfbab868ee48856ddf9cc8233bdf98f8413cc390beaf4132",
     "profiles/operators/03_flex_attention.json": "f043d7c2a9107b5ce6e3ea6befd499a51383ed871405cc6c8b6f6d41fdf00199",
-    "profiles/chips/moore_threads_ph100.json": "a265d3d6433bbccb7538eced237966fbb9b22d4083173422ad975be8ba7a8182",
+    "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
@@ -28,6 +28,11 @@
     "chip_key": "moore_threads_ph100",
     "vendor": "摩尔线程",
     "model": "PH100",
+    "observed_device_name": "MTT S5000",
+    "device_mapping": {
+      "status": "confirmed_by_user",
+      "detail": "This target reports MTT S5000 and is the competition PH100 resource."
+    },
     "resource": "user_provided_target_environment",
     "runtime": {
       "family": "torch_musa_cuda",

@@ -10,6 +10,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 EVALUATOR_COMMIT = "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+EVALUATION_MODE = "official_auto_bench"
 CELL_STATUSES = {
     "not_run",
     "resource_blocked",
@@ -73,6 +74,7 @@ def _validate_attempt(cell: dict[str, Any], context: str) -> None:
             "run_id",
             "git_commit",
             "evaluator_commit",
+            "evaluation_mode",
             "artifact_sha256",
             "environment",
             "log",
@@ -82,6 +84,10 @@ def _validate_attempt(cell: dict[str, Any], context: str) -> None:
             _nonempty_string(cell, key, context)
         if cell["evaluator_commit"] != EVALUATOR_COMMIT:
             raise AssertionError(f"{context}: passed cell uses the wrong evaluator")
+        if cell["evaluation_mode"] != EVALUATION_MODE:
+            raise AssertionError(f"{context}: passed cell is not an official auto_bench result")
+        if cell["official_pass"] is not True:
+            raise AssertionError(f"{context}: passed cell must contain official_pass=true")
         for key in ("environment", "log", "summary"):
             _existing_file(cell, key, context)
     elif status not in {"not_run", "resource_blocked", "queued_observed", "running_observed"}:

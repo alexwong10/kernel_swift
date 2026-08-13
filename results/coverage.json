@@ -1,6 +1,8 @@
 {
   "schema_version": 2,
   "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+  "evaluator_url": "https://github.com/DeepLink-org/DLBlas/blob/9b5b3627a0f2e5e543ad9d05bf051308bafbd12/benchmarks/ks/auto_bench.py",
+  "evaluation_mode": "official_auto_bench",
   "meaning": "passed requires a parsed official PASS and an immutable run bundle from that exact task and chip",
   "tasks": [
     "01_grouped_topk",

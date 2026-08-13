@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
+  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
   "artifact": "upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
   "artifact_sha256": "09b8362ae4593e363e2406a51b423702cc2ecefda5e8340f7f44b1eceb737775",
   "sources": {

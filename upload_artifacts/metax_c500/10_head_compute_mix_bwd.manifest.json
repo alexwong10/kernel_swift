@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "metax_c500",
-  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
+  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
   "artifact": "upload_artifacts\\metax_c500\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "a475da84d4c6f94b175079a91439d751cf2a9e65847efc15b2b49b6dc4bc4c84",
   "sources": {

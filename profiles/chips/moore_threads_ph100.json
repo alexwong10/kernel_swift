@@ -3,6 +3,11 @@
   "chip_key": "moore_threads_ph100",
   "vendor": "摩尔线程",
   "model": "PH100",
+  "observed_device_name": "MTT S5000",
+  "device_mapping": {
+    "status": "confirmed_by_user",
+    "detail": "This target reports MTT S5000 and is the competition PH100 resource."
+  },
   "resource": "user_provided_target_environment",
   "runtime": {
     "family": "torch_musa_cuda",
