@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\enflame_s60\\06_mm_encoder_attention.py",
   "artifact_sha256": "9fd083601ed13b0317651a9faf52c919a8e730e4d790607cfcab5365bb653b8d",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "60e6dbb3d63d265a9e5f38e478f18854d742e070a4604ce0ad99aa111dcd2837",
-    "profiles/operators/06_mm_encoder_attention.json": "8f286e18d8b0c009ddb8cbcf61672d4c9d368620790374dbb6db266f66ec13e5",
+    "profiles/operators/06_mm_encoder_attention.json": "41539f6380896211b8830cf54c8b46593e790d241aa06072f05d6d7c098833e6",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },

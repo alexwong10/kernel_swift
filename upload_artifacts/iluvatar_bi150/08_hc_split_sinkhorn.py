@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'scalar_hc4', 'config': {'num_warps': 1}, 'fallback_variants': [{'variant': 'matrix_reduce', 'config': {'num_warps': 1}}], 'schema_version': 1, 'task_key': '08_hc_split_sinkhorn', 'chip_key': 'iluvatar_bi150', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'scalar_hc4', 'config': {'num_warps': 1}, 'fallback_variants': [{'variant': 'matrix_reduce', 'config': {'num_warps': 1}}], 'schema_version': 1, 'task_key': '08_hc_split_sinkhorn', 'chip_key': 'iluvatar_bi150', 'verified': True}
 
 @triton.jit
 def _split_sinkhorn_kernel(mixes_ptr, scale_ptr, base_ptr, pre_ptr, post_ptr, comb_ptr, rows: tl.constexpr, HC: tl.constexpr, EPS: tl.constexpr, ITERS: tl.constexpr):

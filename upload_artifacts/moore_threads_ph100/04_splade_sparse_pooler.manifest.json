@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\moore_threads_ph100\\04_splade_sparse_pooler.py",
   "artifact_sha256": "27ba95db5b8063027bc830298a425008e5550e8f6295f4b0c322a4d49bd4b070",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "285328dead87ec484bc927282d3b0c7b06ebd82e1d213b12b7adf35ab0d003bf",
-    "profiles/operators/04_splade_sparse_pooler.json": "d6e5420ec25dd1e01a6b00f488641152ed50ecab432d31744f0d47e590a422f0",
+    "profiles/operators/04_splade_sparse_pooler.json": "f9f911885a0896a8fad0def6d99ba79e8908dce577df1d4f98576319500da0b2",
     "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },

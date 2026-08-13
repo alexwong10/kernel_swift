@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "hygon_bw1000",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\hygon_bw1000\\09_centre_random_augmentation.py",
   "artifact_sha256": "583f4fc54ccd0d5542e90c00359b82965dcb86dfa38e1b830d6aa8e09bdf0044",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
-    "profiles/operators/09_centre_random_augmentation.json": "02f77f54a03f13014232020d22a9aae3f802cc8d2163c6da72df5d8fdddd0bbb",
+    "profiles/operators/09_centre_random_augmentation.json": "5bacd144aca0a2de7d2ac2c0703e3db992f7e64a0d0b1c481d06157fe07e178b",
     "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
   },
   "profile": {

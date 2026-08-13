@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "kunlun_p800",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\kunlun_p800\\01_grouped_topk.py",
   "artifact_sha256": "bb9981a49e35686f23a1fcccccfad942b8f881f0a668f696cfdb311bb9f0a7f7",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
-    "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
+    "profiles/operators/01_grouped_topk.json": "e62fd134622e7f78e3b4e4e9e68d1bedd9641a6ab564321c2e867c380209a7fd",
     "profiles/chips/kunlun_p800.json": "c9a685b30e4af20e83e9975a5167348dd022c989f31a7304f46d8e58e48cce81"
   },
   "profile": {

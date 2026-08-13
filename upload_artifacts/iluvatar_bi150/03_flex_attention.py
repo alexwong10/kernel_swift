@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'native_sdpa', 'config': {'num_warps': 8, 'block_n': 64}, 'schema_version': 1, 'task_key': '03_flex_attention', 'chip_key': 'iluvatar_bi150', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'native_sdpa', 'config': {'num_warps': 8, 'block_n': 64}, 'schema_version': 1, 'task_key': '03_flex_attention', 'chip_key': 'iluvatar_bi150', 'verified': True}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit

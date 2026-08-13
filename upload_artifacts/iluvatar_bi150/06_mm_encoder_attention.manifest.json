@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\iluvatar_bi150\\06_mm_encoder_attention.py",
-  "artifact_sha256": "a6abe968dd5c102fef4a2555823029112bc7366459c195d917bd2de7866d853d",
+  "artifact_sha256": "c1f91394dcdd6a8c068f91d591211c87e830f030e6a9aded651d4d0c33f483eb",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "60e6dbb3d63d265a9e5f38e478f18854d742e070a4604ce0ad99aa111dcd2837",
-    "profiles/operators/06_mm_encoder_attention.json": "8f286e18d8b0c009ddb8cbcf61672d4c9d368620790374dbb6db266f66ec13e5",
-    "profiles/chips/iluvatar_bi150.json": "616c64dcd19322fdacfdd496210c330d72560de4fb5baf6accf281a02dda7793",
+    "profiles/operators/06_mm_encoder_attention.json": "41539f6380896211b8830cf54c8b46593e790d241aa06072f05d6d7c098833e6",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
@@ -21,7 +21,7 @@
     "schema_version": 1,
     "task_key": "06_mm_encoder_attention",
     "chip_key": "iluvatar_bi150",
-    "verified": false
+    "verified": true
   },
   "chip_profile": {
     "schema_version": 1,
@@ -35,8 +35,8 @@
       "accelerator_module": null,
       "bootstrap_imports": [],
       "source_device_aliases": [],
-      "evaluator_support": "target_runner_only",
-      "verified": false
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
     },
     "capabilities": {
       "verified": false,

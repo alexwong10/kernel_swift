@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\01_grouped_topk.py",
   "artifact_sha256": "6ee3a0185af7b987b0b68de8f818febcf2de7fb0fade897144d7dccdce1d1bf4",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
-    "profiles/operators/01_grouped_topk.json": "2ac4c1566ee904a9a5034c714b38c9c4edb3da54cb46459d1cad7d6d7d8d1de9",
+    "profiles/operators/01_grouped_topk.json": "e62fd134622e7f78e3b4e4e9e68d1bedd9641a6ab564321c2e867c380209a7fd",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
   "profile": {

@@ -17,47 +17,537 @@
     "10_head_compute_mix_bwd"
   ],
   "chips": {
-    "ascend_a2_910b": {"vendor": "华为昇腾", "model": "A2（910B）", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "metax_c500": {"vendor": "沐曦", "model": "C500", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "iluvatar_bi150": {"vendor": "天数智芯", "model": "BI150", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "enflame_s60": {"vendor": "燧原", "model": "S60", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "thead_810e": {"vendor": "平头哥", "model": "真武810E", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "cambricon_mlu590_m9d": {"vendor": "寒武纪", "model": "MLU590-M9D", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "hygon_bw1000": {"vendor": "海光", "model": "BW1000", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "moore_threads_ph100": {"vendor": "摩尔线程", "model": "PH100", "resource_status": "user_provided_target_environment", "verification_status": "unverified"},
-    "kunlun_p800": {"vendor": "昆仑芯", "model": "P800", "resource_status": "self_hosted_required", "verification_status": "unverified"},
-    "biren_br106m": {"vendor": "壁仞", "model": "BR106M", "resource_status": "self_hosted_required", "verification_status": "unverified"}
+    "ascend_a2_910b": {
+      "vendor": "华为昇腾",
+      "model": "A2（910B）",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "metax_c500": {
+      "vendor": "沐曦",
+      "model": "C500",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "iluvatar_bi150": {
+      "vendor": "天数智芯",
+      "model": "BI150",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "enflame_s60": {
+      "vendor": "燧原",
+      "model": "S60",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "thead_810e": {
+      "vendor": "平头哥",
+      "model": "真武810E",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "cambricon_mlu590_m9d": {
+      "vendor": "寒武纪",
+      "model": "MLU590-M9D",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "hygon_bw1000": {
+      "vendor": "海光",
+      "model": "BW1000",
+      "resource_status": "kernelswift_option_observed",
+      "verification_status": "unverified"
+    },
+    "moore_threads_ph100": {
+      "vendor": "摩尔线程",
+      "model": "PH100",
+      "resource_status": "user_provided_target_environment",
+      "verification_status": "unverified"
+    },
+    "kunlun_p800": {
+      "vendor": "昆仑芯",
+      "model": "P800",
+      "resource_status": "self_hosted_required",
+      "verification_status": "unverified"
+    },
+    "biren_br106m": {
+      "vendor": "壁仞",
+      "model": "BR106M",
+      "resource_status": "self_hosted_required",
+      "verification_status": "unverified"
+    }
   },
   "matrix": {
     "ascend_a2_910b": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "metax_c500": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "iluvatar_bi150": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "passed",
+        "task_key": "01_grouped_topk",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 0.45681,
+        "optimized_ms": 0.162568,
+        "speedup": 2.81,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "11ccb8ca56b1f30ba04f7ba3a80cd98b811496aba032a0613be36113c1279200",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/01_grouped_topk.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "02_fused_moe": {
+        "status": "passed",
+        "task_key": "02_fused_moe",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 3.113868,
+        "optimized_ms": 0.551917,
+        "speedup": 5.642,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "9e0926c1c0d92c4bc877d487f92f45a453cf7026058cba5bf02f247734f58f56",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/02_fused_moe.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "03_flex_attention": {
+        "status": "passed",
+        "task_key": "03_flex_attention",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 0.143584,
+        "optimized_ms": 0.143154,
+        "speedup": 1.003,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "686f8518427d0ce9c8885eb23e92e76728ea79d626c446ce23fcf90a84fee1a9",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/03_flex_attention.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "passed",
+        "task_key": "04_splade_sparse_pooler",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 1.043698,
+        "optimized_ms": 1.042625,
+        "speedup": 1.001,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "c3f06f085572f6ff58f9e046ccedc486a2638ca91e1454748cea0283b1f96b81",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/04_splade_sparse_pooler.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "passed",
+        "task_key": "05_music_flamingo_rotary_embedding",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 0.334765,
+        "optimized_ms": 0.149257,
+        "speedup": 2.243,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "7ea91122b10144e7452397902d532c977a67ada530887e6dece66511a71551ae",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/05_music_flamingo_rotary_embedding.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "06_mm_encoder_attention": {
+        "status": "passed",
+        "task_key": "06_mm_encoder_attention",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 0.143852,
+        "optimized_ms": 0.142937,
+        "speedup": 1.006,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "a6abe968dd5c102fef4a2555823029112bc7366459c195d917bd2de7866d853d",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/06_mm_encoder_attention.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "07_mhc_post": {
+        "status": "passed",
+        "task_key": "07_mhc_post",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 7.821389,
+        "optimized_ms": 1.066629,
+        "speedup": 7.333,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "9c6b9c7d0540fe85c4d80d5f4338c65d0af3b8c8a8778cc4f032bf1838a814d9",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/07_mhc_post.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "passed",
+        "task_key": "08_hc_split_sinkhorn",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 1.396556,
+        "optimized_ms": 0.165516,
+        "speedup": 8.438,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "8617e9c8655fbf463fd9be0c003d899b59006abde200d57988be5bde9fdb9f1e",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/08_hc_split_sinkhorn.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "09_centre_random_augmentation": {
+        "status": "passed",
+        "task_key": "09_centre_random_augmentation",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 0.98406,
+        "optimized_ms": 0.3121,
+        "speedup": 3.153,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "be2e075a0c6dec0c7237c8e6e36a36754cf140e55fc80b9a889dd6111576b87f",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/09_centre_random_augmentation.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "passed",
+        "task_key": "10_head_compute_mix_bwd",
+        "chip_key": "iluvatar_bi150",
+        "run_id": "20260813T191347Z-official-200x500",
+        "reference_ms": 0.338612,
+        "optimized_ms": 0.277818,
+        "speedup": 1.219,
+        "evaluation_mode": "official_auto_bench",
+        "official_pass": true,
+        "git_commit": "43b06fa723582fa9e739ca9a3e2c2088c6401268",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "artifact_sha256": "c24f9f43c1e183b2b539f7f6141924eda893a1c230fc23bd89468b74ad28069b",
+        "environment": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/environment.json",
+        "log": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/logs/10_head_compute_mix_bwd.formal.log",
+        "summary": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json",
+        "measured_at_utc": "2026-08-13T19:13:47Z"
+      }
     },
     "enflame_s60": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "thead_810e": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "cambricon_mlu590_m9d": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "hygon_bw1000": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "moore_threads_ph100": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "kunlun_p800": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     },
     "biren_br106m": {
-      "01_grouped_topk": {"status": "not_run"}, "02_fused_moe": {"status": "not_run"}, "03_flex_attention": {"status": "not_run"}, "04_splade_sparse_pooler": {"status": "not_run"}, "05_music_flamingo_rotary_embedding": {"status": "not_run"}, "06_mm_encoder_attention": {"status": "not_run"}, "07_mhc_post": {"status": "not_run"}, "08_hc_split_sinkhorn": {"status": "not_run"}, "09_centre_random_augmentation": {"status": "not_run"}, "10_head_compute_mix_bwd": {"status": "not_run"}
+      "01_grouped_topk": {
+        "status": "not_run"
+      },
+      "02_fused_moe": {
+        "status": "not_run"
+      },
+      "03_flex_attention": {
+        "status": "not_run"
+      },
+      "04_splade_sparse_pooler": {
+        "status": "not_run"
+      },
+      "05_music_flamingo_rotary_embedding": {
+        "status": "not_run"
+      },
+      "06_mm_encoder_attention": {
+        "status": "not_run"
+      },
+      "07_mhc_post": {
+        "status": "not_run"
+      },
+      "08_hc_split_sinkhorn": {
+        "status": "not_run"
+      },
+      "09_centre_random_augmentation": {
+        "status": "not_run"
+      },
+      "10_head_compute_mix_bwd": {
+        "status": "not_run"
+      }
     }
   },
   "legacy_observations": [

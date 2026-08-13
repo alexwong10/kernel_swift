@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_hidden', 'config': {'block_hidden': 256, 'block_tokens': 4, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'iluvatar_bi150', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_hidden', 'config': {'block_hidden': 256, 'block_tokens': 4, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'iluvatar_bi150', 'verified': True}
 
 @triton.jit
 def _mhc_post_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, hidden_size: tl.constexpr, mhc_mult: tl.constexpr, total: tl.constexpr, BLOCK: tl.constexpr):

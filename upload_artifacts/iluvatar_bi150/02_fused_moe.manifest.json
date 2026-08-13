@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\iluvatar_bi150\\02_fused_moe.py",
-  "artifact_sha256": "9e0926c1c0d92c4bc877d487f92f45a453cf7026058cba5bf02f247734f58f56",
+  "artifact_sha256": "b565a91b9b91861b1cb0b02566f9623223ea660925c8fbe02c31e16417378b95",
   "sources": {
     "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "7805a489acee7a54f336e7ba2bb13ef7121cddfa3bdb805e8436df555b5ca952",
-    "profiles/chips/iluvatar_bi150.json": "616c64dcd19322fdacfdd496210c330d72560de4fb5baf6accf281a02dda7793"
+    "profiles/operators/02_fused_moe.json": "1d6759db119e50ce8b75105d8361ec3c003595b288e392c74d802f156a25fdcd",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {
     "variant": "scalar_elementwise_fallback",
@@ -23,7 +23,7 @@
     "schema_version": 1,
     "task_key": "02_fused_moe",
     "chip_key": "iluvatar_bi150",
-    "verified": false
+    "verified": true
   },
   "chip_profile": {
     "schema_version": 1,
@@ -37,8 +37,8 @@
       "accelerator_module": null,
       "bootstrap_imports": [],
       "source_device_aliases": [],
-      "evaluator_support": "target_runner_only",
-      "verified": false
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
     },
     "capabilities": {
       "verified": false,

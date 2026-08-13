@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "metax_c500",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\metax_c500\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "a475da84d4c6f94b175079a91439d751cf2a9e65847efc15b2b49b6dc4bc4c84",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
-    "profiles/operators/10_head_compute_mix_bwd.json": "1ecf55585079f10bdfb7fb525055faf3eeb2c257c797c8df75994a874db8157c",
+    "profiles/operators/10_head_compute_mix_bwd.json": "57eddd309998b902d36fcf1079a381087c080026d8b9d50356034be1dc9999e6",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

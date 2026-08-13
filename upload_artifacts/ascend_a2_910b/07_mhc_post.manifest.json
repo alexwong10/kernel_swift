@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
+  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
   "artifact": "upload_artifacts\\ascend_a2_910b\\07_mhc_post.py",
   "artifact_sha256": "e4cce319537106ced83e2133fba73badc2dcdc00cf360b4dcd3247a865cc654c",
   "sources": {
     "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
-    "profiles/operators/07_mhc_post.json": "b7d027ebdad9b22f95424a5865ab4992cccce31a832ad80a20d386c648642d70",
+    "profiles/operators/07_mhc_post.json": "da41ab1e2f2a710425fc76e0775e8a1de120ea9c3dc5eff717649cd9f3698034",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {
