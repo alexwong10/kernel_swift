@@ -13,6 +13,6 @@
   },
   "driver": "Hygon BW; torch.cuda device_count=1; device name BW",
   "compiler": "DTK 25.04.1 Triton backend; /opt/dtk-25.04.1",
-  "captured_at_utc": "2026-08-14T01:19:04Z",
+  "captured_at_utc": "2026-08-13T17:19:04Z",
   "evidence": "results/hygon_bw1000/20260814_hygon_batch_fb6427f/summary.json; target-device runner, not official evaluator"
 }
