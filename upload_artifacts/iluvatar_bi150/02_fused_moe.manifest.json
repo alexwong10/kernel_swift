@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
+  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
   "artifact": "upload_artifacts\\iluvatar_bi150\\02_fused_moe.py",
   "artifact_sha256": "9e0926c1c0d92c4bc877d487f92f45a453cf7026058cba5bf02f247734f58f56",
   "sources": {
     "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "9b1564a1dbece44b77a9c2109fe2fae66fec8d6a776fd5a8f2933bbc5af2f391",
+    "profiles/operators/02_fused_moe.json": "7805a489acee7a54f336e7ba2bb13ef7121cddfa3bdb805e8436df555b5ca952",
     "profiles/chips/iluvatar_bi150.json": "616c64dcd19322fdacfdd496210c330d72560de4fb5baf6accf281a02dda7793"
   },
   "profile": {

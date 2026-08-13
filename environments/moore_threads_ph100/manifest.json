@@ -1,1 +1,20 @@
-{"schema_version":1,"chip_key":"moore_threads_ph100","status":"unverified","source":null,"image":{"identifier":null,"digest":null},"python":null,"packages":{},"driver":null,"compiler":null,"captured_at_utc":null,"evidence":null}
+{
+  "schema_version": 1,
+  "chip_key": "moore_threads_ph100",
+  "status": "unverified",
+  "image": {
+    "identifier": "46ad079a9849",
+    "digest": null
+  },
+  "python": "3.10.12",
+  "packages": {
+    "torch": "2.7.1a0+gite2d141d",
+    "torch_musa": "2.7.1",
+    "triton": "3.2.0",
+    "musa": "4.3.5"
+  },
+  "driver": "torch.cuda device_count=1; device name MTT S5000; MUSA runtime",
+  "compiler": "MUSA Triton backend 3.2.0; /usr/local/musa-4.3.5",
+  "captured_at_utc": "2026-08-13T17:43:00Z",
+  "evidence": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json; target-device runner, not official evaluator"
+}

@@ -52,7 +52,10 @@
         }
       }
     },
-    "moore_threads_ph100": {"verified": false, "overrides": {}},
+    "moore_threads_ph100": {
+      "verified": false,
+      "overrides": {"variant": "scalar_elementwise_fallback"}
+    },
     "kunlun_p800": {"verified": false, "overrides": {}},
     "biren_br106m": {"verified": false, "overrides": {}}
   }

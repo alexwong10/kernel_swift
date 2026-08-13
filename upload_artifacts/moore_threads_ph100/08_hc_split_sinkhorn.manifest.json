@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
+  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
   "artifact": "upload_artifacts\\moore_threads_ph100\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "5f36bc524cd6daaef855c9878568b9d591cffbbd97486bdd44ea87fa87f592e7",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
     "profiles/operators/08_hc_split_sinkhorn.json": "1453d49010a44e91201fa86352424b570d3e42656b0e484cc8f0eb44544c2f20",
-    "profiles/chips/moore_threads_ph100.json": "d7ed879a5d36eae212b809be5cb92161cd0484b34151af3971a5738b947a1581"
+    "profiles/chips/moore_threads_ph100.json": "a265d3d6433bbccb7538eced237966fbb9b22d4083173422ad975be8ba7a8182"
   },
   "profile": {
     "variant": "scalar_hc4",
@@ -34,26 +34,37 @@
     "chip_key": "moore_threads_ph100",
     "vendor": "摩尔线程",
     "model": "PH100",
-    "resource": "resource_path_unresolved",
+    "resource": "user_provided_target_environment",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
-      "accelerator_module": null,
+      "family": "torch_musa_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": "torch_musa",
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
       "verified": false,
-      "dtypes": {},
-      "primitives": {}
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda_alias": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
     "replacements": [],
-    "status": "unconfirmed_runtime"
+    "status": "no_matches"
   }
 }

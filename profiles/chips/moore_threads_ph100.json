@@ -3,15 +3,23 @@
   "chip_key": "moore_threads_ph100",
   "vendor": "摩尔线程",
   "model": "PH100",
-  "resource": "resource_path_unresolved",
+  "resource": "user_provided_target_environment",
   "runtime": {
-    "family": "unconfirmed",
-    "torch_device": null,
-    "accelerator_module": null,
+    "family": "torch_musa_cuda",
+    "torch_device": "cuda",
+    "accelerator_module": "torch_musa",
     "bootstrap_imports": [],
-    "source_device_aliases": [],
-    "evaluator_support": "unconfirmed",
+    "source_device_aliases": ["cuda"],
+    "evaluator_support": "target_runner_only",
     "verified": false
   },
-  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+  "capabilities": {
+    "verified": false,
+    "dtypes": {"fp16": "observed", "fp32": "observed"},
+    "primitives": {
+      "torch_cuda_alias": "observed",
+      "triton": "observed",
+      "synchronize": "observed"
+    }
+  }
 }

@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
+  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
   "artifact": "upload_artifacts\\iluvatar_bi150\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "8617e9c8655fbf463fd9be0c003d899b59006abde200d57988be5bde9fdb9f1e",
   "sources": {

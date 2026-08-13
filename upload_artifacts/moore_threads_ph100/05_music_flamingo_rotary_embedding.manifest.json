@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
+  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
   "artifact": "upload_artifacts\\moore_threads_ph100\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "ff07bca97c514fb8a37f9edfabbd14886b34d37e80bfb5737dfb2a8bbbfd2fa3",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",
     "profiles/operators/05_music_flamingo_rotary_embedding.json": "f4069a0d28e274c5706a9d14a2b4f7c9dc48c47cb2013171859282de029dd91a",
-    "profiles/chips/moore_threads_ph100.json": "d7ed879a5d36eae212b809be5cb92161cd0484b34151af3971a5738b947a1581"
+    "profiles/chips/moore_threads_ph100.json": "a265d3d6433bbccb7538eced237966fbb9b22d4083173422ad975be8ba7a8182"
   },
   "profile": {
     "variant": "tiled_frequency",
@@ -27,26 +27,44 @@
     "chip_key": "moore_threads_ph100",
     "vendor": "摩尔线程",
     "model": "PH100",
-    "resource": "resource_path_unresolved",
+    "resource": "user_provided_target_environment",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
-      "accelerator_module": null,
+      "family": "torch_musa_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": "torch_musa",
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
       "verified": false,
-      "dtypes": {},
-      "primitives": {}
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda_alias": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
-    "replacements": [],
-    "status": "unconfirmed_runtime"
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 157,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

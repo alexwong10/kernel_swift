@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "enflame_s60",
-  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
+  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
   "artifact": "upload_artifacts\\enflame_s60\\01_grouped_topk.py",
   "artifact_sha256": "d804ee6645345ef394209be9226b54430154767d235e5853af9f25d75bcb3f6e",
   "sources": {

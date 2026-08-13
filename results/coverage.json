@@ -22,7 +22,7 @@
     "thead_810e": {"vendor": "平头哥", "model": "真武810E", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
     "cambricon_mlu590_m9d": {"vendor": "寒武纪", "model": "MLU590-M9D", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
     "hygon_bw1000": {"vendor": "海光", "model": "BW1000", "resource_status": "kernelswift_option_observed", "verification_status": "unverified"},
-    "moore_threads_ph100": {"vendor": "摩尔线程", "model": "PH100", "resource_status": "resource_path_unresolved", "verification_status": "unverified"},
+    "moore_threads_ph100": {"vendor": "摩尔线程", "model": "PH100", "resource_status": "user_provided_target_environment", "verification_status": "unverified"},
     "kunlun_p800": {"vendor": "昆仑芯", "model": "P800", "resource_status": "self_hosted_required", "verification_status": "unverified"},
     "biren_br106m": {"vendor": "壁仞", "model": "BR106M", "resource_status": "self_hosted_required", "verification_status": "unverified"}
   },

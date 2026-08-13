@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "metax_c500",
-  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
+  "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea",
   "artifact": "upload_artifacts\\metax_c500\\04_splade_sparse_pooler.py",
   "artifact_sha256": "99b972971058053906495aba21654c91f4109320579a92a2c65fb54d96527cf0",
   "sources": {
