@@ -3,16 +3,16 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "hygon_bw1000",
-  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
+  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
   "artifact": "upload_artifacts\\hygon_bw1000\\02_fused_moe.py",
-  "artifact_sha256": "102ae349f1bc41975ec406a055439e2ae620266eafb70e04ce3518033a57c5c5",
+  "artifact_sha256": "a2c498f1a8e3176943c11e25474d78bc1e5b50a7f254db01ff5103e4a8fb53bf",
   "sources": {
     "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "ad81b20daafc844d113c966f4e65c737b334e062c5361fb6062dad8f894c877a",
-    "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
+    "profiles/operators/02_fused_moe.json": "9b1564a1dbece44b77a9c2109fe2fae66fec8d6a776fd5a8f2933bbc5af2f391",
+    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
   },
   "profile": {
-    "variant": "tiled_dot_fp16_reference",
+    "variant": "scalar_elementwise_fallback",
     "config": {
       "route_num_warps": 1,
       "gate_up_num_warps": 4,
@@ -30,26 +30,50 @@
     "chip_key": "hygon_bw1000",
     "vendor": "海光",
     "model": "BW1000",
-    "resource": "kernelswift_option_observed",
+    "resource": "user_provided_target_environment",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "hygon_dtk_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
       "verified": false,
-      "dtypes": {},
-      "primitives": {}
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
-    "replacements": [],
-    "status": "unconfirmed_runtime"
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 378,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 379,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

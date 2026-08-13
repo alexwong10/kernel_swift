@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
+  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\02_fused_moe.py",
   "artifact_sha256": "10b29ad8f3e1b0a0ec9db9bc8a2fed625e09c5e888b7496d99bc6d0aa7b5c9a1",
   "sources": {
     "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "ad81b20daafc844d113c966f4e65c737b334e062c5361fb6062dad8f894c877a",
+    "profiles/operators/02_fused_moe.json": "9b1564a1dbece44b77a9c2109fe2fae66fec8d6a776fd5a8f2933bbc5af2f391",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
   "profile": {

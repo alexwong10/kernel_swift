@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "hygon_bw1000",
-  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
+  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
   "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "add053a4a0c28618dfc88fbdbecf97ff5029afb8a2f84ae199737c75ea0530dd",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
     "profiles/operators/10_head_compute_mix_bwd.json": "1ecf55585079f10bdfb7fb525055faf3eeb2c257c797c8df75994a874db8157c",
-    "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c"
+    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
   },
   "profile": {
     "variant": "tiled_mix_chunked",
@@ -37,26 +37,37 @@
     "chip_key": "hygon_bw1000",
     "vendor": "海光",
     "model": "BW1000",
-    "resource": "kernelswift_option_observed",
+    "resource": "user_provided_target_environment",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "hygon_dtk_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
       "verified": false,
-      "dtypes": {},
-      "primitives": {}
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
     "replacements": [],
-    "status": "unconfirmed_runtime"
+    "status": "no_matches"
   }
 }

@@ -3,13 +3,13 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "hygon_bw1000",
-  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
+  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
   "artifact": "upload_artifacts\\hygon_bw1000\\04_splade_sparse_pooler.py",
   "artifact_sha256": "33d355b2f1f50a05241c30c5c6dfcf22d596cbf4aa54732a9a4b74b8b89d6749",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "58e5040ce40903402a76a9ae00c978e404653423ccc839a4381c80a417b16507",
     "profiles/operators/04_splade_sparse_pooler.json": "c521b059e1088af4e0d9b157b4c81eb8d380d5d3bc84c3e36c4a4faad919e503",
-    "profiles/chips/hygon_bw1000.json": "179bd0f0a5a640ce2c72173dd6771015eab6dc8c09fca2ac2829df9b95fb1b9c",
+    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
@@ -35,26 +35,50 @@
     "chip_key": "hygon_bw1000",
     "vendor": "海光",
     "model": "BW1000",
-    "resource": "kernelswift_option_observed",
+    "resource": "user_provided_target_environment",
     "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
+      "family": "hygon_dtk_cuda",
+      "torch_device": "cuda",
       "accelerator_module": null,
       "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
       "verified": false
     },
     "capabilities": {
       "verified": false,
-      "dtypes": {},
-      "primitives": {}
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
     }
   },
   "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
-    "replacements": [],
-    "status": "unconfirmed_runtime"
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 157,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 158,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
   }
 }

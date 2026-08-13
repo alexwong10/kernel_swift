@@ -91,7 +91,7 @@ def upload_builder_scope() -> None:
         # builder must not invent a device for an unknown runtime.
         unresolved_path = temp_root / "unresolved.py"
         unresolved_manifest = build_submission(
-            "02_fused_moe", "hygon_bw1000", unresolved_path
+            "02_fused_moe", "thead_810e", unresolved_path
         )
         unresolved_source = unresolved_path.read_text(encoding="utf-8")
         if not any(

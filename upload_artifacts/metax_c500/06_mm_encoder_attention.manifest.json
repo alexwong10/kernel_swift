@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "metax_c500",
-  "source_commit": "d5f488cde79d82ac58e3914cdd5444e8de62954e",
+  "source_commit": "fb6427fb1377cb7c44a189dc124c9ddb66890828",
   "artifact": "upload_artifacts\\metax_c500\\06_mm_encoder_attention.py",
   "artifact_sha256": "ab5cd6520e2e0fd156302b4ba4b0dab769cb29850399185bfb38076f41982ef8",
   "sources": {
