@@ -19,9 +19,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 EVALUATOR_URL = (
     "https://github.com/DeepLink-org/DLBlas/blob/"
-    "9b5b3627a0f2e5e543ad9d05bf051308bafbd12/benchmarks/ks/auto_bench.py"
+    "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c/benchmarks/ks/auto_bench.py"
 )
-EVALUATOR_COMMIT = "9b5b3627a0f2e5e543ad9d05bf051308bafbd12"
+EVALUATOR_COMMIT = "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
 EVALUATOR_RELATIVE_PATH = "benchmarks/ks/auto_bench.py"
 # The pinned source is also recorded by content so an air-gapped or
 # GitHub-mirror environment can run the exact official file without a local
