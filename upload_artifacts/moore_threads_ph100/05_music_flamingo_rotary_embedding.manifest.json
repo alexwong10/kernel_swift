@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
+  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
   "artifact": "upload_artifacts\\moore_threads_ph100\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "ff07bca97c514fb8a37f9edfabbd14886b34d37e80bfb5737dfb2a8bbbfd2fa3",
   "sources": {

@@ -2,6 +2,7 @@
 # task_key=04_splade_sparse_pooler chip_key=moore_threads_ph100 builder_version=4
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import triton
 import triton.language as tl
 import torch
@@ -151,14 +152,28 @@ class Model(nn.Module):
         self.decoder = nn.Linear(hidden_size, vocab_size, bias=True)
         self.pooling = pooling
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] != 'staged_portable':
+        if profile['variant'] not in {'staged_portable', 'native_pytorch'}:
             raise ValueError(f"unsupported SPLADE variant: {profile['variant']}")
+        self._ks_variant = profile['variant']
         config = profile['config']
         self._ks_linear_config = {'block_m': int(config['linear_block_m']), 'block_n': int(config['linear_block_n']), 'block_k': int(config['linear_block_k']), 'num_warps': int(config['linear_num_warps'])}
         self._ks_layer_norm_config = {'num_warps_small': int(config['layer_norm_num_warps_small']), 'num_warps_large': int(config['layer_norm_num_warps_large'])}
         self._ks_pool_config = {'block_t': int(config['pool_block_t']), 'block_v': int(config['pool_block_v']), 'num_warps': int(config['pool_num_warps'])}
 
     def forward(self, hidden_states: torch.Tensor, seq_lens: torch.Tensor) -> list:
+        if self._ks_variant == 'native_pytorch':
+            x = self.decoder(self.layer_norm(self.act(self.dense(hidden_states))))
+            x = torch.log1p(F.relu(x))
+            result = []
+            offset = 0
+            for length in seq_lens.tolist():
+                chunk = x[offset:offset + length]
+                if self.pooling == 'max':
+                    result.append(chunk.max(dim=0).values)
+                else:
+                    result.append(chunk.sum(dim=0))
+                offset += length
+            return result
         dense = triton_linear(hidden_states, self.dense.weight, self.dense.bias, config=self._ks_linear_config)
         normalized = gelu_layer_norm(dense, self.layer_norm.weight, self.layer_norm.bias, self.layer_norm.eps, config=self._ks_layer_norm_config)
         logits = triton_linear(normalized, self.decoder.weight, self.decoder.bias, log1p_relu=True, config=self._ks_linear_config)

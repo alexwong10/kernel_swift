@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "hygon_bw1000",
-  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
+  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
   "artifact": "upload_artifacts\\hygon_bw1000\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "33d355b2f1f50a05241c30c5c6dfcf22d596cbf4aa54732a9a4b74b8b89d6749",
+  "artifact_sha256": "225041c1e4035c3ee8d126d16cb9f942cb131c3f299a78351017e07b720c244b",
   "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "58e5040ce40903402a76a9ae00c978e404653423ccc839a4381c80a417b16507",
-    "profiles/operators/04_splade_sparse_pooler.json": "c521b059e1088af4e0d9b157b4c81eb8d380d5d3bc84c3e36c4a4faad919e503",
+    "triton_kernels/04_splade_sparse_pooler.py": "285328dead87ec484bc927282d3b0c7b06ebd82e1d213b12b7adf35ab0d003bf",
+    "profiles/operators/04_splade_sparse_pooler.json": "d6e5420ec25dd1e01a6b00f488641152ed50ecab432d31744f0d47e590a422f0",
     "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
@@ -67,13 +67,13 @@
     ],
     "replacements": [
       {
-        "line": 157,
+        "line": 172,
         "from": "cuda",
         "to": "cuda",
         "context": "device_keyword"
       },
       {
-        "line": 158,
+        "line": 173,
         "from": "cuda",
         "to": "cuda",
         "context": "device_keyword"

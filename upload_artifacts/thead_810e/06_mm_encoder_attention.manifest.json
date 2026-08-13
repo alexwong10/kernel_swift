@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "thead_810e",
-  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
+  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
   "artifact": "upload_artifacts\\thead_810e\\06_mm_encoder_attention.py",
-  "artifact_sha256": "f62206c34abf2e2c007bd1091440cfc3e4a6bb76b5bd3a305663d1cba55e9cbc",
+  "artifact_sha256": "175bebb11fcf9f585c215f890d870b9296094931398d8041057cca32de8912a3",
   "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "4d982c87976b709b7de84164aee765f7fab67d9e52f2719aaca424803977f0d6",
-    "profiles/operators/06_mm_encoder_attention.json": "0a26c7d6303d6e6da241f5202a7e98bdeec0a52985b12c95ae88a42aae5b47eb",
+    "triton_kernels/06_mm_encoder_attention.py": "60e6dbb3d63d265a9e5f38e478f18854d742e070a4604ce0ad99aa111dcd2837",
+    "profiles/operators/06_mm_encoder_attention.json": "8f286e18d8b0c009ddb8cbcf61672d4c9d368620790374dbb6db266f66ec13e5",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },

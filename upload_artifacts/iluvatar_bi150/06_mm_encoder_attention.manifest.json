@@ -3,17 +3,17 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
+  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
   "artifact": "upload_artifacts\\iluvatar_bi150\\06_mm_encoder_attention.py",
-  "artifact_sha256": "6cbc7e595524272ebd56838f277535ce3834af4e905b05363470b707474b6425",
+  "artifact_sha256": "a6abe968dd5c102fef4a2555823029112bc7366459c195d917bd2de7866d853d",
   "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "4d982c87976b709b7de84164aee765f7fab67d9e52f2719aaca424803977f0d6",
-    "profiles/operators/06_mm_encoder_attention.json": "0a26c7d6303d6e6da241f5202a7e98bdeec0a52985b12c95ae88a42aae5b47eb",
+    "triton_kernels/06_mm_encoder_attention.py": "60e6dbb3d63d265a9e5f38e478f18854d742e070a4604ce0ad99aa111dcd2837",
+    "profiles/operators/06_mm_encoder_attention.json": "8f286e18d8b0c009ddb8cbcf61672d4c9d368620790374dbb6db266f66ec13e5",
     "profiles/chips/iluvatar_bi150.json": "616c64dcd19322fdacfdd496210c330d72560de4fb5baf6accf281a02dda7793",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
   "profile": {
-    "variant": "tiled_online_softmax",
+    "variant": "native_sdpa",
     "config": {
       "num_warps": 8,
       "block_n": 64

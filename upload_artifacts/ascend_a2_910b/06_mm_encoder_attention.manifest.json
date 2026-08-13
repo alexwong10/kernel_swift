@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
+  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
   "artifact": "upload_artifacts\\ascend_a2_910b\\06_mm_encoder_attention.py",
-  "artifact_sha256": "44033246374ff2aa10766667b00b2e13fcbdff167a94f91acc08094621e13fc9",
+  "artifact_sha256": "ebfa4a27bc7ea584644262b02d26953cd6f749cea0e088e351c3ecb07cd60e6c",
   "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "4d982c87976b709b7de84164aee765f7fab67d9e52f2719aaca424803977f0d6",
-    "profiles/operators/06_mm_encoder_attention.json": "0a26c7d6303d6e6da241f5202a7e98bdeec0a52985b12c95ae88a42aae5b47eb",
+    "triton_kernels/06_mm_encoder_attention.py": "60e6dbb3d63d265a9e5f38e478f18854d742e070a4604ce0ad99aa111dcd2837",
+    "profiles/operators/06_mm_encoder_attention.json": "8f286e18d8b0c009ddb8cbcf61672d4c9d368620790374dbb6db266f66ec13e5",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
@@ -55,19 +55,19 @@
     ],
     "replacements": [
       {
-        "line": 66,
+        "line": 78,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"
       },
       {
-        "line": 67,
+        "line": 79,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"
       },
       {
-        "line": 68,
+        "line": 80,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"

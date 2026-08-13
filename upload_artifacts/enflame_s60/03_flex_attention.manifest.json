@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "4345450ec7c454c6f654c5b9287684b96257d704",
+  "source_commit": "0dd1319619cc27d69531a7cce704bb23b17cf63e",
   "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
-  "artifact_sha256": "b58298e5d5da8ac54bba338a452029b9879a24c8c79af4f03aed21dae847d8c7",
+  "artifact_sha256": "6f22efc241e55de95006b1b8d5d4e0b0d0b58482a9bbfcd894ee99d8d1bb58d1",
   "sources": {
-    "triton_kernels/03_flex_attention.py": "7b2cc431ee6662a6dfbab868ee48856ddf9cc8233bdf98f8413cc390beaf4132",
-    "profiles/operators/03_flex_attention.json": "f043d7c2a9107b5ce6e3ea6befd499a51383ed871405cc6c8b6f6d41fdf00199",
+    "triton_kernels/03_flex_attention.py": "26251767c45b8375743bde6b18f919ede46e4aa245f404e0fd345a521933ae09",
+    "profiles/operators/03_flex_attention.json": "a20c3e55eec0496bab02d8b55afad3f4c98865ce0c4e8e1f2a0465b91f7b67a4",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
     "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
   },
@@ -55,19 +55,19 @@
     ],
     "replacements": [
       {
-        "line": 67,
+        "line": 79,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 68,
+        "line": 80,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 69,
+        "line": 81,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"

@@ -11,6 +11,7 @@ from __future__ import annotations
 import math
 import re
 import subprocess
+import hashlib
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,11 @@ EVALUATOR_URL = (
 )
 EVALUATOR_COMMIT = "9b5b3627a0f2e5e543ad9d05bf051308bafbd12"
 EVALUATOR_RELATIVE_PATH = "benchmarks/ks/auto_bench.py"
+# The pinned source is also recorded by content so an air-gapped or
+# GitHub-mirror environment can run the exact official file without a local
+# DLBlas checkout.  This is not a replacement evaluator: the bytes must still
+# match the pinned upstream file exactly.
+EVALUATOR_SHA256 = "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db"
 EVALUATION_MODE = "official_auto_bench"
 
 PASS_PATTERN = re.compile(
@@ -49,7 +55,13 @@ def parse_official_pass(output: str) -> dict[str, float] | None:
 
 
 def verify_official_evaluator(bench: Path) -> dict[str, Any]:
-    """Verify that *bench* is byte-identical to the pinned official script."""
+    """Verify that *bench* is byte-identical to the pinned official script.
+
+    Prefer a real DLBlas checkout when available.  Detached files are accepted
+    only when their SHA-256 matches the pinned upstream bytes; this supports
+    vendor containers where GitHub's Git transport is unavailable while
+    preserving an auditable evaluator identity.
+    """
 
     bench = bench.resolve()
     if bench.name != "auto_bench.py":
@@ -66,11 +78,19 @@ def verify_official_evaluator(bench: Path) -> dict[str, Any]:
         capture_output=True,
     )
     if top.returncode != 0:
+        actual_sha256 = hashlib.sha256(bench.read_bytes()).hexdigest()
+        verified = actual_sha256 == EVALUATOR_SHA256
         return {
-            "verified": False,
-            "detail": "evaluator is not inside a Git checkout",
+            "verified": verified,
+            "detail": (
+                "exact pinned file by SHA-256 (detached)"
+                if verified
+                else "evaluator is detached and SHA-256 differs from pinned file"
+            ),
             "path": str(bench),
             "commit": EVALUATOR_COMMIT,
+            "sha256": actual_sha256,
+            "expected_sha256": EVALUATOR_SHA256,
             "url": EVALUATOR_URL,
         }
     repo = Path(top.stdout.strip()).resolve()
@@ -108,7 +128,9 @@ def verify_official_evaluator(bench: Path) -> dict[str, Any]:
             "commit": EVALUATOR_COMMIT,
             "url": EVALUATOR_URL,
         }
-    verified = expected.stdout == bench.read_bytes()
+    payload = bench.read_bytes()
+    actual_sha256 = hashlib.sha256(payload).hexdigest()
+    verified = expected.stdout == payload and actual_sha256 == EVALUATOR_SHA256
     return {
         "verified": verified,
         "detail": "exact pinned file" if verified else "working-tree evaluator differs from pinned file",
@@ -116,6 +138,8 @@ def verify_official_evaluator(bench: Path) -> dict[str, Any]:
         "relative_path": relative,
         "path": str(bench),
         "commit": EVALUATOR_COMMIT,
+        "sha256": actual_sha256,
+        "expected_sha256": EVALUATOR_SHA256,
         "url": EVALUATOR_URL,
     }
 

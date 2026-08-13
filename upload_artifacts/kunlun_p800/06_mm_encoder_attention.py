@@ -2,6 +2,7 @@
 # task_key=06_mm_encoder_attention chip_key=kunlun_p800 builder_version=4
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch
 import triton
 import triton.language as tl
@@ -123,9 +124,10 @@ class Model(nn.Module):
         self.num_kv_heads = num_kv_heads
         self.scale = 1.0 / head_size ** 0.5
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] != 'tiled_online_softmax':
+        if profile['variant'] not in {'tiled_online_softmax', 'native_sdpa'}:
             raise ValueError(f"unsupported MMEncoderAttention variant: {profile['variant']}")
         self._ks_attention_config = profile['config']
+        self._ks_variant = profile['variant']
 
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor):
         batch_size, q_len = query.shape[:2]
@@ -139,6 +141,12 @@ class Model(nn.Module):
             repeat = self.num_heads // self.num_kv_heads
             k = k[:, :, :, None, :].expand(batch_size, kv_len, self.num_kv_heads, repeat, self.head_size).reshape(batch_size, kv_len, self.num_heads, self.head_size)
             v = v[:, :, :, None, :].expand(batch_size, kv_len, self.num_kv_heads, repeat, self.head_size).reshape(batch_size, kv_len, self.num_heads, self.head_size)
+        if self._ks_variant == 'native_sdpa':
+            q_native = q.transpose(1, 2)
+            k_native = k.transpose(1, 2)
+            v_native = v.transpose(1, 2)
+            out = F.scaled_dot_product_attention(q_native, k_native, v_native, scale=self.scale)
+            return out.transpose(1, 2).reshape(batch_size, q_len, self.num_heads * self.head_size)
         out = triton_attention(q, k, v, scale=self.scale, causal=False, config=self._ks_attention_config)
         return out.reshape(batch_size, q_len, self.num_heads * self.head_size)
 

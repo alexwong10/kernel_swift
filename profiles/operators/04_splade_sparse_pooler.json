@@ -18,7 +18,7 @@
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},
-    "iluvatar_bi150": {"verified": false, "overrides": {}},
+    "iluvatar_bi150": {"verified": false, "overrides": {"variant": "native_pytorch"}},
     "enflame_s60": {
       "verified": false,
       "overrides": {"config": {"linear_block_n": 128}}

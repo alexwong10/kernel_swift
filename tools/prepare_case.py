@@ -39,7 +39,6 @@ class DeviceLiteralRewriter(ast.NodeTransformer):
             )
             return ast.copy_location(ast.Constant(value=self.target), node)
         return node
-
     def visit_keyword(self, node: ast.keyword) -> ast.AST:
         node = self.generic_visit(node)
         if node.arg == "device" and isinstance(node.value, ast.Constant):
@@ -76,7 +75,34 @@ class DeviceLiteralRewriter(ast.NodeTransformer):
         return node
 
 
-def prepare_source(source_path: Path, output_path: Path, chip_key: str) -> dict[str, Any]:
+class ArtifactEntrypointRewriter(ast.NodeTransformer):
+    """Adapt the upload entrypoint to the pinned official evaluator contract.
+
+    KernelSwift's upload page loads ``Model``.  The pinned DLBlas evaluator
+    intentionally loads the optimized side as ``ModelNew``.  We only apply
+    this rename to the temporary evaluator copy; the original upload artifact
+    remains untouched and continues to expose ``Model``.
+    """
+
+    def __init__(self) -> None:
+        self.renamed = False
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> ast.AST:
+        if node.name == "Model":
+            if self.renamed:
+                raise ValueError("artifact contains more than one Model class")
+            node.name = "ModelNew"
+            self.renamed = True
+        return self.generic_visit(node)
+
+
+def prepare_source(
+    source_path: Path,
+    output_path: Path,
+    chip_key: str,
+    *,
+    evaluator_role: str = "reference",
+) -> dict[str, Any]:
     chip = load_chip_profile(chip_key)
     runtime = chip["runtime"]
     target = runtime["torch_device"]
@@ -100,6 +126,19 @@ def prepare_source(source_path: Path, output_path: Path, chip_key: str) -> dict[
     ]
     rewriter = DeviceLiteralRewriter(aliases, target)
     tree = rewriter.visit(tree)
+    entrypoint = {"role": evaluator_role, "renamed": False}
+    if evaluator_role == "artifact":
+        class_rewriter = ArtifactEntrypointRewriter()
+        tree = class_rewriter.visit(tree)
+        if not class_rewriter.renamed:
+            raise ValueError(
+                f"{source_path}: evaluator artifact must define a Model class"
+            )
+        entrypoint["renamed"] = True
+        entrypoint["from"] = "Model"
+        entrypoint["to"] = "ModelNew"
+    elif evaluator_role != "reference":
+        raise ValueError(f"unknown evaluator role: {evaluator_role}")
     ast.fix_missing_locations(tree)
     payload = (ast.unparse(tree) + "\n").encode("utf-8")
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -113,6 +152,7 @@ def prepare_source(source_path: Path, output_path: Path, chip_key: str) -> dict[
         "target_device": target,
         "bootstrap_imports": bootstrap_imports,
         "replacements": rewriter.replacements,
+        "entrypoint": entrypoint,
     }
 
 
@@ -125,8 +165,12 @@ def prepare_pair(
     manifest = {
         "schema_version": 1,
         "chip_key": chip_key,
-        "reference": prepare_source(reference, output_dir / "reference.py", chip_key),
-        "artifact": prepare_source(artifact, output_dir / "artifact.py", chip_key),
+        "reference": prepare_source(
+            reference, output_dir / "reference.py", chip_key, evaluator_role="reference"
+        ),
+        "artifact": prepare_source(
+            artifact, output_dir / "artifact.py", chip_key, evaluator_role="artifact"
+        ),
     }
     (output_dir / "case_preparation.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
