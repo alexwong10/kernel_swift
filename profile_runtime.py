@@ -142,9 +142,15 @@ def load_environment_manifest(chip_key: str) -> dict[str, Any]:
         ):
             if not isinstance(payload[key], str) or not payload[key]:
                 raise ProfileError(f"{chip_key}: verified environment requires {key}")
-        for key in ("identifier", "digest"):
-            if not isinstance(image[key], str) or not image[key]:
-                raise ProfileError(f"{chip_key}: verified environment requires image.{key}")
+        if not isinstance(image["identifier"], str) or not image["identifier"]:
+            raise ProfileError(f"{chip_key}: verified environment requires image.identifier")
+        if image["digest"] is None:
+            if payload.get("image_digest_status") != "not_exposed_by_provider":
+                raise ProfileError(
+                    f"{chip_key}: null image.digest requires image_digest_status=not_exposed_by_provider"
+                )
+        elif not isinstance(image["digest"], str) or not image["digest"]:
+            raise ProfileError(f"{chip_key}: image.digest must be a non-empty string or null")
         for package in ("torch", "triton"):
             if not isinstance(payload["packages"].get(package), str):
                 raise ProfileError(f"{chip_key}: verified environment requires {package} pin")

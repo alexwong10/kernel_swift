@@ -21,7 +21,7 @@
       }
     },
     "iluvatar_bi150": {
-      "verified": false,
+      "verified": true,
       "overrides": {
         "variant": "scalar_elementwise_fallback",
         "config": {

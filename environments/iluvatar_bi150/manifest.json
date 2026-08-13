@@ -1,11 +1,12 @@
 {
   "schema_version": 1,
   "chip_key": "iluvatar_bi150",
-  "status": "unverified",
+  "status": "verified",
   "image": {
     "identifier": "saas-de-pjsys2-pjsys2-bi150-33-f0a3-6744568d7c-47twg",
     "digest": null
   },
+  "image_digest_status": "not_exposed_by_provider",
   "python": "3.10.18",
   "packages": {
     "torch": "2.7.1+corex.4.4.0",
@@ -13,6 +14,6 @@
   },
   "driver": "IX-ML 4.4.0; Iluvatar BI-V150; CUDA compatibility layer 10.2; device_count=1",
   "compiler": "CoreX Triton 3.1.0+corex.4.4.0; /usr/local/corex/bin/clang++",
-  "captured_at_utc": "2026-08-11T13:52:49Z",
-  "evidence": "results/iluvatar_bi150/20260811_bi150_batch_v3/summary.json; target-device runner, not official evaluator"
+  "captured_at_utc": "2026-08-13T19:14:26Z",
+  "evidence": "results/iluvatar_bi150/43b06fa/20260813T191347Z-official-200x500/summary.json; official auto_bench logs and environment snapshot"
 }

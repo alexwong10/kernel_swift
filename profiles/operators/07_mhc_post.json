@@ -11,7 +11,7 @@
         "config": {"block_hidden": 256, "block_tokens": 4, "num_warps": 4}
       }
     },
-    "iluvatar_bi150": {"verified": false, "overrides": {}},
+    "iluvatar_bi150": {"verified": true, "overrides": {}},
     "enflame_s60": {"verified": false, "overrides": {}},
     "thead_810e": {"verified": false, "overrides": {}},
     "cambricon_mlu590_m9d": {"verified": false, "overrides": {}},

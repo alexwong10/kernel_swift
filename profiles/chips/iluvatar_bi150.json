@@ -10,8 +10,8 @@
     "accelerator_module": null,
     "bootstrap_imports": [],
     "source_device_aliases": [],
-    "evaluator_support": "target_runner_only",
-    "verified": false
+    "evaluator_support": "native_after_case_preparation",
+    "verified": true
   },
   "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
 }
