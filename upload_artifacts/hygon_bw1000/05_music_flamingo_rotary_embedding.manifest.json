@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "hygon_bw1000",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\hygon_bw1000\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "4a511e3cd6df7d79c2ff103caea7887158cffbf03083a433b29d0950f0c059a6",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "edbed5a51d79cc23e2bd5d761deb52176c8e2356d79cc568c9846c9ef0fea45b",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "4eab766e0b4ea2c02531b7cc5ddc1d482b1f208a76b8f98bf3f54a8295c56834",
     "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
   },
   "profile": {

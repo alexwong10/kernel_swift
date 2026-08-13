@@ -3,19 +3,19 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\iluvatar_bi150\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "966bea6f93104fe980a9ec63baba9c6138dfa31f325e44341c3f95f62f41bee9",
+  "artifact_sha256": "55e281f31e34e86aed00b3c545e1e71850a3907da9c9808812f65323b4f4d493",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "edbed5a51d79cc23e2bd5d761deb52176c8e2356d79cc568c9846c9ef0fea45b",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "4eab766e0b4ea2c02531b7cc5ddc1d482b1f208a76b8f98bf3f54a8295c56834",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {
     "variant": "tiled_frequency",
     "config": {
       "block_channel": 128,
-      "num_warps": 4
+      "num_warps": 1
     },
     "schema_version": 1,
     "task_key": "05_music_flamingo_rotary_embedding",

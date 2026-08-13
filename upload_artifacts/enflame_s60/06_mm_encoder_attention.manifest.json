@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\enflame_s60\\06_mm_encoder_attention.py",
   "artifact_sha256": "9fd083601ed13b0317651a9faf52c919a8e730e4d790607cfcab5365bb653b8d",
   "sources": {

@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "thead_810e",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\thead_810e\\04_splade_sparse_pooler.py",
   "artifact_sha256": "2db9d400e093fc6985beeac2f73715d4115133f8a9a8643a32ea7c7957df16f9",
   "sources": {

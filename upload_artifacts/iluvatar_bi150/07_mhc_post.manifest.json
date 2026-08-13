@@ -3,20 +3,20 @@
   "builder_version": 4,
   "task_key": "07_mhc_post",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\iluvatar_bi150\\07_mhc_post.py",
-  "artifact_sha256": "b33e04de8e2f4463c46c25bed27ca35cf2463960382aee1b6948f122b07333d6",
+  "artifact_sha256": "1ee33b4efbc6ec0782346563fa3104145a92347ece053d85b7cc9ddfa7aba436",
   "sources": {
     "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
-    "profiles/operators/07_mhc_post.json": "da41ab1e2f2a710425fc76e0775e8a1de120ea9c3dc5eff717649cd9f3698034",
+    "profiles/operators/07_mhc_post.json": "0562a3d8ea453f20f40dc5f139e2c2e74f28e893200ac9e1f517048893f62f27",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {
     "variant": "tiled_hidden",
     "config": {
-      "block_hidden": 256,
-      "block_tokens": 4,
-      "num_warps": 4
+      "block_hidden": 128,
+      "block_tokens": 8,
+      "num_warps": 8
     },
     "schema_version": 1,
     "task_key": "07_mhc_post",

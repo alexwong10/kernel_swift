@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\moore_threads_ph100\\06_mm_encoder_attention.py",
   "artifact_sha256": "26315bcaf3d6f84d33104170bc2e68d0ddd5fd3f15279d1fda24278ebf7b61b5",
   "sources": {

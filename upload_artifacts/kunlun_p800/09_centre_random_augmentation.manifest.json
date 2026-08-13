@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "kunlun_p800",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\kunlun_p800\\09_centre_random_augmentation.py",
   "artifact_sha256": "73a7bf6778137dc0e82b92dfa3d8ac32ca03342983ad1eb7f1bc2fe4e6bede7a",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
-    "profiles/operators/09_centre_random_augmentation.json": "5bacd144aca0a2de7d2ac2c0703e3db992f7e64a0d0b1c481d06157fe07e178b",
+    "profiles/operators/09_centre_random_augmentation.json": "cbe9838b516ff0648bf021579b2f87b6b61e67a9e3dfd25380a3c031fda75d5a",
     "profiles/chips/kunlun_p800.json": "c9a685b30e4af20e83e9975a5167348dd022c989f31a7304f46d8e58e48cce81"
   },
   "profile": {

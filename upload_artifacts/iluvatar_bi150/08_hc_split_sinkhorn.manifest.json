@@ -3,18 +3,18 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\iluvatar_bi150\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "6eae0a69fb9cb0c029525dc6f530e11ad65815a681a6ff95b05ccf318008e1bb",
+  "artifact_sha256": "8f7d5766dc2bfc6d5c680cf4efe4b1fac5568a95dde0cc65f3f82b708bebb8bf",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-    "profiles/operators/08_hc_split_sinkhorn.json": "1caca26d1b6f31e9d700b61de964b600ab21e577b22f8aa84a250942b0d750c5",
+    "profiles/operators/08_hc_split_sinkhorn.json": "d6560dc86d0d603ffb7c203f1b2ec3c2719175bb7f0017c916f96c29a32aad83",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {
-    "variant": "scalar_hc4",
+    "variant": "matrix_reduce",
     "config": {
-      "num_warps": 1
+      "num_warps": 2
     },
     "fallback_variants": [
       {

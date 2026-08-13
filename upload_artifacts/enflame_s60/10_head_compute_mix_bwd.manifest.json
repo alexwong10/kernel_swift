@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "enflame_s60",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\enflame_s60\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "8508b4dfdaaf04aae3e3fb8fb2be4baff9207e6b09dda45f165a063b54185a01",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
-    "profiles/operators/10_head_compute_mix_bwd.json": "57eddd309998b902d36fcf1079a381087c080026d8b9d50356034be1dc9999e6",
+    "profiles/operators/10_head_compute_mix_bwd.json": "54fd9c92c19db0bc2955102acae9b4c8cef89048911c6614a3d44072654a8873",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
   "profile": {

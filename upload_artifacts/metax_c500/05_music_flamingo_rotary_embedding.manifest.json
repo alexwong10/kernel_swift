@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "metax_c500",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\metax_c500\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "17f8d0e4e47ace6bc0ad29ab0993593531f464afc97656695edc7556d0fab1d3",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "f6f0d3377470fcdf31938b97954e3aa74caf28c885cc8266cfe1d626ed6f82e4",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "edbed5a51d79cc23e2bd5d761deb52176c8e2356d79cc568c9846c9ef0fea45b",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "4eab766e0b4ea2c02531b7cc5ddc1d482b1f208a76b8f98bf3f54a8295c56834",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

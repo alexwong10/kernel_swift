@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\ascend_a2_910b\\01_grouped_topk.py",
   "artifact_sha256": "9dc5bec5567ea9c9a2f9f966bdf08301021c9415dde533923e6aa8739f506646",
   "sources": {

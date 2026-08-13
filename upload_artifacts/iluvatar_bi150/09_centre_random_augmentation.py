@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'framework_rng_tiled_geometry', 'config': {'center_num_warps': 4, 'augment_block_atoms': 64, 'augment_num_warps': 4}, 'schema_version': 1, 'task_key': '09_centre_random_augmentation', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'framework_rng_tiled_geometry', 'config': {'center_num_warps': 4, 'augment_block_atoms': 256, 'augment_num_warps': 1}, 'schema_version': 1, 'task_key': '09_centre_random_augmentation', 'chip_key': 'iluvatar_bi150', 'verified': True}
 
 @triton.jit
 def _center_kernel(coords_ptr, mask_ptr, center_ptr, n_atoms: tl.constexpr, HAS_MASK: tl.constexpr, EPS: tl.constexpr, BLOCK: tl.constexpr):

@@ -3,12 +3,12 @@
   "builder_version": 4,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "enflame_s60",
-  "source_commit": "e9a54218032042e3049fba6307f52e39fd8c7dfb",
+  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
   "artifact": "upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
   "artifact_sha256": "f367ea9680556f1f81122356e862696e3bb370df66b54e8aa24baa23ed986728",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "61c2c6fa0ca899c718b24f4db2ac451dcfefaea1ae90507eb34e1bc4c357fb2d",
-    "profiles/operators/09_centre_random_augmentation.json": "5bacd144aca0a2de7d2ac2c0703e3db992f7e64a0d0b1c481d06157fe07e178b",
+    "profiles/operators/09_centre_random_augmentation.json": "cbe9838b516ff0648bf021579b2f87b6b61e67a9e3dfd25380a3c031fda75d5a",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
   "profile": {
