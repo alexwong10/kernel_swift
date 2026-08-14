@@ -1,74 +1,81 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "02_fused_moe",
-  "chip_key": "ascend_a2_910b",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\ascend_a2_910b\\02_fused_moe.py",
-  "artifact_sha256": "c99cb6a449f5c2b50ced7067caf0ba62fd78ffb77e2dd044bed84b62ce4b918c",
-  "sources": {
-    "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "b443bc0a2de1245f3262073b8190e32d225064bdee780fc01f6349b3ef0151e3",
-    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
-  },
-  "profile": {
-    "variant": "tiled_dot_fp16_reference",
-    "config": {
-      "route_num_warps": 1,
-      "gate_up_num_warps": 4,
-      "down_num_warps": 4,
-      "reduce_block": 256,
-      "reduce_num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "02_fused_moe",
-    "chip_key": "ascend_a2_910b",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "ascend_a2_910b",
-    "vendor": "华为昇腾",
-    "model": "A2（910B）",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "torch_npu",
-      "torch_device": "npu",
-      "accelerator_module": "npu",
-      "bootstrap_imports": [
-        "torch_npu"
-      ],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "npu",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 378,
-        "from": "cuda",
-        "to": "npu",
-        "context": "device_keyword"
-      },
-      {
-        "line": 379,
-        "from": "cuda",
-        "to": "npu",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "02_fused_moe",
+    "chip_key":  "ascend_a2_910b",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/ascend_a2_910b/02_fused_moe.py",
+    "artifact_sha256":  "9aa2efbd2bdc576beda82f1711f6b2b06332e936fa04e06aa747377e24f65ceb",
+    "sources":  {
+                    "triton_kernels/02_fused_moe.py":  "38e7c2aa793eb9ddb3db914319b8eeda7a9de6d750074be51308faabaf17bcc0",
+                    "profiles/operators/02_fused_moe.json":  "820dabc7d5ee9af151a02ccd82a7d9bf604bb7085be0076fcbab3916fca62a80",
+                    "profiles/chips/ascend_a2_910b.json":  "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
+                },
+    "profile":  {
+                    "variant":  "expert_grouped_dot",
+                    "config":  {
+                                   "route_num_warps":  1,
+                                   "gate_up_num_warps":  4,
+                                   "down_num_warps":  4,
+                                   "reduce_block":  256,
+                                   "reduce_num_warps":  4,
+                                   "group_block_routes":  32,
+                                   "group_gate_num_warps":  4,
+                                   "group_down_num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "02_fused_moe",
+                    "chip_key":  "ascend_a2_910b",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "ascend_a2_910b",
+                         "vendor":  "华为昇腾",
+                         "model":  "A2（910B）",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "torch_npu",
+                                         "torch_device":  "npu",
+                                         "accelerator_module":  "npu",
+                                         "bootstrap_imports":  [
+                                                                   "torch_npu"
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "native_after_case_preparation",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "npu",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+                                                   {
+                                                       "line":  651,
+                                                       "from":  "cuda",
+                                                       "to":  "npu",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  652,
+                                                       "from":  "cuda",
+                                                       "to":  "npu",
+                                                       "context":  "device_keyword"
+                                                   }
+                                               ],
+                              "status":  "rewritten"
+                          }
 }

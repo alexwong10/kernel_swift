@@ -1,54 +1,66 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "06_mm_encoder_attention",
-  "chip_key": "iluvatar_bi150",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\iluvatar_bi150\\06_mm_encoder_attention.py",
-  "artifact_sha256": "d15800381e020e3d92cbd65d07ed7835b4598a42b94c39ef5281f55ef33f5428",
-  "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
-    "profiles/operators/06_mm_encoder_attention.json": "50c4a7830f5bc8bcbf9c6bc750b0a43f5ad550c204ace0b03c72ac347c2d0ebf",
-    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
-    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
-  },
-  "profile": {
-    "variant": "tiled_online_softmax",
-    "config": {
-      "num_warps": 8,
-      "block_m": 32,
-      "block_n": 128
-    },
-    "schema_version": 1,
-    "task_key": "06_mm_encoder_attention",
-    "chip_key": "iluvatar_bi150",
-    "verified": true
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "iluvatar_bi150",
-    "vendor": "天数智芯",
-    "model": "BI150",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "corex_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": true
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [],
-    "replacements": [],
-    "status": "no_source_aliases"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "06_mm_encoder_attention",
+    "chip_key":  "iluvatar_bi150",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/iluvatar_bi150/06_mm_encoder_attention.py",
+    "artifact_sha256":  "06130cab5c0deadc239c453dadecd0505e4231a4e6880af7ffdbba5ec52e8d00",
+    "sources":  {
+                    "triton_kernels/06_mm_encoder_attention.py":  "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
+                    "profiles/operators/06_mm_encoder_attention.json":  "16986189595908d5dbdbd2a16bf47bffd6260872a51ad27c00f952682e23374c",
+                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
+                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
+                },
+    "profile":  {
+                    "variant":  "tiled_online_softmax",
+                    "config":  {
+                                   "num_warps":  8,
+                                   "block_m":  32,
+                                   "block_n":  128
+                               },
+                    "schema_version":  1,
+                    "task_key":  "06_mm_encoder_attention",
+                    "chip_key":  "iluvatar_bi150",
+                    "verified":  true
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "iluvatar_bi150",
+                         "vendor":  "澶╂暟鏅鸿姱",
+                         "model":  "BI150",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "corex_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+
+                                                                   ],
+                                         "evaluator_support":  "native_after_case_preparation",
+                                         "verified":  true
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_source_aliases"
+                          }
 }

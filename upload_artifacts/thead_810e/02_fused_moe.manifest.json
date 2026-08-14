@@ -1,55 +1,82 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "02_fused_moe",
-  "chip_key": "thead_810e",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\thead_810e\\02_fused_moe.py",
-  "artifact_sha256": "9c2c31b96734046ccc6b55d0750d62f9ff2c1b612d0ab06292d4d9d0526edc08",
-  "sources": {
-    "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "b443bc0a2de1245f3262073b8190e32d225064bdee780fc01f6349b3ef0151e3",
-    "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
-  },
-  "profile": {
-    "variant": "tiled_dot_fp16_reference",
-    "config": {
-      "route_num_warps": 1,
-      "gate_up_num_warps": 4,
-      "down_num_warps": 4,
-      "reduce_block": 256,
-      "reduce_num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "02_fused_moe",
-    "chip_key": "thead_810e",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "thead_810e",
-    "vendor": "平头哥",
-    "model": "真武810E",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "unconfirmed",
-      "torch_device": null,
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "unconfirmed",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": null,
-    "source_aliases": [],
-    "replacements": [],
-    "status": "unconfirmed_runtime"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "10_head_compute_mix_bwd",
+    "chip_key":  "moore_threads_ph100",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/thead_810e/02_fused_moe.py",
+    "artifact_sha256":  "226af3c48548be6325eeb447e77a8da83a9e7cdc29c4bd8c57380008d1db095b",
+    "sources":  {
+                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
+                    "profiles/operators/10_head_compute_mix_bwd.json":  "b8e04e0cf845625154942a290200efedbebcc6dd4604c05d38aa6d577023a4a0",
+                    "profiles/chips/moore_threads_ph100.json":  "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
+                },
+    "profile":  {
+                    "variant":  "fused_all_mixes",
+                    "config":  {
+                                   "block_rows":  256,
+                                   "block_mixes":  4,
+                                   "num_warps":  8,
+                                   "reduce_num_warps":  1
+                               },
+                    "fallback_variants":  [
+                                              {
+                                                  "variant":  "single_block_reduce",
+                                                  "config":  {
+                                                                 "num_warps":  8
+                                                             }
+                                              }
+                                          ],
+                    "schema_version":  1,
+                    "task_key":  "10_head_compute_mix_bwd",
+                    "chip_key":  "moore_threads_ph100",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "moore_threads_ph100",
+                         "vendor":  "鎽╁皵绾跨▼",
+                         "model":  "PH100",
+                         "observed_device_name":  "MTT S5000",
+                         "device_mapping":  {
+                                                "status":  "confirmed_by_user",
+                                                "detail":  "This target reports MTT S5000 and is the competition PH100 resource."
+                                            },
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "torch_musa_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  "torch_musa",
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda_alias":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

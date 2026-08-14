@@ -1,79 +1,74 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "04_splade_sparse_pooler",
-  "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "75a8c2a68124d64866de61f1a711516861bf6b2b5968d37e6628045b4ee38acc",
-  "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "ef6bd111bc87680ba2dc24e75bfd7196ea197b00a6c2b9d9fea82c00ac0f2d7c",
-    "profiles/operators/04_splade_sparse_pooler.json": "3e7b2a9744a84984f009d576ea342742348aa5fc2d72da6566d5d19d85530f8c",
-    "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed",
-    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
-  },
-  "profile": {
-    "variant": "staged_portable",
-    "config": {
-      "linear_block_m": 16,
-      "linear_block_n": 64,
-      "linear_block_k": 32,
-      "linear_num_warps": 4,
-      "layer_norm_num_warps_small": 4,
-      "layer_norm_num_warps_large": 8,
-      "pool_block_t": 32,
-      "pool_block_v": 128,
-      "pool_num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "04_splade_sparse_pooler",
-    "chip_key": "cambricon_mlu590_m9d",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "cambricon_mlu590_m9d",
-    "vendor": "寒武纪",
-    "model": "MLU590-M9D",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "torch_mlu",
-      "torch_device": "mlu",
-      "accelerator_module": "mlu",
-      "bootstrap_imports": [
-        "torch_mlu"
-      ],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "mlu",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 175,
-        "from": "cuda",
-        "to": "mlu",
-        "context": "device_keyword"
-      },
-      {
-        "line": 176,
-        "from": "cuda",
-        "to": "mlu",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "10_head_compute_mix_bwd",
+    "chip_key":  "biren_br106m",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/cambricon_mlu590_m9d/04_splade_sparse_pooler.py",
+    "artifact_sha256":  "4fb2bd479e4928d13ec3f6e62dd6e89143e5fa2e8b6d279a9e98cc8e630e2123",
+    "sources":  {
+                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
+                    "profiles/operators/10_head_compute_mix_bwd.json":  "b8e04e0cf845625154942a290200efedbebcc6dd4604c05d38aa6d577023a4a0",
+                    "profiles/chips/biren_br106m.json":  "411db1945beb0121c8b1cfcf5e90e593bf71e0f97691616d4ea2ada98c14876b"
+                },
+    "profile":  {
+                    "variant":  "tiled_mix_chunked",
+                    "config":  {
+                                   "block_rows":  256,
+                                   "block_mixes":  4,
+                                   "num_warps":  4,
+                                   "reduce_num_warps":  1
+                               },
+                    "fallback_variants":  [
+                                              {
+                                                  "variant":  "single_block_reduce",
+                                                  "config":  {
+                                                                 "num_warps":  8
+                                                             }
+                                              }
+                                          ],
+                    "schema_version":  1,
+                    "task_key":  "10_head_compute_mix_bwd",
+                    "chip_key":  "biren_br106m",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "biren_br106m",
+                         "vendor":  "澹佷粸",
+                         "model":  "BR106M",
+                         "resource":  "self_hosted_required",
+                         "runtime":  {
+                                         "family":  "biren_supa",
+                                         "torch_device":  "supa",
+                                         "accelerator_module":  "torch_br",
+                                         "bootstrap_imports":  [
+                                                                   "torch_br"
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "blocked_missing_triton_backend",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "supa",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

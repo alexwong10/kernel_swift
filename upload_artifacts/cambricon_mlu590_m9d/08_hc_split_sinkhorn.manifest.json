@@ -1,65 +1,74 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "08_hc_split_sinkhorn",
-  "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "6c1b05fd49abdda538d50a9d74d2e12257d9b19dff251054bf34d1248954c4e6",
-  "sources": {
-    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-    "profiles/operators/08_hc_split_sinkhorn.json": "d6560dc86d0d603ffb7c203f1b2ec3c2719175bb7f0017c916f96c29a32aad83",
-    "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
-  },
-  "profile": {
-    "variant": "scalar_hc4",
-    "config": {
-      "num_warps": 1
-    },
-    "fallback_variants": [
-      {
-        "variant": "matrix_reduce",
-        "config": {
-          "num_warps": 1
-        }
-      }
-    ],
-    "schema_version": 1,
-    "task_key": "08_hc_split_sinkhorn",
-    "chip_key": "cambricon_mlu590_m9d",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "cambricon_mlu590_m9d",
-    "vendor": "寒武纪",
-    "model": "MLU590-M9D",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "torch_mlu",
-      "torch_device": "mlu",
-      "accelerator_module": "mlu",
-      "bootstrap_imports": [
-        "torch_mlu"
-      ],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "mlu",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "10_head_compute_mix_bwd",
+    "chip_key":  "biren_br106m",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/cambricon_mlu590_m9d/08_hc_split_sinkhorn.py",
+    "artifact_sha256":  "8ae3387a07d8226619e03c6770605a5cafa8e131c9f06c3094b3a16e19099d7e",
+    "sources":  {
+                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
+                    "profiles/operators/10_head_compute_mix_bwd.json":  "b8e04e0cf845625154942a290200efedbebcc6dd4604c05d38aa6d577023a4a0",
+                    "profiles/chips/biren_br106m.json":  "411db1945beb0121c8b1cfcf5e90e593bf71e0f97691616d4ea2ada98c14876b"
+                },
+    "profile":  {
+                    "variant":  "tiled_mix_chunked",
+                    "config":  {
+                                   "block_rows":  256,
+                                   "block_mixes":  4,
+                                   "num_warps":  4,
+                                   "reduce_num_warps":  1
+                               },
+                    "fallback_variants":  [
+                                              {
+                                                  "variant":  "single_block_reduce",
+                                                  "config":  {
+                                                                 "num_warps":  8
+                                                             }
+                                              }
+                                          ],
+                    "schema_version":  1,
+                    "task_key":  "10_head_compute_mix_bwd",
+                    "chip_key":  "biren_br106m",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "biren_br106m",
+                         "vendor":  "澹佷粸",
+                         "model":  "BR106M",
+                         "resource":  "self_hosted_required",
+                         "runtime":  {
+                                         "family":  "biren_supa",
+                                         "torch_device":  "supa",
+                                         "accelerator_module":  "torch_br",
+                                         "bootstrap_imports":  [
+                                                                   "torch_br"
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "blocked_missing_triton_backend",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "supa",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

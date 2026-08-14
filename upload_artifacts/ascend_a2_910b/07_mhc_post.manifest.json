@@ -1,59 +1,65 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "07_mhc_post",
-  "chip_key": "ascend_a2_910b",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\ascend_a2_910b\\07_mhc_post.py",
-  "artifact_sha256": "e4cce319537106ced83e2133fba73badc2dcdc00cf360b4dcd3247a865cc654c",
-  "sources": {
-    "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
-    "profiles/operators/07_mhc_post.json": "0562a3d8ea453f20f40dc5f139e2c2e74f28e893200ac9e1f517048893f62f27",
-    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
-  },
-  "profile": {
-    "variant": "tiled_hidden",
-    "config": {
-      "block_hidden": 256,
-      "block_tokens": 4,
-      "num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "07_mhc_post",
-    "chip_key": "ascend_a2_910b",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "ascend_a2_910b",
-    "vendor": "华为昇腾",
-    "model": "A2（910B）",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "torch_npu",
-      "torch_device": "npu",
-      "accelerator_module": "npu",
-      "bootstrap_imports": [
-        "torch_npu"
-      ],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "npu",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "07_mhc_post",
+    "chip_key":  "ascend_a2_910b",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/ascend_a2_910b/07_mhc_post.py",
+    "artifact_sha256":  "e2fb5c65e6409a13bf7394d92889b3db4b619456fb3909d94277a3005b12fea1",
+    "sources":  {
+                    "triton_kernels/07_mhc_post.py":  "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
+                    "profiles/operators/07_mhc_post.json":  "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
+                    "profiles/chips/ascend_a2_910b.json":  "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
+                },
+    "profile":  {
+                    "variant":  "tiled_hidden",
+                    "config":  {
+                                   "block_hidden":  256,
+                                   "block_tokens":  4,
+                                   "num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "07_mhc_post",
+                    "chip_key":  "ascend_a2_910b",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "ascend_a2_910b",
+                         "vendor":  "华为昇腾",
+                         "model":  "A2（910B）",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "torch_npu",
+                                         "torch_device":  "npu",
+                                         "accelerator_module":  "npu",
+                                         "bootstrap_imports":  [
+                                                                   "torch_npu"
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "native_after_case_preparation",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "npu",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

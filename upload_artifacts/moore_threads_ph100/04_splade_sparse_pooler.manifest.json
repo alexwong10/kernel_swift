@@ -1,89 +1,91 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "04_splade_sparse_pooler",
-  "chip_key": "moore_threads_ph100",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\moore_threads_ph100\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "725a08f0f7a1c169ffa1569f22a83879fac26cb2d762123024912ae4834d73bf",
-  "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "ef6bd111bc87680ba2dc24e75bfd7196ea197b00a6c2b9d9fea82c00ac0f2d7c",
-    "profiles/operators/04_splade_sparse_pooler.json": "3e7b2a9744a84984f009d576ea342742348aa5fc2d72da6566d5d19d85530f8c",
-    "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
-    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
-  },
-  "profile": {
-    "variant": "staged_portable",
-    "config": {
-      "linear_block_m": 16,
-      "linear_block_n": 64,
-      "linear_block_k": 32,
-      "linear_num_warps": 4,
-      "layer_norm_num_warps_small": 4,
-      "layer_norm_num_warps_large": 8,
-      "pool_block_t": 32,
-      "pool_block_v": 128,
-      "pool_num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "04_splade_sparse_pooler",
-    "chip_key": "moore_threads_ph100",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "moore_threads_ph100",
-    "vendor": "摩尔线程",
-    "model": "PH100",
-    "observed_device_name": "MTT S5000",
-    "device_mapping": {
-      "status": "confirmed_by_user",
-      "detail": "This target reports MTT S5000 and is the competition PH100 resource."
-    },
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "torch_musa_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": "torch_musa",
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda_alias": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 175,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      },
-      {
-        "line": 176,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "04_splade_sparse_pooler",
+    "chip_key":  "moore_threads_ph100",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/moore_threads_ph100/04_splade_sparse_pooler.py",
+    "artifact_sha256":  "ef90921b6c8776097b2c51344e7feeab615a0716d9fd65b5c12b733e9c3185c2",
+    "sources":  {
+                    "triton_kernels/04_splade_sparse_pooler.py":  "16bbb01f4febf58f76c831ee6cf6b089390f76589f03b628f669ae0d220efe56",
+                    "profiles/operators/04_splade_sparse_pooler.json":  "a39db400feb840eff175a58a6213479bdc206f65a8c0227d01312d67074d92f5",
+                    "profiles/chips/moore_threads_ph100.json":  "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
+                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
+                },
+    "profile":  {
+                    "variant":  "staged_portable",
+                    "config":  {
+                                   "linear_block_m":  16,
+                                   "linear_block_n":  64,
+                                   "linear_block_k":  32,
+                                   "linear_num_warps":  4,
+                                   "layer_norm_num_warps_small":  4,
+                                   "layer_norm_num_warps_large":  8,
+                                   "pool_block_t":  32,
+                                   "pool_block_v":  128,
+                                   "pool_num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "04_splade_sparse_pooler",
+                    "chip_key":  "moore_threads_ph100",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "moore_threads_ph100",
+                         "vendor":  "鎽╁皵绾跨▼",
+                         "model":  "PH100",
+                         "observed_device_name":  "MTT S5000",
+                         "device_mapping":  {
+                                                "status":  "confirmed_by_user",
+                                                "detail":  "This target reports MTT S5000 and is the competition PH100 resource."
+                                            },
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "torch_musa_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  "torch_musa",
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda_alias":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+                                                   {
+                                                       "line":  177,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  178,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   }
+                                               ],
+                              "status":  "rewritten"
+                          }
 }

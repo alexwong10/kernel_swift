@@ -1,73 +1,77 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "10_head_compute_mix_bwd",
-  "chip_key": "hygon_bw1000",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "add053a4a0c28618dfc88fbdbecf97ff5029afb8a2f84ae199737c75ea0530dd",
-  "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "9d590edde56b6d694b4ea26cab0d28dcfc10d8add3195da6cb977c50f74268f8",
-    "profiles/operators/10_head_compute_mix_bwd.json": "54fd9c92c19db0bc2955102acae9b4c8cef89048911c6614a3d44072654a8873",
-    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
-  },
-  "profile": {
-    "variant": "tiled_mix_chunked",
-    "config": {
-      "block_rows": 256,
-      "block_mixes": 4,
-      "num_warps": 4,
-      "reduce_num_warps": 1
-    },
-    "fallback_variants": [
-      {
-        "variant": "single_block_reduce",
-        "config": {
-          "num_warps": 8
-        }
-      }
-    ],
-    "schema_version": 1,
-    "task_key": "10_head_compute_mix_bwd",
-    "chip_key": "hygon_bw1000",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "hygon_bw1000",
-    "vendor": "海光",
-    "model": "BW1000",
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "hygon_dtk_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "10_head_compute_mix_bwd",
+    "chip_key":  "hygon_bw1000",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/hygon_bw1000/10_head_compute_mix_bwd.py",
+    "artifact_sha256":  "b9e0b2e98161e1e10a1588831d586ce46ef00ed9abdf0e5e962035ad70b88cbf",
+    "sources":  {
+                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
+                    "profiles/operators/10_head_compute_mix_bwd.json":  "5acb4b3e9e7c58c61ba047e56357b3fcd1712c8c8a69fc908e5fbff128bad39a",
+                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
+                },
+    "profile":  {
+                    "variant":  "fused_all_mixes",
+                    "config":  {
+                                   "block_rows":  256,
+                                   "block_mixes":  4,
+                                   "num_warps":  8,
+                                   "reduce_num_warps":  1
+                               },
+                    "fallback_variants":  [
+                                              {
+                                                  "variant":  "single_block_reduce",
+                                                  "config":  {
+                                                                 "num_warps":  8
+                                                             }
+                                              }
+                                          ],
+                    "schema_version":  1,
+                    "task_key":  "10_head_compute_mix_bwd",
+                    "chip_key":  "hygon_bw1000",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "hygon_bw1000",
+                         "vendor":  "海光",
+                         "model":  "BW1000",
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "hygon_dtk_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

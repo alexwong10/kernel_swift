@@ -1,75 +1,79 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "08_hc_split_sinkhorn",
-  "chip_key": "moore_threads_ph100",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\moore_threads_ph100\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "5f36bc524cd6daaef855c9878568b9d591cffbbd97486bdd44ea87fa87f592e7",
-  "sources": {
-    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-    "profiles/operators/08_hc_split_sinkhorn.json": "d6560dc86d0d603ffb7c203f1b2ec3c2719175bb7f0017c916f96c29a32aad83",
-    "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
-  },
-  "profile": {
-    "variant": "scalar_hc4",
-    "config": {
-      "num_warps": 1
-    },
-    "fallback_variants": [
-      {
-        "variant": "matrix_reduce",
-        "config": {
-          "num_warps": 1
-        }
-      }
-    ],
-    "schema_version": 1,
-    "task_key": "08_hc_split_sinkhorn",
-    "chip_key": "moore_threads_ph100",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "moore_threads_ph100",
-    "vendor": "摩尔线程",
-    "model": "PH100",
-    "observed_device_name": "MTT S5000",
-    "device_mapping": {
-      "status": "confirmed_by_user",
-      "detail": "This target reports MTT S5000 and is the competition PH100 resource."
-    },
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "torch_musa_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": "torch_musa",
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda_alias": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "08_hc_split_sinkhorn",
+    "chip_key":  "moore_threads_ph100",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/moore_threads_ph100/08_hc_split_sinkhorn.py",
+    "artifact_sha256":  "35fe96464b7be98c28bdc28992b8f3531241845f25408e60abe75439975d1673",
+    "sources":  {
+                    "triton_kernels/08_hc_split_sinkhorn.py":  "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
+                    "profiles/operators/08_hc_split_sinkhorn.json":  "d6560dc86d0d603ffb7c203f1b2ec3c2719175bb7f0017c916f96c29a32aad83",
+                    "profiles/chips/moore_threads_ph100.json":  "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
+                },
+    "profile":  {
+                    "variant":  "scalar_hc4",
+                    "config":  {
+                                   "num_warps":  1
+                               },
+                    "fallback_variants":  [
+                                              {
+                                                  "variant":  "matrix_reduce",
+                                                  "config":  {
+                                                                 "num_warps":  1
+                                                             }
+                                              }
+                                          ],
+                    "schema_version":  1,
+                    "task_key":  "08_hc_split_sinkhorn",
+                    "chip_key":  "moore_threads_ph100",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "moore_threads_ph100",
+                         "vendor":  "鎽╁皵绾跨▼",
+                         "model":  "PH100",
+                         "observed_device_name":  "MTT S5000",
+                         "device_mapping":  {
+                                                "status":  "confirmed_by_user",
+                                                "detail":  "This target reports MTT S5000 and is the competition PH100 resource."
+                                            },
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "torch_musa_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  "torch_musa",
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda_alias":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

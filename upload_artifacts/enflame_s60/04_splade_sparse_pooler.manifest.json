@@ -1,79 +1,83 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "04_splade_sparse_pooler",
-  "chip_key": "enflame_s60",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\enflame_s60\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "44f4f702596df22f2a51369a7b1790f0bd45425c5111809a93313880660c2171",
-  "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "ef6bd111bc87680ba2dc24e75bfd7196ea197b00a6c2b9d9fea82c00ac0f2d7c",
-    "profiles/operators/04_splade_sparse_pooler.json": "3e7b2a9744a84984f009d576ea342742348aa5fc2d72da6566d5d19d85530f8c",
-    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
-    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
-  },
-  "profile": {
-    "variant": "staged_portable",
-    "config": {
-      "linear_block_m": 16,
-      "linear_block_n": 128,
-      "linear_block_k": 32,
-      "linear_num_warps": 4,
-      "layer_norm_num_warps_small": 4,
-      "layer_norm_num_warps_large": 8,
-      "pool_block_t": 32,
-      "pool_block_v": 128,
-      "pool_num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "04_splade_sparse_pooler",
-    "chip_key": "enflame_s60",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "enflame_s60",
-    "vendor": "燧原",
-    "model": "S60",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "torch_gcu",
-      "torch_device": "gcu",
-      "accelerator_module": "gcu",
-      "bootstrap_imports": [
-        "torch_gcu"
-      ],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "gcu",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 175,
-        "from": "cuda",
-        "to": "gcu",
-        "context": "device_keyword"
-      },
-      {
-        "line": 176,
-        "from": "cuda",
-        "to": "gcu",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "04_splade_sparse_pooler",
+    "chip_key":  "enflame_s60",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/enflame_s60/04_splade_sparse_pooler.py",
+    "artifact_sha256":  "3efb69f5c48a09011493024b11972c60169a7227d339aedfb4d87da817b25506",
+    "sources":  {
+                    "triton_kernels/04_splade_sparse_pooler.py":  "16bbb01f4febf58f76c831ee6cf6b089390f76589f03b628f669ae0d220efe56",
+                    "profiles/operators/04_splade_sparse_pooler.json":  "a39db400feb840eff175a58a6213479bdc206f65a8c0227d01312d67074d92f5",
+                    "profiles/chips/enflame_s60.json":  "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
+                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
+                },
+    "profile":  {
+                    "variant":  "staged_portable",
+                    "config":  {
+                                   "linear_block_m":  16,
+                                   "linear_block_n":  128,
+                                   "linear_block_k":  32,
+                                   "linear_num_warps":  4,
+                                   "layer_norm_num_warps_small":  4,
+                                   "layer_norm_num_warps_large":  8,
+                                   "pool_block_t":  32,
+                                   "pool_block_v":  128,
+                                   "pool_num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "04_splade_sparse_pooler",
+                    "chip_key":  "enflame_s60",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "enflame_s60",
+                         "vendor":  "鐕у師",
+                         "model":  "S60",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "torch_gcu",
+                                         "torch_device":  "gcu",
+                                         "accelerator_module":  "gcu",
+                                         "bootstrap_imports":  [
+                                                                   "torch_gcu"
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "native_after_case_preparation",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "gcu",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+                                                   {
+                                                       "line":  177,
+                                                       "from":  "cuda",
+                                                       "to":  "gcu",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  178,
+                                                       "from":  "cuda",
+                                                       "to":  "gcu",
+                                                       "context":  "device_keyword"
+                                                   }
+                                               ],
+                              "status":  "rewritten"
+                          }
 }

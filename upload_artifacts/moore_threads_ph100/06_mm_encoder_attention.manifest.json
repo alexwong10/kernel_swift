@@ -1,89 +1,92 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "06_mm_encoder_attention",
-  "chip_key": "moore_threads_ph100",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\moore_threads_ph100\\06_mm_encoder_attention.py",
-  "artifact_sha256": "e7dc168ead4d60702cc36c0b87abdcb201d5c57ff435a538a93a7286b07af774",
-  "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
-    "profiles/operators/06_mm_encoder_attention.json": "50c4a7830f5bc8bcbf9c6bc750b0a43f5ad550c204ace0b03c72ac347c2d0ebf",
-    "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
-    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
-  },
-  "profile": {
-    "variant": "tiled_online_softmax",
-    "config": {
-      "num_warps": 8,
-      "block_m": 16,
-      "block_n": 64
-    },
-    "schema_version": 1,
-    "task_key": "06_mm_encoder_attention",
-    "chip_key": "moore_threads_ph100",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "moore_threads_ph100",
-    "vendor": "摩尔线程",
-    "model": "PH100",
-    "observed_device_name": "MTT S5000",
-    "device_mapping": {
-      "status": "confirmed_by_user",
-      "detail": "This target reports MTT S5000 and is the competition PH100 resource."
-    },
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "torch_musa_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": "torch_musa",
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda_alias": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 67,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      },
-      {
-        "line": 68,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      },
-      {
-        "line": 69,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "06_mm_encoder_attention",
+    "chip_key":  "moore_threads_ph100",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/moore_threads_ph100/06_mm_encoder_attention.py",
+    "artifact_sha256":  "0311d3635ffe34dabff12d0b4b9460ae56f9090b78cd057c595594eece0f750d",
+    "sources":  {
+                    "triton_kernels/06_mm_encoder_attention.py":  "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
+                    "profiles/operators/06_mm_encoder_attention.json":  "16986189595908d5dbdbd2a16bf47bffd6260872a51ad27c00f952682e23374c",
+                    "profiles/chips/moore_threads_ph100.json":  "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
+                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
+                },
+    "profile":  {
+                    "variant":  "tiled_online_softmax",
+                    "config":  {
+                                   "num_warps":  4,
+                                   "block_m":  16,
+                                   "block_n":  64,
+                                   "implementation":  "scalar_online"
+                               },
+                    "schema_version":  1,
+                    "task_key":  "06_mm_encoder_attention",
+                    "chip_key":  "moore_threads_ph100",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "moore_threads_ph100",
+                         "vendor":  "鎽╁皵绾跨▼",
+                         "model":  "PH100",
+                         "observed_device_name":  "MTT S5000",
+                         "device_mapping":  {
+                                                "status":  "confirmed_by_user",
+                                                "detail":  "This target reports MTT S5000 and is the competition PH100 resource."
+                                            },
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "torch_musa_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  "torch_musa",
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda_alias":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+                                                   {
+                                                       "line":  67,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  68,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  69,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   }
+                                               ],
+                              "status":  "rewritten"
+                          }
 }

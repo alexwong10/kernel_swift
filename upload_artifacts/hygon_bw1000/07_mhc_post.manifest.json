@@ -1,64 +1,68 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "07_mhc_post",
-  "chip_key": "hygon_bw1000",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\hygon_bw1000\\07_mhc_post.py",
-  "artifact_sha256": "481e81894bcf5888be903b2f5e3534201265e60883992f00c6b0247fc03948db",
-  "sources": {
-    "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
-    "profiles/operators/07_mhc_post.json": "0562a3d8ea453f20f40dc5f139e2c2e74f28e893200ac9e1f517048893f62f27",
-    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
-  },
-  "profile": {
-    "variant": "tiled_hidden",
-    "config": {
-      "block_hidden": 256,
-      "block_tokens": 4,
-      "num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "07_mhc_post",
-    "chip_key": "hygon_bw1000",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "hygon_bw1000",
-    "vendor": "海光",
-    "model": "BW1000",
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "hygon_dtk_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "07_mhc_post",
+    "chip_key":  "hygon_bw1000",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/hygon_bw1000/07_mhc_post.py",
+    "artifact_sha256":  "d148726f9552976fbfe81a36c11aeac00420950da0e0a24bb689a10af7f4fa4b",
+    "sources":  {
+                    "triton_kernels/07_mhc_post.py":  "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
+                    "profiles/operators/07_mhc_post.json":  "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
+                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
+                },
+    "profile":  {
+                    "variant":  "tiled_hidden",
+                    "config":  {
+                                   "block_hidden":  256,
+                                   "block_tokens":  4,
+                                   "num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "07_mhc_post",
+                    "chip_key":  "hygon_bw1000",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "hygon_bw1000",
+                         "vendor":  "娴峰厜",
+                         "model":  "BW1000",
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "hygon_dtk_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

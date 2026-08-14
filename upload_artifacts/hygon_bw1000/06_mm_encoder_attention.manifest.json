@@ -1,84 +1,86 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "06_mm_encoder_attention",
-  "chip_key": "hygon_bw1000",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\hygon_bw1000\\06_mm_encoder_attention.py",
-  "artifact_sha256": "46b3e106423d45a311deb5bb9d9f6bf76ebb439d24e9d3f2846f8c8128388cde",
-  "sources": {
-    "triton_kernels/06_mm_encoder_attention.py": "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
-    "profiles/operators/06_mm_encoder_attention.json": "50c4a7830f5bc8bcbf9c6bc750b0a43f5ad550c204ace0b03c72ac347c2d0ebf",
-    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
-    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
-  },
-  "profile": {
-    "variant": "tiled_online_softmax",
-    "config": {
-      "num_warps": 8,
-      "block_m": 16,
-      "block_n": 64
-    },
-    "schema_version": 1,
-    "task_key": "06_mm_encoder_attention",
-    "chip_key": "hygon_bw1000",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "hygon_bw1000",
-    "vendor": "海光",
-    "model": "BW1000",
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "hygon_dtk_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 67,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      },
-      {
-        "line": 68,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      },
-      {
-        "line": 69,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "06_mm_encoder_attention",
+    "chip_key":  "hygon_bw1000",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/hygon_bw1000/06_mm_encoder_attention.py",
+    "artifact_sha256":  "7af19f5bb725a20e98ee6cec2eafcc8564ce818d7d5e188ad703b5de9cab652e",
+    "sources":  {
+                    "triton_kernels/06_mm_encoder_attention.py":  "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
+                    "profiles/operators/06_mm_encoder_attention.json":  "16986189595908d5dbdbd2a16bf47bffd6260872a51ad27c00f952682e23374c",
+                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
+                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
+                },
+    "profile":  {
+                    "variant":  "tiled_online_softmax",
+                    "config":  {
+                                   "num_warps":  8,
+                                   "block_m":  16,
+                                   "block_n":  64
+                               },
+                    "schema_version":  1,
+                    "task_key":  "06_mm_encoder_attention",
+                    "chip_key":  "hygon_bw1000",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "hygon_bw1000",
+                         "vendor":  "娴峰厜",
+                         "model":  "BW1000",
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "hygon_dtk_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+                                                   {
+                                                       "line":  67,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  68,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  69,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   }
+                                               ],
+                              "status":  "rewritten"
+                          }
 }

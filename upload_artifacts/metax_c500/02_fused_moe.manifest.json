@@ -1,72 +1,81 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "02_fused_moe",
-  "chip_key": "metax_c500",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
-  "artifact_sha256": "f4955178e4648b84fd80b551fd857a6c4217200073bf6100081f6823421ed7ea",
-  "sources": {
-    "triton_kernels/02_fused_moe.py": "fc854393cec8595b0ec6ed03234cf612a0fc182b3ed69bbbf001bc6d513e6d83",
-    "profiles/operators/02_fused_moe.json": "b443bc0a2de1245f3262073b8190e32d225064bdee780fc01f6349b3ef0151e3",
-    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
-  },
-  "profile": {
-    "variant": "scalar_elementwise_fallback",
-    "config": {
-      "route_num_warps": 1,
-      "gate_up_num_warps": 4,
-      "down_num_warps": 4,
-      "reduce_block": 256,
-      "reduce_num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "02_fused_moe",
-    "chip_key": "metax_c500",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "metax_c500",
-    "vendor": "沐曦",
-    "model": "C500",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "metax_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [
-      {
-        "line": 378,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      },
-      {
-        "line": 379,
-        "from": "cuda",
-        "to": "cuda",
-        "context": "device_keyword"
-      }
-    ],
-    "status": "rewritten"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "02_fused_moe",
+    "chip_key":  "metax_c500",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/metax_c500/02_fused_moe.py",
+    "artifact_sha256":  "ed895b8c70f7183243c8c7cffd546464d5ddb804f68d5ce8e8326b57086424c1",
+    "sources":  {
+                    "triton_kernels/02_fused_moe.py":  "38e7c2aa793eb9ddb3db914319b8eeda7a9de6d750074be51308faabaf17bcc0",
+                    "profiles/operators/02_fused_moe.json":  "820dabc7d5ee9af151a02ccd82a7d9bf604bb7085be0076fcbab3916fca62a80",
+                    "profiles/chips/metax_c500.json":  "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
+                },
+    "profile":  {
+                    "variant":  "scalar_elementwise_fallback",
+                    "config":  {
+                                   "route_num_warps":  1,
+                                   "gate_up_num_warps":  4,
+                                   "down_num_warps":  4,
+                                   "reduce_block":  256,
+                                   "reduce_num_warps":  4,
+                                   "group_block_routes":  32,
+                                   "group_gate_num_warps":  4,
+                                   "group_down_num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "02_fused_moe",
+                    "chip_key":  "metax_c500",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "metax_c500",
+                         "vendor":  "娌愭洣",
+                         "model":  "C500",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "metax_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+                                                   {
+                                                       "line":  651,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   },
+                                                   {
+                                                       "line":  652,
+                                                       "from":  "cuda",
+                                                       "to":  "cuda",
+                                                       "context":  "device_keyword"
+                                                   }
+                                               ],
+                              "status":  "rewritten"
+                          }
 }

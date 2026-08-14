@@ -1,54 +1,66 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "07_mhc_post",
-  "chip_key": "iluvatar_bi150",
-  "source_commit": "49931bf1041d09521d744a58a7e4ec6ef6e944e4",
-  "artifact": "upload_artifacts/iluvatar_bi150/07_mhc_post.py",
-  "artifact_sha256": "4c1573f4350db97aaaf1a04864045aef5a19393920076b449dfceee224c54187",
-  "sources": {
-    "triton_kernels/07_mhc_post.py": "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
-    "profiles/operators/07_mhc_post.json": "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
-    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
-  },
-  "profile": {
-    "variant": "fused_mix_tiled",
-    "config": {
-      "block_hidden": 512,
-      "block_tokens": 2,
-      "num_warps": 4,
-      "block_mixes": 4
-    },
-    "schema_version": 1,
-    "task_key": "07_mhc_post",
-    "chip_key": "iluvatar_bi150",
-    "verified": true
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "iluvatar_bi150",
-    "vendor": "天数智芯",
-    "model": "BI150",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "corex_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": true
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [],
-    "replacements": [],
-    "status": "no_source_aliases"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "07_mhc_post",
+    "chip_key":  "iluvatar_bi150",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/iluvatar_bi150/07_mhc_post.py",
+    "artifact_sha256":  "2ec491a039d25f0b4dc6240ddfa9808624c12a816e57bf21515ee9de9c3cdc5b",
+    "sources":  {
+                    "triton_kernels/07_mhc_post.py":  "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
+                    "profiles/operators/07_mhc_post.json":  "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
+                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
+                },
+    "profile":  {
+                    "variant":  "fused_mix_tiled",
+                    "config":  {
+                                   "block_hidden":  512,
+                                   "block_tokens":  2,
+                                   "num_warps":  4,
+                                   "block_mixes":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "07_mhc_post",
+                    "chip_key":  "iluvatar_bi150",
+                    "verified":  true
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "iluvatar_bi150",
+                         "vendor":  "澶╂暟鏅鸿姱",
+                         "model":  "BI150",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "corex_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+
+                                                                   ],
+                                         "evaluator_support":  "native_after_case_preparation",
+                                         "verified":  true
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_source_aliases"
+                          }
 }

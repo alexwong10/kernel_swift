@@ -1,70 +1,74 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "01_grouped_topk",
-  "chip_key": "hygon_bw1000",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
-  "artifact_sha256": "f7218efd0b9c63dca610f7191eb9fc27524e670c3e38612fcb904996fa0f20ac",
-  "sources": {
-    "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
-    "profiles/operators/01_grouped_topk.json": "e62fd134622e7f78e3b4e4e9e68d1bedd9641a6ab564321c2e867c380209a7fd",
-    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
-  },
-  "profile": {
-    "variant": "vector_reduce",
-    "config": {
-      "num_warps": 4
-    },
-    "fallback_variants": [
-      {
-        "variant": "manual_stable",
-        "config": {
-          "num_warps": 4
-        }
-      }
-    ],
-    "schema_version": 1,
-    "task_key": "01_grouped_topk",
-    "chip_key": "hygon_bw1000",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "hygon_bw1000",
-    "vendor": "海光",
-    "model": "BW1000",
-    "resource": "user_provided_target_environment",
-    "runtime": {
-      "family": "hygon_dtk_cuda",
-      "torch_device": "cuda",
-      "accelerator_module": null,
-      "bootstrap_imports": [],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "target_runner_only",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {
-        "fp16": "observed",
-        "fp32": "observed"
-      },
-      "primitives": {
-        "torch_cuda": "observed",
-        "triton": "observed",
-        "synchronize": "observed"
-      }
-    }
-  },
-  "device_adaptation": {
-    "target_device": "cuda",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "01_grouped_topk",
+    "chip_key":  "hygon_bw1000",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/hygon_bw1000/01_grouped_topk.py",
+    "artifact_sha256":  "d02aad2724340557a1b967f14599bfa5af9a0a64cb55b66b8f41942ad38419eb",
+    "sources":  {
+                    "triton_kernels/01_grouped_topk.py":  "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
+                    "profiles/operators/01_grouped_topk.json":  "81f2320d9c8adbc7ab20de651ebef74a69a0edeb6c0dbb139c866af7e33b4874",
+                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
+                },
+    "profile":  {
+                    "variant":  "vector_reduce",
+                    "config":  {
+                                   "num_warps":  4
+                               },
+                    "fallback_variants":  [
+                                              {
+                                                  "variant":  "manual_stable",
+                                                  "config":  {
+                                                                 "num_warps":  4
+                                                             }
+                                              }
+                                          ],
+                    "schema_version":  1,
+                    "task_key":  "01_grouped_topk",
+                    "chip_key":  "hygon_bw1000",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "hygon_bw1000",
+                         "vendor":  "娴峰厜",
+                         "model":  "BW1000",
+                         "resource":  "user_provided_target_environment",
+                         "runtime":  {
+                                         "family":  "hygon_dtk_cuda",
+                                         "torch_device":  "cuda",
+                                         "accelerator_module":  null,
+                                         "bootstrap_imports":  [
+
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "target_runner_only",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+                                                             "fp16":  "observed",
+                                                             "fp32":  "observed"
+                                                         },
+                                              "primitives":  {
+                                                                 "torch_cuda":  "observed",
+                                                                 "triton":  "observed",
+                                                                 "synchronize":  "observed"
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "cuda",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }

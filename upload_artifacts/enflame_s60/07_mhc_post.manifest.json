@@ -1,59 +1,65 @@
-{
-  "schema_version": 1,
-  "builder_version": 4,
-  "task_key": "07_mhc_post",
-  "chip_key": "enflame_s60",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
-  "artifact": "upload_artifacts\\enflame_s60\\07_mhc_post.py",
-  "artifact_sha256": "f52a00a357d1db7872a08e692b94889ad58a86c05aa80a4f5b79106aef1d8dc7",
-  "sources": {
-    "triton_kernels/07_mhc_post.py": "aed3c2e47029370d1255f08c3dff1413b6094ab5b171d4af9c3657dda68773c0",
-    "profiles/operators/07_mhc_post.json": "0562a3d8ea453f20f40dc5f139e2c2e74f28e893200ac9e1f517048893f62f27",
-    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
-  },
-  "profile": {
-    "variant": "tiled_hidden",
-    "config": {
-      "block_hidden": 256,
-      "block_tokens": 4,
-      "num_warps": 4
-    },
-    "schema_version": 1,
-    "task_key": "07_mhc_post",
-    "chip_key": "enflame_s60",
-    "verified": false
-  },
-  "chip_profile": {
-    "schema_version": 1,
-    "chip_key": "enflame_s60",
-    "vendor": "燧原",
-    "model": "S60",
-    "resource": "kernelswift_option_observed",
-    "runtime": {
-      "family": "torch_gcu",
-      "torch_device": "gcu",
-      "accelerator_module": "gcu",
-      "bootstrap_imports": [
-        "torch_gcu"
-      ],
-      "source_device_aliases": [
-        "cuda"
-      ],
-      "evaluator_support": "native_after_case_preparation",
-      "verified": false
-    },
-    "capabilities": {
-      "verified": false,
-      "dtypes": {},
-      "primitives": {}
-    }
-  },
-  "device_adaptation": {
-    "target_device": "gcu",
-    "source_aliases": [
-      "cuda"
-    ],
-    "replacements": [],
-    "status": "no_matches"
-  }
+﻿{
+    "schema_version":  1,
+    "builder_version":  5,
+    "task_key":  "07_mhc_post",
+    "chip_key":  "enflame_s60",
+    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
+    "artifact":  "upload_artifacts/enflame_s60/07_mhc_post.py",
+    "artifact_sha256":  "fb03f70c630a9d907480bb6ae09dd8fc4cdad98d9d810996edff9c3db4cd9017",
+    "sources":  {
+                    "triton_kernels/07_mhc_post.py":  "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
+                    "profiles/operators/07_mhc_post.json":  "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
+                    "profiles/chips/enflame_s60.json":  "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+                },
+    "profile":  {
+                    "variant":  "tiled_hidden",
+                    "config":  {
+                                   "block_hidden":  256,
+                                   "block_tokens":  4,
+                                   "num_warps":  4
+                               },
+                    "schema_version":  1,
+                    "task_key":  "07_mhc_post",
+                    "chip_key":  "enflame_s60",
+                    "verified":  false
+                },
+    "chip_profile":  {
+                         "schema_version":  1,
+                         "chip_key":  "enflame_s60",
+                         "vendor":  "鐕у師",
+                         "model":  "S60",
+                         "resource":  "kernelswift_option_observed",
+                         "runtime":  {
+                                         "family":  "torch_gcu",
+                                         "torch_device":  "gcu",
+                                         "accelerator_module":  "gcu",
+                                         "bootstrap_imports":  [
+                                                                   "torch_gcu"
+                                                               ],
+                                         "source_device_aliases":  [
+                                                                       "cuda"
+                                                                   ],
+                                         "evaluator_support":  "native_after_case_preparation",
+                                         "verified":  false
+                                     },
+                         "capabilities":  {
+                                              "verified":  false,
+                                              "dtypes":  {
+
+                                                         },
+                                              "primitives":  {
+
+                                                             }
+                                          }
+                     },
+    "device_adaptation":  {
+                              "target_device":  "gcu",
+                              "source_aliases":  [
+                                                     "cuda"
+                                                 ],
+                              "replacements":  [
+
+                                               ],
+                              "status":  "no_matches"
+                          }
 }
