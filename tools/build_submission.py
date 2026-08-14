@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import copy
 import hashlib
 import json
 import subprocess
@@ -23,7 +24,7 @@ from profile_runtime import (  # noqa: E402
 )
 
 
-BUILDER_VERSION = 4
+BUILDER_VERSION = 5
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -207,6 +208,7 @@ def build_submission(
     output_path: Path,
     *,
     manifest_path: Path | None = None,
+    profile_override: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if task_key not in TASK_KEYS:
         raise ValueError(f"unknown task_key: {task_key}")
@@ -236,6 +238,22 @@ def build_submission(
         common_imports, common_body = _split_module(common_tree)
 
     profile = get_operator_profile(task_key, chip_key)
+    if profile_override is not None:
+        if not isinstance(profile_override, dict):
+            raise ValueError("profile_override must be an object")
+        profile = copy.deepcopy(profile)
+        if "variant" in profile_override:
+            variant = profile_override["variant"]
+            if not isinstance(variant, str) or not variant:
+                raise ValueError("profile override variant must be a non-empty string")
+            profile["variant"] = variant
+        if "config" in profile_override:
+            config = profile_override["config"]
+            if not isinstance(config, dict):
+                raise ValueError("profile override config must be an object")
+            profile["config"].update(copy.deepcopy(config))
+        profile["verified"] = False
+        profile["candidate_override"] = copy.deepcopy(profile_override)
     module = ast.Module(
         body=[
             *_runtime_imports(chip_profile),
@@ -292,11 +310,34 @@ def main() -> None:
     parser.add_argument("--chip", choices=CHIP_KEYS)
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--output-root", type=Path, default=ROOT / "artifacts")
+    parser.add_argument(
+        "--variant",
+        help="explicit unverified variant override for a diagnostic candidate build",
+    )
+    parser.add_argument(
+        "--config-json",
+        help="JSON object merged into the selected profile config for a diagnostic candidate build",
+    )
     args = parser.parse_args()
     if args.all == bool(args.task or args.chip):
         raise SystemExit("choose either --all or both --task and --chip")
     if not args.all and (not args.task or not args.chip):
         raise SystemExit("--task and --chip are required together")
+    if args.all and (args.variant or args.config_json):
+        raise SystemExit("candidate profile overrides require a single --task/--chip pair")
+    profile_override: dict[str, Any] | None = None
+    if args.variant or args.config_json:
+        profile_override = {}
+        if args.variant:
+            profile_override["variant"] = args.variant
+        if args.config_json:
+            try:
+                config = json.loads(args.config_json)
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"--config-json must be valid JSON: {exc}") from exc
+            if not isinstance(config, dict):
+                raise SystemExit("--config-json must decode to a JSON object")
+            profile_override["config"] = config
 
     pairs = (
         [(task, chip) for chip in CHIP_KEYS for task in TASK_KEYS]
@@ -305,7 +346,7 @@ def main() -> None:
     )
     for task_key, chip_key in pairs:
         output = args.output_root / chip_key / f"{task_key}.py"
-        build_submission(task_key, chip_key, output)
+        build_submission(task_key, chip_key, output, profile_override=profile_override)
         print(f"BUILT {chip_key}/{task_key}")
 
 
