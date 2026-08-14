@@ -2,6 +2,13 @@
   "schema_version": 1,
   "task_key": "05_music_flamingo_rotary_embedding",
   "default": {"variant": "tiled_frequency", "config": {"block_channel": 128, "num_warps": 4}},
+  "candidates": {
+    "paired_tiled_frequency": {
+      "verified": false,
+      "config": {"block_pair": 32, "num_warps": 1},
+      "note": "Computes the two repeat_interleave(2) channels from one phase; pending official accuracy and timing."
+    }
+  },
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},

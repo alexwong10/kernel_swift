@@ -144,6 +144,127 @@ def _grouped_topk_register_kernel(
 
 
 @triton.jit
+def _grouped_topk_unrolled8_kernel(
+    logits_ptr,
+    weights_ptr,
+    ids_ptr,
+    num_experts: tl.constexpr,
+    experts_per_group: tl.constexpr,
+    num_groups: tl.constexpr,
+    TOPK: tl.constexpr,
+    TOPK_GROUPS: tl.constexpr,
+    SOFTMAX: tl.constexpr,
+    RENORMALIZE: tl.constexpr,
+    ROUTED_SCALE: tl.constexpr,
+    BLOCK: tl.constexpr,
+):
+    """TOPK=8 selection with scalar weight lifetimes.
+
+    The official case uses eight ranks.  The previous vector path writes all
+    eight raw weights, reloads them, then writes the normalized vector.  This
+    specialization preserves each ``tl.argmax``/``tl.max`` in the same order
+    but keeps the eight scalar weights live until the final normalized stores.
+    No framework operation is introduced; all routing work remains in this
+    Triton program.
+    """
+    token = tl.program_id(0)
+    expert = tl.arange(0, BLOCK)
+    mask = expert < num_experts
+    logits = tl.load(
+        logits_ptr + token * num_experts + expert,
+        mask=mask,
+        other=-float("inf"),
+    ).to(tl.float32)
+    if SOFTMAX:
+        shifted = logits - tl.max(logits, axis=0)
+        scores = tl.exp(shifted)
+        scores = scores / tl.sum(tl.where(mask, scores, 0.0), axis=0)
+    else:
+        scores = tl.sigmoid(logits)
+
+    grouped = tl.reshape(scores, (num_groups, experts_per_group))
+    group_scores = tl.max(grouped, axis=1)
+    group_offsets = tl.arange(0, num_groups)
+    eligible = tl.zeros((BLOCK,), tl.int1)
+    remaining_groups = group_scores
+    for _ in range(TOPK_GROUPS):
+        group_id = tl.argmax(remaining_groups, axis=0)
+        eligible = eligible | ((expert // experts_per_group) == group_id)
+        remaining_groups = tl.where(
+            group_offsets == group_id, -float("inf"), remaining_groups
+        )
+
+    candidates = tl.where(mask & eligible, scores, -float("inf"))
+    expert0 = tl.argmax(candidates, axis=0)
+    weight0 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert0, -float("inf"), candidates)
+    expert1 = tl.argmax(candidates, axis=0)
+    weight1 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert1, -float("inf"), candidates)
+    expert2 = tl.argmax(candidates, axis=0)
+    weight2 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert2, -float("inf"), candidates)
+    expert3 = tl.argmax(candidates, axis=0)
+    weight3 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert3, -float("inf"), candidates)
+    expert4 = tl.argmax(candidates, axis=0)
+    weight4 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert4, -float("inf"), candidates)
+    expert5 = tl.argmax(candidates, axis=0)
+    weight5 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert5, -float("inf"), candidates)
+    expert6 = tl.argmax(candidates, axis=0)
+    weight6 = tl.max(candidates, axis=0)
+    candidates = tl.where(expert == expert6, -float("inf"), candidates)
+    expert7 = tl.argmax(candidates, axis=0)
+    weight7 = tl.max(candidates, axis=0)
+
+    weight_sum = 0.0
+    weight_sum += weight0
+    weight_sum += weight1
+    weight_sum += weight2
+    weight_sum += weight3
+    weight_sum += weight4
+    weight_sum += weight5
+    weight_sum += weight6
+    weight_sum += weight7
+    if RENORMALIZE:
+        weight0 = weight0 / weight_sum
+        weight1 = weight1 / weight_sum
+        weight2 = weight2 / weight_sum
+        weight3 = weight3 / weight_sum
+        weight4 = weight4 / weight_sum
+        weight5 = weight5 / weight_sum
+        weight6 = weight6 / weight_sum
+        weight7 = weight7 / weight_sum
+    weight0 *= ROUTED_SCALE
+    weight1 *= ROUTED_SCALE
+    weight2 *= ROUTED_SCALE
+    weight3 *= ROUTED_SCALE
+    weight4 *= ROUTED_SCALE
+    weight5 *= ROUTED_SCALE
+    weight6 *= ROUTED_SCALE
+    weight7 *= ROUTED_SCALE
+    base = token * TOPK
+    tl.store(weights_ptr + base + 0, weight0)
+    tl.store(weights_ptr + base + 1, weight1)
+    tl.store(weights_ptr + base + 2, weight2)
+    tl.store(weights_ptr + base + 3, weight3)
+    tl.store(weights_ptr + base + 4, weight4)
+    tl.store(weights_ptr + base + 5, weight5)
+    tl.store(weights_ptr + base + 6, weight6)
+    tl.store(weights_ptr + base + 7, weight7)
+    tl.store(ids_ptr + base + 0, expert0)
+    tl.store(ids_ptr + base + 1, expert1)
+    tl.store(ids_ptr + base + 2, expert2)
+    tl.store(ids_ptr + base + 3, expert3)
+    tl.store(ids_ptr + base + 4, expert4)
+    tl.store(ids_ptr + base + 5, expert5)
+    tl.store(ids_ptr + base + 6, expert6)
+    tl.store(ids_ptr + base + 7, expert7)
+
+
+@triton.jit
 def _grouped_topk_manual_kernel(
     logits_ptr,
     weights_ptr,
@@ -247,6 +368,7 @@ class ModelNew(nn.Module):
             "vector_reduce",
             "manual_stable",
             "register_reduce",
+            "unrolled_reduce",
         }:
             raise ValueError(f"unsupported GroupedTopk variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
@@ -276,6 +398,10 @@ class ModelNew(nn.Module):
             kernel = _grouped_topk_manual_kernel
         elif self._ks_variant == "register_reduce":
             kernel = _grouped_topk_register_kernel
+        elif self._ks_variant == "unrolled_reduce":
+            if self.topk != 8:
+                raise ValueError("unrolled_reduce requires topk == 8")
+            kernel = _grouped_topk_unrolled8_kernel
         else:
             kernel = _grouped_topk_kernel
         launch = dict(

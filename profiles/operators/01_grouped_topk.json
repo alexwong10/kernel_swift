@@ -13,6 +13,11 @@
       "verified": false,
       "config": {"num_warps": 1},
       "note": "Preserves vector_reduce selection/tie order while keeping selected weights in registers; pending official accuracy and timing."
+    },
+    "unrolled_reduce": {
+      "verified": false,
+      "config": {"num_warps": 1},
+      "note": "TOPK=8 scalar selection preserves argmax order and removes raw-weight global readback; pending official accuracy and timing."
     }
   },
   "chips": {
