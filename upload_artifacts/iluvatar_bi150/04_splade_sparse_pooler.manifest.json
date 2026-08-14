@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "52341558e337ee91041794d513b086e768e237c3",
+  "source_commit": "27ccd758960ffb89a635df520f78f89a60db2378",
   "artifact": "upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
   "artifact_sha256": "429d5f69f1fc7b982c738c3185e247850275b74660fa161c9bc6f9a85683aecf",
   "sources": {
