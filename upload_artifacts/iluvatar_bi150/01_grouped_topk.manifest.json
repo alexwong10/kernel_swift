@@ -3,24 +3,24 @@
   "builder_version": 4,
   "task_key": "01_grouped_topk",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
+  "source_commit": "dc5fd145f0f9890e2545f015f1aa459f1d2b5636",
   "artifact": "upload_artifacts\\iluvatar_bi150\\01_grouped_topk.py",
-  "artifact_sha256": "376e7f32f9a43c2d776dce04ce9aae0c6d27401415402fce8f5584efbe8ddb9b",
+  "artifact_sha256": "c663175b8e77071a263458b90bfdb9ad16a4391ebbadedc89954e3a3ca79b3dc",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "b90384f888f933e3ad38f9242cfcde01d5fd266ec03e7607da2145e6dfdf8fd3",
-    "profiles/operators/01_grouped_topk.json": "e62fd134622e7f78e3b4e4e9e68d1bedd9641a6ab564321c2e867c380209a7fd",
+    "profiles/operators/01_grouped_topk.json": "52f70aed0729c54769d32ef780609aec0ccb83141300392c7b8e9acd40001420",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {
     "variant": "vector_reduce",
     "config": {
-      "num_warps": 4
+      "num_warps": 1
     },
     "fallback_variants": [
       {
         "variant": "manual_stable",
         "config": {
-          "num_warps": 4
+          "num_warps": 1
         }
       }
     ],
