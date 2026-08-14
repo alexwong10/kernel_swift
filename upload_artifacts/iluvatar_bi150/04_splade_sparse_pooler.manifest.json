@@ -1,73 +1,62 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "04_splade_sparse_pooler",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/iluvatar_bi150/04_splade_sparse_pooler.py",
-    "artifact_sha256":  "541e05efd0a314be1df3fc12326633fd550b8121c68b57a6757a775e7a7b58a9",
-    "sources":  {
-                    "triton_kernels/04_splade_sparse_pooler.py":  "16bbb01f4febf58f76c831ee6cf6b089390f76589f03b628f669ae0d220efe56",
-                    "profiles/operators/04_splade_sparse_pooler.json":  "a39db400feb840eff175a58a6213479bdc206f65a8c0227d01312d67074d92f5",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
-                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
-                },
-    "profile":  {
-                    "variant":  "staged_portable",
-                    "config":  {
-                                   "linear_block_m":  128,
-                                   "linear_block_n":  64,
-                                   "linear_block_k":  16,
-                                   "linear_num_warps":  8,
-                                   "layer_norm_num_warps_small":  4,
-                                   "layer_norm_num_warps_large":  8,
-                                   "pool_block_t":  32,
-                                   "pool_block_v":  128,
-                                   "pool_num_warps":  2,
-                                   "linear_num_stages":  1
-                               },
-                    "schema_version":  1,
-                    "task_key":  "04_splade_sparse_pooler",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "04_splade_sparse_pooler",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "f22d6aa6b6a9a2bbc1263440f9f075e122d68f69",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "b836c90e8efbf0ae3d352438ab4fd831c668bab81f9faa839c28d934b78769dd",
+  "sources": {
+    "triton_kernels/04_splade_sparse_pooler.py": "7f1737d80df58b7eedc7bd1d97703a67427f2d5003e9b0f2f4d5737d632bb536",
+    "profiles/operators/04_splade_sparse_pooler.json": "f5d0ad8b4a1238e42de80a368463dd000045f8bb66e3756864cf27d3337c296f",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
+    "triton_kernels/common.py": "a3caf9ed09dc5645254fa42f19abe17f30fcc22ed945b4ad7ffeef3bc1ba24a0"
+  },
+  "profile": {
+    "variant": "staged_portable",
+    "config": {
+      "linear_block_m": 128,
+      "linear_block_n": 64,
+      "linear_block_k": 16,
+      "linear_num_warps": 8,
+      "layer_norm_num_warps_small": 4,
+      "layer_norm_num_warps_large": 8,
+      "pool_block_t": 32,
+      "pool_block_v": 128,
+      "pool_num_warps": 2,
+      "linear_num_stages": 1,
+      "linear_input_dtype": "fp16"
+    },
+    "schema_version": 1,
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "iluvatar_bi150",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "corex_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
 }
