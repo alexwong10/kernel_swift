@@ -244,7 +244,6 @@ def _moe_down_scalar_kernel(
 @triton.jit
 def _moe_route_pack_kernel(
     logits_ptr,
-    ids_ptr,
     weights_ptr,
     counts_ptr,
     packed_routes_ptr,
@@ -277,7 +276,6 @@ def _moe_route_pack_kernel(
         expert_id = tl.argmax(remaining, axis=0)
         weight = tl.max(remaining, axis=0)
         route = token * TOP_K + rank
-        tl.store(ids_ptr + route, expert_id)
         tl.store(weights_ptr + route, weight)
         slot = tl.atomic_add(counts_ptr + expert_id, 1)
         tl.store(packed_routes_ptr + expert_id * TOTAL_ROUTES + slot, route)
@@ -465,9 +463,11 @@ class ModelNew(nn.Module):
 
     def forward(self, hidden_states: torch.Tensor, router_logits: torch.Tensor):
         num_tokens = hidden_states.shape[0]
-        ids = torch.empty(
-            (num_tokens, self.top_k), device=hidden_states.device, dtype=torch.int32
-        )
+        ids = None
+        if self._ks_variant != "expert_grouped_dot":
+            ids = torch.empty(
+                (num_tokens, self.top_k), device=hidden_states.device, dtype=torch.int32
+            )
         route_weights = torch.empty(
             (num_tokens, self.top_k), device=hidden_states.device, dtype=hidden_states.dtype
         )
@@ -487,7 +487,6 @@ class ModelNew(nn.Module):
             )
             _moe_route_pack_kernel[(num_tokens,)](
                 router_logits,
-                ids,
                 route_weights,
                 packed_counts,
                 packed_routes,
