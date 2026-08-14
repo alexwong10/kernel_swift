@@ -125,6 +125,74 @@ def _mhc_post_tiled_kernel(
     tl.store(out_ptr + out_offset, result.to(tl.bfloat16), mask=mask)
 
 
+@triton.jit
+def _mhc_post_fused_mix_kernel(
+    x_ptr,
+    residual_ptr,
+    post_mix_ptr,
+    comb_mix_ptr,
+    out_ptr,
+    hidden_size: tl.constexpr,
+    mhc_mult: tl.constexpr,
+    token_count,
+    BLOCK_H: tl.constexpr,
+    BLOCK_TOKENS: tl.constexpr,
+    BLOCK_MIXES: tl.constexpr,
+):
+    """Fuse all output mix lanes for one token/hidden tile.
+
+    The reference has four output mix lanes.  The previous tiled kernel
+    launched one program per output lane, reloading the same ``x`` and all
+    residual lanes four times.  This variant keeps the four output lanes in
+    one program, sharing those loads while retaining the reference's fp32
+    accumulation and bf16 store.
+    """
+    token = tl.program_id(0) * BLOCK_TOKENS + tl.arange(0, BLOCK_TOKENS)
+    hidden_tile = tl.program_id(1)
+    out_mix = tl.arange(0, BLOCK_MIXES)
+    hidden = hidden_tile * BLOCK_H + tl.arange(0, BLOCK_H)
+    token_mask = token < token_count
+    hidden_mask = hidden < hidden_size
+    mix_mask = out_mix < mhc_mult
+    mask = token_mask[:, None, None] & mix_mask[None, :, None] & hidden_mask[None, None, :]
+
+    x = tl.load(
+        x_ptr + token[:, None] * hidden_size + hidden[None, :],
+        mask=token_mask[:, None] & hidden_mask[None, :],
+        other=0.0,
+    ).to(tl.float32)
+    post = tl.load(
+        post_mix_ptr + token[:, None] * mhc_mult + out_mix[None, :],
+        mask=token_mask[:, None] & mix_mask[None, :],
+        other=0.0,
+    ).to(tl.float32)
+    result = x[:, None, :] * post[:, :, None]
+    for in_mix in range(mhc_mult):
+        residual = tl.load(
+            residual_ptr
+            + token[:, None] * mhc_mult * hidden_size
+            + in_mix * hidden_size
+            + hidden[None, :],
+            mask=token_mask[:, None] & hidden_mask[None, :],
+            other=0.0,
+        ).to(tl.float32)
+        coefficient = tl.load(
+            comb_mix_ptr
+            + token[:, None] * mhc_mult * mhc_mult
+            + in_mix * mhc_mult
+            + out_mix[None, :],
+            mask=token_mask[:, None] & mix_mask[None, :],
+            other=0.0,
+        ).to(tl.float32)
+        result += coefficient[:, :, None] * residual[:, None, :]
+
+    out_offset = (
+        (token[:, None, None] * mhc_mult + out_mix[None, :, None]) * hidden_size
+        + hidden[None, None, :]
+    )
+    tl.store(out_ptr + out_offset, result.to(tl.bfloat16), mask=mask)
+
+
 class ModelNew(nn.Module):
     def __init__(self):
         super().__init__()
@@ -133,6 +201,7 @@ class ModelNew(nn.Module):
             "tiled_hidden",
             "flat_elementwise",
             "fp32_input_tiled",
+            "fused_mix_tiled",
         }:
             raise ValueError(f"unsupported mhc_post variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
@@ -163,7 +232,33 @@ class ModelNew(nn.Module):
             kernel_residual = residual
             kernel_post = post_layer_mix
             kernel_comb = comb_res_mix
-        if self._ks_variant in {"tiled_hidden", "fp32_input_tiled"}:
+        if self._ks_variant == "fused_mix_tiled":
+            block_hidden = int(self._ks_config["block_hidden"])
+            block_tokens = int(self._ks_config.get("block_tokens", 1))
+            block_mixes = int(self._ks_config.get("block_mixes", mhc_mult))
+            if block_hidden <= 0 or block_tokens <= 0 or block_mixes <= 0:
+                raise ValueError("invalid fused mhc_post tile configuration")
+            token_count = x.numel() // hidden_size
+            _mhc_post_fused_mix_kernel[
+                (
+                    triton.cdiv(token_count, block_tokens),
+                    triton.cdiv(hidden_size, block_hidden),
+                )
+            ](
+                kernel_x,
+                kernel_residual,
+                kernel_post,
+                kernel_comb,
+                out,
+                hidden_size,
+                mhc_mult,
+                token_count,
+                BLOCK_H=block_hidden,
+                BLOCK_TOKENS=block_tokens,
+                BLOCK_MIXES=block_mixes,
+                num_warps=int(self._ks_config["num_warps"]),
+            )
+        elif self._ks_variant in {"tiled_hidden", "fp32_input_tiled"}:
             block_hidden = int(self._ks_config["block_hidden"])
             block_tokens = int(self._ks_config.get("block_tokens", 1))
             if block_hidden <= 0:
