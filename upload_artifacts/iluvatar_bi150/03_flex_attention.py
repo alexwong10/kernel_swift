@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 1, 'block_m': 32, 'block_n': 128}, 'schema_version': 1, 'task_key': '03_flex_attention', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 4, 'block_m': 32, 'block_n': 128}, 'schema_version': 1, 'task_key': '03_flex_attention', 'chip_key': 'iluvatar_bi150', 'verified': True}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -186,8 +186,8 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
         next_max = tl.where(q_valid, next_max, 0.0)
         old_scale = tl.where(q_valid, tl.exp(running_max - next_max), 0.0)
         probs = tl.where(valid, tl.exp(scores - next_max[:, None]), 0.0)
-        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_valid[:, None] & d_valid[None, :], other=0.0).to(tl.float32)
-        result = result * old_scale[:, None] + tl.dot(probs, v)
+        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_valid[:, None] & d_valid[None, :], other=0.0)
+        result = result * old_scale[:, None] + tl.dot(probs.to(tl.float16), v)
         running_norm = running_norm * old_scale + tl.sum(probs, axis=1)
         running_max = next_max
     result = result / running_norm[:, None]

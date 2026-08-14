@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "02_fused_moe",
   "chip_key": "enflame_s60",
-  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
+  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
   "artifact": "upload_artifacts\\enflame_s60\\02_fused_moe.py",
   "artifact_sha256": "2b2eebd0a661ccabe3d78d41d76ca59e2f98154104af2b706e611761ca244f7d",
   "sources": {

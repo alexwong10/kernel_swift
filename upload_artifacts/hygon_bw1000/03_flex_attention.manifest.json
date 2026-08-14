@@ -3,14 +3,14 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "hygon_bw1000",
-  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
+  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
   "artifact": "upload_artifacts\\hygon_bw1000\\03_flex_attention.py",
-  "artifact_sha256": "20c9df955ce1f3ecaf3a9a27057c0c8a1376e930bb33d0c824bed222bac166b3",
+  "artifact_sha256": "bf7dfc908567e2a0f527e57b5c3ef671d214a08b57a7ee67c966635da2b6d9c3",
   "sources": {
     "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-    "profiles/operators/03_flex_attention.json": "c2f305232c4ce6345053a44ebf9a7c21729bb7ebeff4e8399a42009f8b97d5eb",
+    "profiles/operators/03_flex_attention.json": "bc1a8fedc54af23318b90088c9e729beb276c64ce4c21ca7abe458f6a7deca45",
     "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
-    "triton_kernels/common.py": "5328930100d896e85ff8d0461045aea58ce9ad04b046cea5c1980d985e96d8d6"
+    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
   },
   "profile": {
     "variant": "tiled_online_softmax",

@@ -468,8 +468,13 @@ def _attention_query_tile_kernel(
             + d[None, :] * stride_vd,
             mask=n_valid[:, None] & d_valid[None, :],
             other=0.0,
-        ).to(tl.float32)
-        result = result * old_scale[:, None] + tl.dot(probs, v)
+        )
+        # Keep the online-softmax state in FP32, but feed the value dot with
+        # the native FP16 operands used by the official attention case so the
+        # backend can use its matrix pipeline instead of an FP32 dot path.
+        result = result * old_scale[:, None] + tl.dot(
+            probs.to(tl.float16), v
+        )
         running_norm = running_norm * old_scale + tl.sum(probs, axis=1)
         running_max = next_max
 

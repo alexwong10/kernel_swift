@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "metax_c500",
-  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
+  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
   "artifact": "upload_artifacts\\metax_c500\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "17f8d0e4e47ace6bc0ad29ab0993593531f464afc97656695edc7556d0fab1d3",
   "sources": {

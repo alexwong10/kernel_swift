@@ -3,14 +3,14 @@
   "builder_version": 4,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "kunlun_p800",
-  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
+  "source_commit": "0b059b6eaa9b41dc7efe29834745c2931fa7ebf9",
   "artifact": "upload_artifacts\\kunlun_p800\\06_mm_encoder_attention.py",
-  "artifact_sha256": "dfe50a75fbcee241cef57c2e638937c10125c256b9176078f5290e34fdac9efd",
+  "artifact_sha256": "61bf3e3cdc84b82af1758e312947d37c660481313842deb5bcb164100daef6e2",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
-    "profiles/operators/06_mm_encoder_attention.json": "7c0438ad83aeacb0bbe74330bfdd285699354b402dd23cd6872f22b1f4a1959f",
+    "profiles/operators/06_mm_encoder_attention.json": "50c4a7830f5bc8bcbf9c6bc750b0a43f5ad550c204ace0b03c72ac347c2d0ebf",
     "profiles/chips/kunlun_p800.json": "c9a685b30e4af20e83e9975a5167348dd022c989f31a7304f46d8e58e48cce81",
-    "triton_kernels/common.py": "5328930100d896e85ff8d0461045aea58ce9ad04b046cea5c1980d985e96d8d6"
+    "triton_kernels/common.py": "4f93cdfca61d62b7cc0e5db8195fd46edb96d3afebefe39379c1da0d74cd9167"
   },
   "profile": {
     "variant": "tiled_online_softmax",

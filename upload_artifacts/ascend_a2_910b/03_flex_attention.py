@@ -187,8 +187,8 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
         next_max = tl.where(q_valid, next_max, 0.0)
         old_scale = tl.where(q_valid, tl.exp(running_max - next_max), 0.0)
         probs = tl.where(valid, tl.exp(scores - next_max[:, None]), 0.0)
-        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_valid[:, None] & d_valid[None, :], other=0.0).to(tl.float32)
-        result = result * old_scale[:, None] + tl.dot(probs, v)
+        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_valid[:, None] & d_valid[None, :], other=0.0)
+        result = result * old_scale[:, None] + tl.dot(probs.to(tl.float16), v)
         running_norm = running_norm * old_scale + tl.sum(probs, axis=1)
         running_max = next_max
     result = result / running_norm[:, None]
