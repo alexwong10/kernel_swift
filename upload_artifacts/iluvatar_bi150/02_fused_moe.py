@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'fused_route_scalar_mlp_unrolled', 'config': {'route_num_warps': 2, 'gate_up_num_warps': 2, 'down_num_warps': 1, 'reduce_block': 512, 'reduce_num_warps': 2}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'fused_route_scalar_mlp_unrolled_direct', 'config': {'route_num_warps': 2, 'gate_up_num_warps': 2, 'down_num_warps': 1, 'reduce_block': 512, 'reduce_num_warps': 2}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'iluvatar_bi150', 'verified': True}
 
 @triton.jit
 def _moe_route_kernel(logits_ptr, ids_ptr, weights_ptr, num_experts: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr):
@@ -175,7 +175,7 @@ def _moe_fused_route_scalar_mlp_kernel(router_logits_ptr, x_ptr, w1_ptr, w2_ptr,
         tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
 
 @triton.jit
-def _moe_fused_route_scalar_mlp_unrolled_kernel(router_logits_ptr, x_ptr, w1_ptr, w2_ptr, contribution_ptr, num_experts: tl.constexpr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr):
+def _moe_fused_route_scalar_mlp_unrolled_kernel(router_logits_ptr, x_ptr, w1_ptr, w2_ptr, contribution_ptr, out_ptr, num_experts: tl.constexpr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr, DIRECT_OUTPUT: tl.constexpr):
     """Top-2 fused route/MLP with the two route bodies explicitly unrolled."""
     token = tl.program_id(0)
     expert_offsets = tl.arange(0, BLOCK_E)
@@ -206,7 +206,8 @@ def _moe_fused_route_scalar_mlp_unrolled_kernel(router_logits_ptr, x_ptr, w1_ptr
     act0 = gate0 * tl.sigmoid(gate0.to(tl.float32)).to(tl.float16) * up0
     w20 = tl.load(w2_ptr + expert0 * hidden_size * intermediate_size + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
     down0 = tl.sum(w20 * act0[None, :], axis=1).to(tl.float16) * weight0.to(tl.float16)
-    tl.store(contribution_ptr + (token * TOP_K + 0) * hidden_size + h, down0.to(tl.float16), mask=h_mask)
+    if not DIRECT_OUTPUT:
+        tl.store(contribution_ptr + (token * TOP_K + 0) * hidden_size + h, down0.to(tl.float16), mask=h_mask)
     expert_base1 = expert1 * 2 * intermediate_size * hidden_size
     gate_w1 = tl.load(w1_ptr + expert_base1 + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
     up_w1 = tl.load(w1_ptr + expert_base1 + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
@@ -215,7 +216,11 @@ def _moe_fused_route_scalar_mlp_unrolled_kernel(router_logits_ptr, x_ptr, w1_ptr
     act1 = gate1 * tl.sigmoid(gate1.to(tl.float32)).to(tl.float16) * up1
     w21 = tl.load(w2_ptr + expert1 * hidden_size * intermediate_size + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
     down1 = tl.sum(w21 * act1[None, :], axis=1).to(tl.float16) * weight1.to(tl.float16)
-    tl.store(contribution_ptr + (token * TOP_K + 1) * hidden_size + h, down1.to(tl.float16), mask=h_mask)
+    if DIRECT_OUTPUT:
+        result = down0.to(tl.float16).to(tl.float32) + down1.to(tl.float16).to(tl.float32)
+        tl.store(out_ptr + token * hidden_size + h, result.to(tl.float16), mask=h_mask)
+    else:
+        tl.store(contribution_ptr + (token * TOP_K + 1) * hidden_size + h, down1.to(tl.float16), mask=h_mask)
 
 @triton.jit
 def _moe_route_pack_kernel(logits_ptr, weights_ptr, counts_ptr, packed_routes_ptr, num_experts: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr, TOTAL_ROUTES: tl.constexpr):
@@ -331,7 +336,7 @@ class Model(nn.Module):
         nn.init.normal_(self.w1, std=0.02)
         nn.init.normal_(self.w2, std=0.02)
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'tiled_dot_fp16_reference', 'scalar_elementwise_fallback', 'expert_grouped_dot', 'fused_scalar_mlp', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+        if profile['variant'] not in {'tiled_dot_fp16_reference', 'scalar_elementwise_fallback', 'expert_grouped_dot', 'fused_scalar_mlp', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled', 'fused_route_scalar_mlp_unrolled_direct'}:
             raise ValueError(f"unsupported FusedMoE variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         self._ks_config = profile['config']
@@ -339,10 +344,10 @@ class Model(nn.Module):
     def forward(self, hidden_states: torch.Tensor, router_logits: torch.Tensor):
         num_tokens = hidden_states.shape[0]
         ids = None
-        if self._ks_variant not in {'expert_grouped_dot', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+        if self._ks_variant not in {'expert_grouped_dot', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled', 'fused_route_scalar_mlp_unrolled_direct'}:
             ids = torch.empty((num_tokens, self.top_k), device=hidden_states.device, dtype=torch.int32)
         route_weights = None
-        if self._ks_variant not in {'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+        if self._ks_variant not in {'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled', 'fused_route_scalar_mlp_unrolled_direct'}:
             route_weights = torch.empty((num_tokens, self.top_k), device=hidden_states.device, dtype=hidden_states.dtype)
         block_e = triton.next_power_of_2(self.num_experts)
         total_routes = num_tokens * self.top_k
@@ -367,7 +372,7 @@ class Model(nn.Module):
                 raise ValueError('route compaction produced no expert blocks')
             block_experts = torch.tensor(block_experts_host, device=hidden_states.device, dtype=torch.int32)
             block_starts = torch.tensor(block_starts_host, device=hidden_states.device, dtype=torch.int32)
-        elif self._ks_variant in {'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+        elif self._ks_variant in {'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled', 'fused_route_scalar_mlp_unrolled_direct'}:
             if self.top_k != 2:
                 raise ValueError('fused_route_scalar_mlp requires top_k == 2')
         else:
@@ -377,9 +382,13 @@ class Model(nn.Module):
         if self._ks_variant == 'expert_grouped_dot':
             act = torch.empty((num_tokens, self.top_k, self.intermediate_size), device=hidden_states.device, dtype=hidden_states.dtype)
             _moe_gate_up_grouped_kernel[len(block_experts_host),](hidden_states, packed_routes, packed_counts, block_experts, block_starts, self.w1, act, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, TOTAL_ROUTES=total_routes, BLOCK_R=group_block_routes, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['group_gate_num_warps']))
-        elif self._ks_variant == 'fused_route_scalar_mlp_unrolled':
-            contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
-            _moe_fused_route_scalar_mlp_unrolled_kernel[num_tokens,](router_logits, hidden_states, self.w1, self.w2, contributions, self.num_experts, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, RENORMALIZE=self.renormalize, BLOCK_E=block_e, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
+        elif self._ks_variant in {'fused_route_scalar_mlp_unrolled', 'fused_route_scalar_mlp_unrolled_direct'}:
+            if self._ks_variant == 'fused_route_scalar_mlp_unrolled_direct':
+                out = torch.empty_like(hidden_states)
+                contributions = out
+            else:
+                contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
+            _moe_fused_route_scalar_mlp_unrolled_kernel[num_tokens,](router_logits, hidden_states, self.w1, self.w2, contributions, contributions, self.num_experts, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, RENORMALIZE=self.renormalize, BLOCK_E=block_e, BLOCK_H=block_h, BLOCK_I=block_i, DIRECT_OUTPUT=self._ks_variant == 'fused_route_scalar_mlp_unrolled_direct', num_warps=int(self._ks_config['gate_up_num_warps']))
         elif self._ks_variant == 'fused_route_scalar_mlp':
             contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
             _moe_fused_route_scalar_mlp_kernel[num_tokens,](router_logits, hidden_states, self.w1, self.w2, contributions, self.num_experts, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, RENORMALIZE=self.renormalize, BLOCK_E=block_e, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
@@ -393,12 +402,14 @@ class Model(nn.Module):
         if self._ks_variant == 'expert_grouped_dot':
             contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
             _moe_down_grouped_kernel[len(block_experts_host),](packed_routes, packed_counts, block_experts, block_starts, act, route_weights, self.w2, contributions, self.hidden_size, self.intermediate_size, TOTAL_ROUTES=total_routes, BLOCK_R=group_block_routes, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['group_down_num_warps']))
-        elif self._ks_variant in {'fused_scalar_mlp', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+        elif self._ks_variant in {'fused_scalar_mlp', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled', 'fused_route_scalar_mlp_unrolled_direct'}:
             pass
         else:
             contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
             down_kernel = _moe_down_scalar_kernel if self._ks_variant == 'scalar_elementwise_fallback' else _moe_down_kernel
             down_kernel[num_tokens, self.top_k](act, ids, route_weights, self.w2, contributions, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['down_num_warps']))
+        if self._ks_variant == 'fused_route_scalar_mlp_unrolled_direct':
+            return out
         out = torch.empty_like(hidden_states)
         total = out.numel()
         block = int(self._ks_config['reduce_block'])

@@ -37,7 +37,7 @@
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {
-        "variant": "fused_route_scalar_mlp_unrolled",
+        "variant": "fused_route_scalar_mlp_unrolled_direct",
         "config": {
           "route_num_warps": 2,
           "gate_up_num_warps": 2,
