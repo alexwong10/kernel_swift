@@ -7,7 +7,7 @@ import triton.language as tl
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 128, 'linear_block_n': 64, 'linear_block_k': 16, 'linear_num_warps': 8, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 2}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 128, 'linear_block_n': 64, 'linear_block_k': 16, 'linear_num_warps': 8, 'linear_num_stages': 1, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 2}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'iluvatar_bi150', 'verified': True}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -42,7 +42,10 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     block_k = int(config['block_k'])
     grid = (triton.cdiv(m_size, block_m), triton.cdiv(n_size, block_n))
     bias_arg = bias if bias is not None else weight
-    _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, num_warps=int(config['num_warps']))
+    launch_kwargs = {'num_warps': int(config['num_warps'])}
+    if 'num_stages' in config:
+        launch_kwargs['num_stages'] = int(config['num_stages'])
+    _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, **launch_kwargs)
     return out
 
 @triton.jit
@@ -256,6 +259,8 @@ class Model(nn.Module):
         self._ks_variant = profile['variant']
         config = profile['config']
         self._ks_linear_config = {'block_m': int(config['linear_block_m']), 'block_n': int(config['linear_block_n']), 'block_k': int(config['linear_block_k']), 'num_warps': int(config['linear_num_warps'])}
+        if 'linear_num_stages' in config:
+            self._ks_linear_config['num_stages'] = int(config['linear_num_stages'])
         self._ks_layer_norm_config = {'num_warps_small': int(config['layer_norm_num_warps_small']), 'num_warps_large': int(config['layer_norm_num_warps_large'])}
         self._ks_pool_config = {'block_t': int(config['pool_block_t']), 'block_v': int(config['pool_block_v']), 'num_warps': int(config['pool_num_warps'])}
         self._ks_fused_config = {'block_t': int(config.get('fused_block_t', 16)), 'block_v': int(config.get('fused_block_v', 64)), 'block_k': int(config.get('fused_block_k', 16)), 'max_seq': int(config.get('fused_max_seq', 32)), 'num_warps': int(config.get('fused_num_warps', 8))}

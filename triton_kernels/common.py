@@ -90,6 +90,9 @@ def triton_linear(
     grid = (triton.cdiv(m_size, block_m), triton.cdiv(n_size, block_n))
     # Triton needs a valid pointer even when the constexpr disables the load.
     bias_arg = bias if bias is not None else weight
+    launch_kwargs = {"num_warps": int(config["num_warps"])}
+    if "num_stages" in config:
+        launch_kwargs["num_stages"] = int(config["num_stages"])
     _linear_kernel[grid](
         x,
         weight,
@@ -109,7 +112,7 @@ def triton_linear(
         BLOCK_M=block_m,
         BLOCK_N=block_n,
         BLOCK_K=block_k,
-        num_warps=int(config["num_warps"]),
+        **launch_kwargs,
     )
     return out
 

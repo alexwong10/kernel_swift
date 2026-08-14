@@ -102,6 +102,8 @@ class ModelNew(nn.Module):
             "block_k": int(config["linear_block_k"]),
             "num_warps": int(config["linear_num_warps"]),
         }
+        if "linear_num_stages" in config:
+            self._ks_linear_config["num_stages"] = int(config["linear_num_stages"])
         self._ks_layer_norm_config = {
             "num_warps_small": int(config["layer_norm_num_warps_small"]),
             "num_warps_large": int(config["layer_norm_num_warps_large"]),

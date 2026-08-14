@@ -27,6 +27,7 @@
           "linear_block_n": 64,
           "linear_block_k": 16,
           "linear_num_warps": 8,
+          "linear_num_stages": 1,
           "pool_block_t": 32,
           "pool_block_v": 128,
           "pool_num_warps": 2
