@@ -475,8 +475,8 @@ class ModelNew(nn.Module):
         total_routes = num_tokens * self.top_k
         if self._ks_variant == "expert_grouped_dot":
             # Allocate the compaction buffers before routing so the grouped
-            # route kernel can produce ids, weights, and the expert segments
-            # in one launch.
+            # route kernel can produce weights and expert segments in one
+            # launch.
             packed_counts = torch.zeros(
                 (self.num_experts,), device=hidden_states.device, dtype=torch.int32
             )
