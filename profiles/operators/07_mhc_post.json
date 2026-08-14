@@ -14,7 +14,7 @@
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {
-        "config": {"block_hidden": 128, "block_tokens": 8, "num_warps": 8}
+        "config": {"block_hidden": 128, "block_tokens": 32, "num_warps": 8}
       }
     },
     "enflame_s60": {"verified": false, "overrides": {}},
