@@ -52,6 +52,39 @@ def _head_mix_bwd_kernel(
 
 
 @triton.jit
+def _head_mix_bwd_fused_kernel(
+    input_ptr,
+    scale_ptr,
+    base_ptr,
+    grad_out_ptr,
+    grad_input_ptr,
+    grad_scale_ptr,
+    grad_base_ptr,
+    rows: tl.constexpr,
+    mhc_mult: tl.constexpr,
+    BLOCK: tl.constexpr,
+    BLOCK_MIXES: tl.constexpr,
+):
+    """Process all mix lanes in one reduction program."""
+    row = tl.arange(0, BLOCK)[:, None]
+    mix = tl.arange(0, BLOCK_MIXES)
+    valid = (row < rows) & (mix[None, :] < mhc_mult)
+    offset = row * mhc_mult + mix[None, :]
+    x = tl.load(input_ptr + offset, mask=valid, other=0.0).to(tl.float32)
+    scale = tl.load(scale_ptr).to(tl.float32)
+    base = tl.load(base_ptr + mix, mask=mix < mhc_mult, other=0.0).to(tl.float32)
+    grad_out = tl.load(grad_out_ptr + offset, mask=valid, other=0.0).to(tl.float32)
+    z = x * scale + base[None, :]
+    sigmoid = tl.sigmoid(z)
+    grad_z = grad_out * sigmoid * (1.0 - sigmoid)
+    tl.store(grad_input_ptr + offset, grad_z * scale, mask=valid)
+    grad_base = tl.sum(grad_z, axis=0)
+    grad_scale_parts = tl.sum(grad_z * x, axis=0)
+    tl.store(grad_base_ptr + mix, grad_base, mask=mix < mhc_mult)
+    tl.store(grad_scale_ptr, tl.sum(grad_scale_parts, axis=0))
+
+
+@triton.jit
 def _head_mix_bwd_chunked_kernel(
     input_ptr,
     scale_ptr,
@@ -164,6 +197,7 @@ class ModelNew(nn.Module):
             "single_block_reduce",
             "chunked_deterministic",
             "tiled_mix_chunked",
+            "fused_all_mixes",
         }:
             raise ValueError(f"unsupported head_compute_mix_bwd variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
@@ -179,8 +213,30 @@ class ModelNew(nn.Module):
         mhc_mult = input_mix.shape[-1]
         rows = input_mix.numel() // mhc_mult
         grad_input = torch.empty_like(input_mix)
-        grad_scale_parts = torch.empty(mhc_mult, device=input_mix.device, dtype=torch.float32)
         grad_base = torch.empty_like(mhc_base)
+        if self._ks_variant == "fused_all_mixes":
+            block = triton.next_power_of_2(rows)
+            block_mixes = triton.next_power_of_2(mhc_mult)
+            grad_scale = torch.empty_like(mhc_scale)
+            _head_mix_bwd_fused_kernel[(1,)](
+                input_mix,
+                mhc_scale,
+                mhc_base,
+                grad_out,
+                grad_input,
+                grad_scale,
+                grad_base,
+                rows,
+                mhc_mult,
+                BLOCK=block,
+                BLOCK_MIXES=block_mixes,
+                num_warps=int(self._ks_config["num_warps"]),
+            )
+            return grad_input, grad_scale, grad_base
+
+        grad_scale_parts = torch.empty(
+            mhc_mult, device=input_mix.device, dtype=torch.float32
+        )
         if self._ks_variant == "single_block_reduce":
             block = triton.next_power_of_2(rows)
             _head_mix_bwd_kernel[(mhc_mult,)](
