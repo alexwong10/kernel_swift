@@ -23,13 +23,13 @@
       "overrides": {
         "variant": "staged_portable",
         "config": {
-          "linear_block_m": 64,
+          "linear_block_m": 128,
           "linear_block_n": 64,
           "linear_block_k": 16,
           "linear_num_warps": 8,
-          "pool_block_t": 64,
+          "pool_block_t": 32,
           "pool_block_v": 128,
-          "pool_num_warps": 4
+          "pool_num_warps": 2
         }
       }
     },
