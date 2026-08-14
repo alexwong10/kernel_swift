@@ -7,7 +7,7 @@ import triton.language as tl
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 128, 'linear_block_n': 64, 'linear_block_k': 16, 'linear_num_warps': 8, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 2, 'linear_num_stages': 1, 'linear_input_dtype': 'fp16'}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 128, 'linear_block_n': 64, 'linear_block_k': 16, 'linear_num_warps': 8, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 2, 'linear_num_stages': 1, 'linear_input_dtype': 'fp16', 'dense_block_m': 32, 'dense_block_n': 64, 'dense_block_k': 16, 'dense_num_warps': 8, 'dense_num_stages': 1}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'iluvatar_bi150', 'verified': True}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -269,12 +269,17 @@ class Model(nn.Module):
             self._ks_linear_config['num_stages'] = int(config['linear_num_stages'])
         if 'linear_input_dtype' in config:
             self._ks_linear_config['input_dtype'] = config['linear_input_dtype']
+        self._ks_dense_config = dict(self._ks_linear_config)
+        for key in ('block_m', 'block_n', 'block_k', 'num_warps', 'num_stages'):
+            dense_key = f'dense_{key}'
+            if dense_key in config:
+                self._ks_dense_config[key] = int(config[dense_key])
         self._ks_layer_norm_config = {'num_warps_small': int(config['layer_norm_num_warps_small']), 'num_warps_large': int(config['layer_norm_num_warps_large'])}
         self._ks_pool_config = {'block_t': int(config['pool_block_t']), 'block_v': int(config['pool_block_v']), 'num_warps': int(config['pool_num_warps'])}
         self._ks_fused_config = {'block_t': int(config.get('fused_block_t', 16)), 'block_v': int(config.get('fused_block_v', 64)), 'block_k': int(config.get('fused_block_k', 16)), 'max_seq': int(config.get('fused_max_seq', 32)), 'num_warps': int(config.get('fused_num_warps', 8))}
 
     def forward(self, hidden_states: torch.Tensor, seq_lens: torch.Tensor) -> list:
-        dense = triton_linear(hidden_states, self.dense.weight, self.dense.bias, config=self._ks_linear_config)
+        dense = triton_linear(hidden_states, self.dense.weight, self.dense.bias, config=self._ks_dense_config)
         normalized = gelu_layer_norm(dense, self.layer_norm.weight, self.layer_norm.bias, self.layer_norm.eps, config=self._ks_layer_norm_config)
         if self._ks_variant == 'fused_pool':
             pooled = triton_decoder_pool(normalized, self.decoder.weight, self.decoder.bias, seq_lens, pooling=self.pooling, config=self._ks_fused_config)
