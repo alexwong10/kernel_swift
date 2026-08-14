@@ -8,6 +8,13 @@
       {"variant": "manual_stable", "config": {"num_warps": 4}}
     ]
   },
+  "candidates": {
+    "register_reduce": {
+      "verified": false,
+      "config": {"num_warps": 1},
+      "note": "Preserves vector_reduce selection/tie order while keeping selected weights in registers; pending official accuracy and timing."
+    }
+  },
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},

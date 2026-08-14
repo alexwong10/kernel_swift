@@ -76,6 +76,74 @@ def _grouped_topk_kernel(
 
 
 @triton.jit
+def _grouped_topk_register_kernel(
+    logits_ptr,
+    weights_ptr,
+    ids_ptr,
+    num_experts: tl.constexpr,
+    experts_per_group: tl.constexpr,
+    num_groups: tl.constexpr,
+    TOPK: tl.constexpr,
+    TOPK_GROUPS: tl.constexpr,
+    SOFTMAX: tl.constexpr,
+    RENORMALIZE: tl.constexpr,
+    ROUTED_SCALE: tl.constexpr,
+    BLOCK: tl.constexpr,
+):
+    """Grouped top-k with register-resident selected weights.
+
+    The selection order and arithmetic intentionally match
+    ``_grouped_topk_kernel``.  Only the temporary selected weights change
+    storage: the eight values are accumulated in a tiny register vector and
+    written once after renormalization, avoiding a global write/read pair for
+    every rank.
+    """
+    token = tl.program_id(0)
+    expert = tl.arange(0, BLOCK)
+    mask = expert < num_experts
+    logits = tl.load(
+        logits_ptr + token * num_experts + expert,
+        mask=mask,
+        other=-float("inf"),
+    ).to(tl.float32)
+    if SOFTMAX:
+        shifted = logits - tl.max(logits, axis=0)
+        scores = tl.exp(shifted)
+        scores = scores / tl.sum(tl.where(mask, scores, 0.0), axis=0)
+    else:
+        scores = tl.sigmoid(logits)
+
+    grouped = tl.reshape(scores, (num_groups, experts_per_group))
+    group_scores = tl.max(grouped, axis=1)
+    group_offsets = tl.arange(0, num_groups)
+    eligible = tl.zeros((BLOCK,), tl.int1)
+    remaining_groups = group_scores
+    for _ in range(TOPK_GROUPS):
+        group_id = tl.argmax(remaining_groups, axis=0)
+        eligible = eligible | ((expert // experts_per_group) == group_id)
+        remaining_groups = tl.where(
+            group_offsets == group_id, -float("inf"), remaining_groups
+        )
+
+    candidates = tl.where(mask & eligible, scores, -float("inf"))
+    selected_weights = tl.zeros((TOPK,), tl.float32)
+    weight_sum = 0.0
+    rank_offsets = tl.arange(0, TOPK)
+    for rank in range(TOPK):
+        expert_id = tl.argmax(candidates, axis=0)
+        weight = tl.max(candidates, axis=0)
+        selected_weights = tl.where(rank_offsets == rank, weight, selected_weights)
+        tl.store(ids_ptr + token * TOPK + rank, expert_id)
+        weight_sum += weight
+        candidates = tl.where(expert == expert_id, -float("inf"), candidates)
+
+    if RENORMALIZE:
+        selected_weights = selected_weights / weight_sum
+    selected_weights *= ROUTED_SCALE
+    tl.store(weights_ptr + token * TOPK + rank_offsets, selected_weights)
+
+
+@triton.jit
 def _grouped_topk_manual_kernel(
     logits_ptr,
     weights_ptr,
@@ -175,7 +243,11 @@ class ModelNew(nn.Module):
         if scoring_func not in {"softmax", "sigmoid"}:
             raise ValueError(f"Unsupported scoring_func: {scoring_func}")
         profile = get_operator_profile("01_grouped_topk")
-        if profile["variant"] not in {"vector_reduce", "manual_stable"}:
+        if profile["variant"] not in {
+            "vector_reduce",
+            "manual_stable",
+            "register_reduce",
+        }:
             raise ValueError(f"unsupported GroupedTopk variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
         self._ks_num_warps = int(profile["config"]["num_warps"])
@@ -200,11 +272,12 @@ class ModelNew(nn.Module):
             (num_tokens, self.topk), device=gating_output.device, dtype=torch.int32
         )
         block = triton.next_power_of_2(num_experts)
-        kernel = (
-            _grouped_topk_manual_kernel
-            if self._ks_variant == "manual_stable"
-            else _grouped_topk_kernel
-        )
+        if self._ks_variant == "manual_stable":
+            kernel = _grouped_topk_manual_kernel
+        elif self._ks_variant == "register_reduce":
+            kernel = _grouped_topk_register_kernel
+        else:
+            kernel = _grouped_topk_kernel
         launch = dict(
             TOPK=self.topk,
             TOPK_GROUPS=self.topk_group,
