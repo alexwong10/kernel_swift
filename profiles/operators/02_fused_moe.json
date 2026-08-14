@@ -26,7 +26,7 @@
         "variant": "scalar_elementwise_fallback",
         "config": {
           "route_num_warps": 1,
-          "gate_up_num_warps": 4,
+          "gate_up_num_warps": 1,
           "down_num_warps": 1,
           "reduce_block": 256,
           "reduce_num_warps": 4
