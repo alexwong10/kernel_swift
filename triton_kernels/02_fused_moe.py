@@ -293,6 +293,8 @@ def _moe_gate_up_grouped_kernel(
     x_ptr,
     packed_routes_ptr,
     counts_ptr,
+    block_experts_ptr,
+    block_starts_ptr,
     w1_ptr,
     act_ptr,
     hidden_size: tl.constexpr,
@@ -306,13 +308,16 @@ def _moe_gate_up_grouped_kernel(
     """Batched gate/up dot for routes belonging to one expert.
 
     The route compaction makes the ``BLOCK_R`` dimension dense for each
-    expert.  Invalid tail rows are masked, and the masked rows never store to
-    ``act_ptr``.  Weight layout remains [2I, H], but is loaded as [H, I] so
-    that the dot is [R, H] x [H, I].
+    expert.  ``block_experts_ptr``/``block_starts_ptr`` contain only non-empty
+    blocks, so no expert-wide empty tiles are launched.  Invalid tail rows
+    are masked, and the masked rows never store to ``act_ptr``.  Weight layout
+    remains [2I, H], but is loaded as [H, I] so that the dot is [R, H] x
+    [H, I].
     """
-    expert = tl.program_id(0)
-    route_block = tl.program_id(1)
-    rows = route_block * BLOCK_R + tl.arange(0, BLOCK_R)
+    block_id = tl.program_id(0)
+    expert = tl.load(block_experts_ptr + block_id)
+    route_block_start = tl.load(block_starts_ptr + block_id)
+    rows = route_block_start + tl.arange(0, BLOCK_R)
     count = tl.load(counts_ptr + expert)
     row_mask = rows < count
     packed_base = expert * TOTAL_ROUTES
@@ -359,6 +364,8 @@ def _moe_gate_up_grouped_kernel(
 def _moe_down_grouped_kernel(
     packed_routes_ptr,
     counts_ptr,
+    block_experts_ptr,
+    block_starts_ptr,
     act_ptr,
     route_weights_ptr,
     w2_ptr,
@@ -371,9 +378,10 @@ def _moe_down_grouped_kernel(
     BLOCK_I: tl.constexpr,
 ):
     """Batched down projection for compacted routes of one expert."""
-    expert = tl.program_id(0)
-    route_block = tl.program_id(1)
-    rows = route_block * BLOCK_R + tl.arange(0, BLOCK_R)
+    block_id = tl.program_id(0)
+    expert = tl.load(block_experts_ptr + block_id)
+    route_block_start = tl.load(block_starts_ptr + block_id)
+    rows = route_block_start + tl.arange(0, BLOCK_R)
     count = tl.load(counts_ptr + expert)
     row_mask = rows < count
     packed_base = expert * TOTAL_ROUTES
@@ -473,6 +481,9 @@ class ModelNew(nn.Module):
         )
         block_e = triton.next_power_of_2(self.num_experts)
         total_routes = num_tokens * self.top_k
+        block_experts = None
+        block_starts = None
+        group_block_routes = None
         if self._ks_variant == "expert_grouped_dot":
             # Allocate the compaction buffers before routing so the grouped
             # route kernel can produce weights and expert segments in one
@@ -497,6 +508,28 @@ class ModelNew(nn.Module):
                 TOTAL_ROUTES=total_routes,
                 num_warps=int(self._ks_config["route_num_warps"]),
             )
+            group_block_routes = int(self._ks_config["group_block_routes"])
+            if group_block_routes <= 0:
+                raise ValueError("group_block_routes must be positive")
+            # Routing has already produced a compact device-side count.  A
+            # tiny metadata readback lets the two projection kernels launch
+            # only non-empty expert blocks instead of doing masked matrix dots
+            # for every expert/total-route combination.
+            counts_host = packed_counts.cpu().tolist()
+            block_experts_host = []
+            block_starts_host = []
+            for expert, count in enumerate(counts_host):
+                for start in range(0, int(count), group_block_routes):
+                    block_experts_host.append(expert)
+                    block_starts_host.append(start)
+            if not block_experts_host:
+                raise ValueError("route compaction produced no expert blocks")
+            block_experts = torch.tensor(
+                block_experts_host, device=hidden_states.device, dtype=torch.int32
+            )
+            block_starts = torch.tensor(
+                block_starts_host, device=hidden_states.device, dtype=torch.int32
+            )
         else:
             _moe_route_kernel[(num_tokens,)](
                 router_logits,
@@ -518,13 +551,14 @@ class ModelNew(nn.Module):
         if self._ks_variant == "expert_grouped_dot":
             # The route-pack kernel above produced only a Triton-generated
             # permutation.  No framework sort or PyTorch fallback is used.
-            group_block_routes = int(self._ks_config["group_block_routes"])
             _moe_gate_up_grouped_kernel[
-                (self.num_experts, triton.cdiv(total_routes, group_block_routes))
+                (len(block_experts_host),)
             ](
                 hidden_states,
                 packed_routes,
                 packed_counts,
+                block_experts,
+                block_starts,
                 self.w1,
                 act,
                 self.hidden_size,
@@ -560,12 +594,13 @@ class ModelNew(nn.Module):
             dtype=hidden_states.dtype,
         )
         if self._ks_variant == "expert_grouped_dot":
-            group_block_routes = int(self._ks_config["group_block_routes"])
             _moe_down_grouped_kernel[
-                (self.num_experts, triton.cdiv(total_routes, group_block_routes))
+                (len(block_experts_host),)
             ](
                 packed_routes,
                 packed_counts,
+                block_experts,
+                block_starts,
                 act,
                 route_weights,
                 self.w2,
