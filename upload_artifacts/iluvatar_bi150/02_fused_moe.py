@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'scalar_elementwise_fallback', 'config': {'route_num_warps': 1, 'gate_up_num_warps': 1, 'down_num_warps': 1, 'reduce_block': 256, 'reduce_num_warps': 4, 'group_block_routes': 32, 'group_gate_num_warps': 4, 'group_down_num_warps': 4}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'fused_route_scalar_mlp_unrolled', 'config': {'route_num_warps': 2, 'gate_up_num_warps': 2, 'down_num_warps': 1, 'reduce_block': 512, 'reduce_num_warps': 2}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'iluvatar_bi150', 'verified': True}
 
 @triton.jit
 def _moe_route_kernel(logits_ptr, ids_ptr, weights_ptr, num_experts: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr):
@@ -99,6 +99,123 @@ def _moe_down_scalar_kernel(act_ptr, ids_ptr, route_weights_ptr, w2_ptr, contrib
     w2 = tl.load(w2_ptr + expert_base + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
     down = tl.sum(w2 * act[None, :], axis=1).to(tl.float16) * route_weight
     tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
+
+@triton.jit
+def _moe_fused_scalar_mlp_kernel(x_ptr, ids_ptr, route_weights_ptr, w1_ptr, w2_ptr, contribution_ptr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr):
+    """Fuse scalar gate/up, activation, and down projection for one route.
+
+    The BI150 case has hidden=128 and intermediate=64.  The separate scalar
+    path materializes ``act`` between two launches; this specialization keeps
+    it in registers and writes only the final weighted contribution.  All
+    arithmetic remains in Triton and uses the same fp16 input/accumulation
+    order as the existing scalar kernels.
+    """
+    token = tl.program_id(0)
+    rank = tl.program_id(1)
+    expert = tl.load(ids_ptr + token * TOP_K + rank)
+    route_weight = tl.load(route_weights_ptr + token * TOP_K + rank).to(tl.float16)
+    h = tl.arange(0, BLOCK_H)
+    i = tl.arange(0, BLOCK_I)
+    h_mask = h < hidden_size
+    i_mask = i < intermediate_size
+    x = tl.load(x_ptr + token * hidden_size + h, mask=h_mask, other=0.0).to(tl.float16)
+    expert_base = expert * 2 * intermediate_size * hidden_size
+    gate_w = tl.load(w1_ptr + expert_base + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    up_w = tl.load(w1_ptr + expert_base + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    gate = tl.sum(gate_w * x[None, :], axis=1).to(tl.float16)
+    up = tl.sum(up_w * x[None, :], axis=1).to(tl.float16)
+    act = gate * tl.sigmoid(gate.to(tl.float32)).to(tl.float16) * up
+    expert_base = expert * hidden_size * intermediate_size
+    w2 = tl.load(w2_ptr + expert_base + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
+    down = tl.sum(w2 * act[None, :], axis=1).to(tl.float16) * route_weight
+    tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
+
+@triton.jit
+def _moe_fused_route_scalar_mlp_kernel(router_logits_ptr, x_ptr, w1_ptr, w2_ptr, contribution_ptr, num_experts: tl.constexpr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr):
+    """Fuse Triton top-k routing with the scalar route MLP.
+
+    This specialization is used only for the official top_k=2 case.  The
+    selected expert ids and weights remain scalar SSA values, so the route
+    kernel's temporary global ids/weights tensors and one launch disappear.
+    The MLP itself is identical to ``_moe_fused_scalar_mlp_kernel``.
+    """
+    token = tl.program_id(0)
+    expert_offsets = tl.arange(0, BLOCK_E)
+    expert_valid = expert_offsets < num_experts
+    logits = tl.load(router_logits_ptr + token * num_experts + expert_offsets, mask=expert_valid, other=-float('inf')).to(tl.float32)
+    scores = tl.exp(logits - tl.max(logits, axis=0))
+    scores = scores / tl.sum(tl.where(expert_valid, scores, 0.0), axis=0)
+    remaining = tl.where(expert_valid, scores, -float('inf'))
+    expert0 = tl.argmax(remaining, axis=0)
+    weight0 = tl.max(remaining, axis=0)
+    remaining = tl.where(expert_offsets == expert0, -float('inf'), remaining)
+    expert1 = tl.argmax(remaining, axis=0)
+    weight1 = tl.max(remaining, axis=0)
+    if RENORMALIZE:
+        weight_sum = weight0 + weight1
+        weight0 = weight0 / weight_sum
+        weight1 = weight1 / weight_sum
+    h = tl.arange(0, BLOCK_H)
+    i = tl.arange(0, BLOCK_I)
+    h_mask = h < hidden_size
+    i_mask = i < intermediate_size
+    x = tl.load(x_ptr + token * hidden_size + h, mask=h_mask, other=0.0).to(tl.float16)
+    for rank in range(TOP_K):
+        expert_id = tl.where(rank == 0, expert0, expert1)
+        route_weight = tl.where(rank == 0, weight0, weight1).to(tl.float16)
+        expert_base = expert_id * 2 * intermediate_size * hidden_size
+        gate_w = tl.load(w1_ptr + expert_base + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+        up_w = tl.load(w1_ptr + expert_base + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+        gate = tl.sum(gate_w * x[None, :], axis=1).to(tl.float16)
+        up = tl.sum(up_w * x[None, :], axis=1).to(tl.float16)
+        act = gate * tl.sigmoid(gate.to(tl.float32)).to(tl.float16) * up
+        expert_base = expert_id * hidden_size * intermediate_size
+        w2 = tl.load(w2_ptr + expert_base + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
+        down = tl.sum(w2 * act[None, :], axis=1).to(tl.float16) * route_weight
+        tl.store(contribution_ptr + (token * TOP_K + rank) * hidden_size + h, down.to(tl.float16), mask=h_mask)
+
+@triton.jit
+def _moe_fused_route_scalar_mlp_unrolled_kernel(router_logits_ptr, x_ptr, w1_ptr, w2_ptr, contribution_ptr, num_experts: tl.constexpr, hidden_size: tl.constexpr, intermediate_size: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr, BLOCK_H: tl.constexpr, BLOCK_I: tl.constexpr):
+    """Top-2 fused route/MLP with the two route bodies explicitly unrolled."""
+    token = tl.program_id(0)
+    expert_offsets = tl.arange(0, BLOCK_E)
+    expert_valid = expert_offsets < num_experts
+    logits = tl.load(router_logits_ptr + token * num_experts + expert_offsets, mask=expert_valid, other=-float('inf')).to(tl.float32)
+    scores = tl.exp(logits - tl.max(logits, axis=0))
+    scores = scores / tl.sum(tl.where(expert_valid, scores, 0.0), axis=0)
+    remaining = tl.where(expert_valid, scores, -float('inf'))
+    expert0 = tl.argmax(remaining, axis=0)
+    weight0 = tl.max(remaining, axis=0)
+    remaining = tl.where(expert_offsets == expert0, -float('inf'), remaining)
+    expert1 = tl.argmax(remaining, axis=0)
+    weight1 = tl.max(remaining, axis=0)
+    if RENORMALIZE:
+        weight_sum = weight0 + weight1
+        weight0 = weight0 / weight_sum
+        weight1 = weight1 / weight_sum
+    h = tl.arange(0, BLOCK_H)
+    i = tl.arange(0, BLOCK_I)
+    h_mask = h < hidden_size
+    i_mask = i < intermediate_size
+    x = tl.load(x_ptr + token * hidden_size + h, mask=h_mask, other=0.0).to(tl.float16)
+    expert_base0 = expert0 * 2 * intermediate_size * hidden_size
+    gate_w0 = tl.load(w1_ptr + expert_base0 + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    up_w0 = tl.load(w1_ptr + expert_base0 + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    gate0 = tl.sum(gate_w0 * x[None, :], axis=1).to(tl.float16)
+    up0 = tl.sum(up_w0 * x[None, :], axis=1).to(tl.float16)
+    act0 = gate0 * tl.sigmoid(gate0.to(tl.float32)).to(tl.float16) * up0
+    w20 = tl.load(w2_ptr + expert0 * hidden_size * intermediate_size + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
+    down0 = tl.sum(w20 * act0[None, :], axis=1).to(tl.float16) * weight0.to(tl.float16)
+    tl.store(contribution_ptr + (token * TOP_K + 0) * hidden_size + h, down0.to(tl.float16), mask=h_mask)
+    expert_base1 = expert1 * 2 * intermediate_size * hidden_size
+    gate_w1 = tl.load(w1_ptr + expert_base1 + i[:, None] * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    up_w1 = tl.load(w1_ptr + expert_base1 + (intermediate_size + i[:, None]) * hidden_size + h[None, :], mask=i_mask[:, None] & h_mask[None, :], other=0.0).to(tl.float16)
+    gate1 = tl.sum(gate_w1 * x[None, :], axis=1).to(tl.float16)
+    up1 = tl.sum(up_w1 * x[None, :], axis=1).to(tl.float16)
+    act1 = gate1 * tl.sigmoid(gate1.to(tl.float32)).to(tl.float16) * up1
+    w21 = tl.load(w2_ptr + expert1 * hidden_size * intermediate_size + h[:, None] * intermediate_size + i[None, :], mask=h_mask[:, None] & i_mask[None, :], other=0.0).to(tl.float16)
+    down1 = tl.sum(w21 * act1[None, :], axis=1).to(tl.float16) * weight1.to(tl.float16)
+    tl.store(contribution_ptr + (token * TOP_K + 1) * hidden_size + h, down1.to(tl.float16), mask=h_mask)
 
 @triton.jit
 def _moe_route_pack_kernel(logits_ptr, weights_ptr, counts_ptr, packed_routes_ptr, num_experts: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr, TOTAL_ROUTES: tl.constexpr):
@@ -214,7 +331,7 @@ class Model(nn.Module):
         nn.init.normal_(self.w1, std=0.02)
         nn.init.normal_(self.w2, std=0.02)
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'tiled_dot_fp16_reference', 'scalar_elementwise_fallback', 'expert_grouped_dot'}:
+        if profile['variant'] not in {'tiled_dot_fp16_reference', 'scalar_elementwise_fallback', 'expert_grouped_dot', 'fused_scalar_mlp', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
             raise ValueError(f"unsupported FusedMoE variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         self._ks_config = profile['config']
@@ -222,9 +339,11 @@ class Model(nn.Module):
     def forward(self, hidden_states: torch.Tensor, router_logits: torch.Tensor):
         num_tokens = hidden_states.shape[0]
         ids = None
-        if self._ks_variant != 'expert_grouped_dot':
+        if self._ks_variant not in {'expert_grouped_dot', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
             ids = torch.empty((num_tokens, self.top_k), device=hidden_states.device, dtype=torch.int32)
-        route_weights = torch.empty((num_tokens, self.top_k), device=hidden_states.device, dtype=hidden_states.dtype)
+        route_weights = None
+        if self._ks_variant not in {'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+            route_weights = torch.empty((num_tokens, self.top_k), device=hidden_states.device, dtype=hidden_states.dtype)
         block_e = triton.next_power_of_2(self.num_experts)
         total_routes = num_tokens * self.top_k
         block_experts = None
@@ -240,7 +359,7 @@ class Model(nn.Module):
             counts_host = packed_counts.cpu().tolist()
             block_experts_host = []
             block_starts_host = []
-            for (expert, count) in enumerate(counts_host):
+            for expert, count in enumerate(counts_host):
                 for start in range(0, int(count), group_block_routes):
                     block_experts_host.append(expert)
                     block_starts_host.append(start)
@@ -248,20 +367,36 @@ class Model(nn.Module):
                 raise ValueError('route compaction produced no expert blocks')
             block_experts = torch.tensor(block_experts_host, device=hidden_states.device, dtype=torch.int32)
             block_starts = torch.tensor(block_starts_host, device=hidden_states.device, dtype=torch.int32)
+        elif self._ks_variant in {'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+            if self.top_k != 2:
+                raise ValueError('fused_route_scalar_mlp requires top_k == 2')
         else:
             _moe_route_kernel[num_tokens,](router_logits, ids, route_weights, self.num_experts, TOP_K=self.top_k, RENORMALIZE=self.renormalize, BLOCK_E=block_e, num_warps=int(self._ks_config['route_num_warps']))
-        act = torch.empty((num_tokens, self.top_k, self.intermediate_size), device=hidden_states.device, dtype=hidden_states.dtype)
         block_h = triton.next_power_of_2(self.hidden_size)
         block_i = triton.next_power_of_2(self.intermediate_size)
         if self._ks_variant == 'expert_grouped_dot':
+            act = torch.empty((num_tokens, self.top_k, self.intermediate_size), device=hidden_states.device, dtype=hidden_states.dtype)
             _moe_gate_up_grouped_kernel[len(block_experts_host),](hidden_states, packed_routes, packed_counts, block_experts, block_starts, self.w1, act, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, TOTAL_ROUTES=total_routes, BLOCK_R=group_block_routes, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['group_gate_num_warps']))
+        elif self._ks_variant == 'fused_route_scalar_mlp_unrolled':
+            contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
+            _moe_fused_route_scalar_mlp_unrolled_kernel[num_tokens,](router_logits, hidden_states, self.w1, self.w2, contributions, self.num_experts, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, RENORMALIZE=self.renormalize, BLOCK_E=block_e, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
+        elif self._ks_variant == 'fused_route_scalar_mlp':
+            contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
+            _moe_fused_route_scalar_mlp_kernel[num_tokens,](router_logits, hidden_states, self.w1, self.w2, contributions, self.num_experts, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, RENORMALIZE=self.renormalize, BLOCK_E=block_e, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
+        elif self._ks_variant == 'fused_scalar_mlp':
+            contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
+            _moe_fused_scalar_mlp_kernel[num_tokens, self.top_k](hidden_states, ids, route_weights, self.w1, self.w2, contributions, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
         else:
+            act = torch.empty((num_tokens, self.top_k, self.intermediate_size), device=hidden_states.device, dtype=hidden_states.dtype)
             gate_up_kernel = _moe_gate_up_scalar_kernel if self._ks_variant == 'scalar_elementwise_fallback' else _moe_gate_up_kernel
             gate_up_kernel[num_tokens, self.top_k](hidden_states, ids, self.w1, act, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['gate_up_num_warps']))
-        contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
         if self._ks_variant == 'expert_grouped_dot':
+            contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
             _moe_down_grouped_kernel[len(block_experts_host),](packed_routes, packed_counts, block_experts, block_starts, act, route_weights, self.w2, contributions, self.hidden_size, self.intermediate_size, TOTAL_ROUTES=total_routes, BLOCK_R=group_block_routes, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['group_down_num_warps']))
+        elif self._ks_variant in {'fused_scalar_mlp', 'fused_route_scalar_mlp', 'fused_route_scalar_mlp_unrolled'}:
+            pass
         else:
+            contributions = torch.empty((num_tokens, self.top_k, self.hidden_size), device=hidden_states.device, dtype=hidden_states.dtype)
             down_kernel = _moe_down_scalar_kernel if self._ks_variant == 'scalar_elementwise_fallback' else _moe_down_kernel
             down_kernel[num_tokens, self.top_k](act, ids, route_weights, self.w2, contributions, self.hidden_size, self.intermediate_size, TOP_K=self.top_k, BLOCK_H=block_h, BLOCK_I=block_i, num_warps=int(self._ks_config['down_num_warps']))
         out = torch.empty_like(hidden_states)

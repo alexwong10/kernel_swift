@@ -1,70 +1,55 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "02_fused_moe",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/iluvatar_bi150/02_fused_moe.py",
-    "artifact_sha256":  "235ea66e091980ad27618c01ee1c490f406a9591a38b879cf7cc7fe4b99b301e",
-    "sources":  {
-                    "triton_kernels/02_fused_moe.py":  "38e7c2aa793eb9ddb3db914319b8eeda7a9de6d750074be51308faabaf17bcc0",
-                    "profiles/operators/02_fused_moe.json":  "820dabc7d5ee9af151a02ccd82a7d9bf604bb7085be0076fcbab3916fca62a80",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
-                },
-    "profile":  {
-                    "variant":  "scalar_elementwise_fallback",
-                    "config":  {
-                                   "route_num_warps":  1,
-                                   "gate_up_num_warps":  1,
-                                   "down_num_warps":  1,
-                                   "reduce_block":  256,
-                                   "reduce_num_warps":  4,
-                                   "group_block_routes":  32,
-                                   "group_gate_num_warps":  4,
-                                   "group_down_num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "02_fused_moe",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "02_fused_moe",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "b0039e3ba861565c87383df3b1b9810c1fbf6a81",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\02_fused_moe.py",
+  "artifact_sha256": "2372bc39da10c0b6003ade89ace30e92244f8618d19e3e12bf7322cc54ec5909",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "8e3a2a0a1465fcee3e1fa3143e3653c7ad54af22201202b2cf16f17e29eaab4a",
+    "profiles/operators/02_fused_moe.json": "7a99fc853df55b941d37298223f46aa82e4089f7c8ee6e5156d6a5bf03740406",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
+  },
+  "profile": {
+    "variant": "fused_route_scalar_mlp_unrolled",
+    "config": {
+      "route_num_warps": 2,
+      "gate_up_num_warps": 2,
+      "down_num_warps": 1,
+      "reduce_block": 512,
+      "reduce_num_warps": 2
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "iluvatar_bi150",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "corex_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
 }
