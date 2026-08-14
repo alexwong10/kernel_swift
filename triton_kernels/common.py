@@ -30,6 +30,7 @@ def _linear_kernel(
     stride_on: tl.constexpr,
     HAS_BIAS: tl.constexpr,
     EPILOGUE: tl.constexpr,
+    INPUT_FP16: tl.constexpr,
     BLOCK_M: tl.constexpr,
     BLOCK_N: tl.constexpr,
     BLOCK_K: tl.constexpr,
@@ -54,6 +55,9 @@ def _linear_kernel(
             mask=(offs_n[None, :] < n_size) & (k[:, None] < k_size),
             other=0.0,
         )
+        if INPUT_FP16:
+            a = a.to(tl.float16)
+            w = w.to(tl.float16)
         acc += tl.dot(a, w)
 
     if HAS_BIAS:
@@ -109,6 +113,7 @@ def triton_linear(
         out.stride(1),
         HAS_BIAS=bias is not None,
         EPILOGUE=1 if log1p_relu else 0,
+        INPUT_FP16=config.get("input_dtype") == "fp16",
         BLOCK_M=block_m,
         BLOCK_N=block_n,
         BLOCK_K=block_k,

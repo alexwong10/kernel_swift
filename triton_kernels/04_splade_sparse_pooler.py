@@ -104,6 +104,8 @@ class ModelNew(nn.Module):
         }
         if "linear_num_stages" in config:
             self._ks_linear_config["num_stages"] = int(config["linear_num_stages"])
+        if "linear_input_dtype" in config:
+            self._ks_linear_config["input_dtype"] = config["linear_input_dtype"]
         self._ks_layer_norm_config = {
             "num_warps_small": int(config["layer_norm_num_warps_small"]),
             "num_warps_large": int(config["layer_norm_num_warps_large"]),
