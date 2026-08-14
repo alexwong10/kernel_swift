@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from common import triton_attention
 
@@ -32,7 +31,7 @@ class ModelNew(nn.Module):
         self.scale = scale or 1.0 / (head_size**0.5)
         self.num_kv_heads = num_kv_heads
         profile = get_operator_profile("03_flex_attention")
-        if profile["variant"] not in {"tiled_online_softmax", "native_sdpa"}:
+        if profile["variant"] != "tiled_online_softmax":
             raise ValueError(f"unsupported FlexAttention variant: {profile['variant']}")
         self._ks_attention_config = profile["config"]
         self._ks_variant = profile["variant"]
@@ -48,16 +47,6 @@ class ModelNew(nn.Module):
             )
             value = value[:, :, None, :].expand(-1, -1, repeat, -1).reshape(
                 num_tokens, self.num_heads, self.head_size
-            )
-        if self._ks_variant == "native_sdpa":
-            q = query.unsqueeze(0).transpose(1, 2)
-            k = key.unsqueeze(0).transpose(1, 2)
-            v = value.unsqueeze(0).transpose(1, 2)
-            out = F.scaled_dot_product_attention(
-                q, k, v, scale=self.scale, is_causal=True
-            )
-            return out.squeeze(0).transpose(0, 1).reshape(
-                num_tokens, self.num_heads * self.head_size
             )
         q = query.unsqueeze(0)
         k = key.unsqueeze(0)

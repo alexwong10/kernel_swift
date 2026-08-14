@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
+  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
   "artifact": "upload_artifacts\\ascend_a2_910b\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "8ec46cc8ee848bd64d94b11a90c1264ec71fe4c03f2cea6c6dec7cf85b70c3c8",
   "sources": {

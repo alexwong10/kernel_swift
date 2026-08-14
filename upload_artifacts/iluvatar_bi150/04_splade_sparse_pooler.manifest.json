@@ -3,25 +3,25 @@
   "builder_version": 4,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
+  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
   "artifact": "upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "aa71ad4c7d1e226b31190a1a1c693f3dddc2bf59081d77a9792143da88e8edad",
+  "artifact_sha256": "2cbfd061d966d6d9351333128e92930fa6e9038d451e323cae06775b86e174c8",
   "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "285328dead87ec484bc927282d3b0c7b06ebd82e1d213b12b7adf35ab0d003bf",
-    "profiles/operators/04_splade_sparse_pooler.json": "f9f911885a0896a8fad0def6d99ba79e8908dce577df1d4f98576319500da0b2",
+    "triton_kernels/04_splade_sparse_pooler.py": "ef6bd111bc87680ba2dc24e75bfd7196ea197b00a6c2b9d9fea82c00ac0f2d7c",
+    "profiles/operators/04_splade_sparse_pooler.json": "3e7b2a9744a84984f009d576ea342742348aa5fc2d72da6566d5d19d85530f8c",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
-    "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
+    "triton_kernels/common.py": "5328930100d896e85ff8d0461045aea58ce9ad04b046cea5c1980d985e96d8d6"
   },
   "profile": {
-    "variant": "native_pytorch",
+    "variant": "staged_portable",
     "config": {
-      "linear_block_m": 16,
+      "linear_block_m": 64,
       "linear_block_n": 64,
-      "linear_block_k": 32,
-      "linear_num_warps": 4,
+      "linear_block_k": 16,
+      "linear_num_warps": 8,
       "layer_norm_num_warps_small": 4,
       "layer_norm_num_warps_large": 8,
-      "pool_block_t": 32,
+      "pool_block_t": 64,
       "pool_block_v": 128,
       "pool_num_warps": 4
     },

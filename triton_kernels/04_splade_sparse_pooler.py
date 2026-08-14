@@ -1,10 +1,9 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import triton
 import triton.language as tl
 
-from common import gelu_layer_norm, triton_linear
+from common import gelu_layer_norm, triton_decoder_pool, triton_linear
 
 _KS_PROFILE = {
     "task_key": "04_splade_sparse_pooler",
@@ -93,7 +92,7 @@ class ModelNew(nn.Module):
         self.decoder = nn.Linear(hidden_size, vocab_size, bias=True)
         self.pooling = pooling
         profile = get_operator_profile("04_splade_sparse_pooler")
-        if profile["variant"] not in {"staged_portable", "native_pytorch"}:
+        if profile["variant"] not in {"staged_portable", "fused_pool"}:
             raise ValueError(f"unsupported SPLADE variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
         config = profile["config"]
@@ -112,21 +111,15 @@ class ModelNew(nn.Module):
             "block_v": int(config["pool_block_v"]),
             "num_warps": int(config["pool_num_warps"]),
         }
+        self._ks_fused_config = {
+            "block_t": int(config.get("fused_block_t", 16)),
+            "block_v": int(config.get("fused_block_v", 64)),
+            "block_k": int(config.get("fused_block_k", 16)),
+            "max_seq": int(config.get("fused_max_seq", 32)),
+            "num_warps": int(config.get("fused_num_warps", 8)),
+        }
 
     def forward(self, hidden_states: torch.Tensor, seq_lens: torch.Tensor) -> list:
-        if self._ks_variant == "native_pytorch":
-            x = self.decoder(self.layer_norm(self.act(self.dense(hidden_states))))
-            x = torch.log1p(F.relu(x))
-            result = []
-            offset = 0
-            for length in seq_lens.tolist():
-                chunk = x[offset : offset + length]
-                if self.pooling == "max":
-                    result.append(chunk.max(dim=0).values)
-                else:
-                    result.append(chunk.sum(dim=0))
-                offset += length
-            return result
         dense = triton_linear(
             hidden_states,
             self.dense.weight,
@@ -140,6 +133,16 @@ class ModelNew(nn.Module):
             self.layer_norm.eps,
             config=self._ks_layer_norm_config,
         )
+        if self._ks_variant == "fused_pool":
+            pooled = triton_decoder_pool(
+                normalized,
+                self.decoder.weight,
+                self.decoder.bias,
+                seq_lens,
+                pooling=self.pooling,
+                config=self._ks_fused_config,
+            )
+            return [pooled[index] for index in range(pooled.shape[0])]
         logits = triton_linear(
             normalized,
             self.decoder.weight,

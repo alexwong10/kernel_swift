@@ -3,19 +3,20 @@
   "builder_version": 4,
   "task_key": "03_flex_attention",
   "chip_key": "enflame_s60",
-  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
+  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
   "artifact": "upload_artifacts\\enflame_s60\\03_flex_attention.py",
-  "artifact_sha256": "6f22efc241e55de95006b1b8d5d4e0b0d0b58482a9bbfcd894ee99d8d1bb58d1",
+  "artifact_sha256": "194fc681b13521f197cdbce1709c875e1a5a9cfb80e12db68f882e10f1c69f6f",
   "sources": {
-    "triton_kernels/03_flex_attention.py": "26251767c45b8375743bde6b18f919ede46e4aa245f404e0fd345a521933ae09",
-    "profiles/operators/03_flex_attention.json": "ed7ff6941e70c4da917bbc39a25aa486d040e2def4777138656a80fc11069a7b",
+    "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
+    "profiles/operators/03_flex_attention.json": "c2f305232c4ce6345053a44ebf9a7c21729bb7ebeff4e8399a42009f8b97d5eb",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
-    "triton_kernels/common.py": "78920223ffec6f18cbd2cf31cbc98b71168319e1b5106ab9eebf0795ea083aaa"
+    "triton_kernels/common.py": "5328930100d896e85ff8d0461045aea58ce9ad04b046cea5c1980d985e96d8d6"
   },
   "profile": {
     "variant": "tiled_online_softmax",
     "config": {
       "num_warps": 8,
+      "block_m": 16,
       "block_n": 64
     },
     "schema_version": 1,
@@ -55,19 +56,19 @@
     ],
     "replacements": [
       {
-        "line": 79,
+        "line": 68,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 80,
+        "line": 69,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 81,
+        "line": 70,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"

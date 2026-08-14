@@ -3,7 +3,7 @@
   "builder_version": 4,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "thead_810e",
-  "source_commit": "42338f9050b607bd231feb4776b9abe5dfce8104",
+  "source_commit": "5551c90f2cf5ceac8545b225159450080fb96acc",
   "artifact": "upload_artifacts\\thead_810e\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "ac2588375d6b2e83c1ca5b0041a4596dbcad4ad44de5019b43dd1850e5e842bc",
   "sources": {

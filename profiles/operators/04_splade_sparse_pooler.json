@@ -18,7 +18,21 @@
   "chips": {
     "ascend_a2_910b": {"verified": false, "overrides": {}},
     "metax_c500": {"verified": false, "overrides": {}},
-    "iluvatar_bi150": {"verified": true, "overrides": {"variant": "native_pytorch"}},
+    "iluvatar_bi150": {
+      "verified": true,
+      "overrides": {
+        "variant": "staged_portable",
+        "config": {
+          "linear_block_m": 64,
+          "linear_block_n": 64,
+          "linear_block_k": 16,
+          "linear_num_warps": 8,
+          "pool_block_t": 64,
+          "pool_block_v": 128,
+          "pool_num_warps": 4
+        }
+      }
+    },
     "enflame_s60": {
       "verified": false,
       "overrides": {"config": {"linear_block_n": 128}}

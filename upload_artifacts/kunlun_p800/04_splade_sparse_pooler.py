@@ -2,7 +2,6 @@
 # task_key=04_splade_sparse_pooler chip_key=kunlun_p800 builder_version=4
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import triton
 import triton.language as tl
 import torch
@@ -44,6 +43,61 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     grid = (triton.cdiv(m_size, block_m), triton.cdiv(n_size, block_n))
     bias_arg = bias if bias is not None else weight
     _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, num_warps=int(config['num_warps']))
+    return out
+
+@triton.jit
+def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr, batch_size: tl.constexpr, total_tokens: tl.constexpr, hidden_size: tl.constexpr, vocab_size: tl.constexpr, MAX_SEQ: tl.constexpr, POOL_MAX: tl.constexpr, BLOCK_T: tl.constexpr, BLOCK_V: tl.constexpr, BLOCK_K: tl.constexpr):
+    """Fuse decoder projection, log1p(ReLU), and sequence pooling.
+
+    The decoder is the dominant SPLADE stage.  Keeping the token tile in
+    registers avoids writing the full [total_tokens, vocab] activation only
+    to read it again in a second pooling kernel.
+    """
+    sequence = tl.program_id(0)
+    vocab_block = tl.program_id(1)
+    start = 0
+    for index in range(batch_size):
+        item_length = tl.load(seq_lens_ptr + index).to(tl.int32)
+        start += tl.where(index < sequence, item_length, 0)
+    length = tl.load(seq_lens_ptr + sequence).to(tl.int32)
+    vocab = vocab_block * BLOCK_V + tl.arange(0, BLOCK_V)
+    vocab_valid = vocab < vocab_size
+    if POOL_MAX:
+        pooled = tl.full((BLOCK_V,), -float('inf'), tl.float32)
+    else:
+        pooled = tl.zeros((BLOCK_V,), tl.float32)
+    for token_start in range(0, MAX_SEQ, BLOCK_T):
+        token = token_start + tl.arange(0, BLOCK_T)
+        token_valid = (token < length) & (start + token < total_tokens)
+        acc = tl.zeros((BLOCK_T, BLOCK_V), tl.float32)
+        for k_start in range(0, hidden_size, BLOCK_K):
+            k = k_start + tl.arange(0, BLOCK_K)
+            hidden = tl.load(hidden_ptr + (start + token[:, None]) * hidden_size + k[None, :], mask=token_valid[:, None] & (k[None, :] < hidden_size), other=0.0)
+            weight = tl.load(weight_ptr + vocab[None, :] * hidden_size + k[:, None], mask=vocab_valid[None, :] & (k[:, None] < hidden_size), other=0.0)
+            acc += tl.dot(hidden, weight)
+        bias = tl.load(bias_ptr + vocab, mask=vocab_valid, other=0.0)
+        logits = tl.log(1.0 + tl.maximum(acc + bias[None, :], 0.0))
+        if POOL_MAX:
+            logits = tl.where(token_valid[:, None] & vocab_valid[None, :], logits, -float('inf'))
+            pooled = tl.maximum(pooled, tl.max(logits, axis=0))
+        else:
+            logits = tl.where(token_valid[:, None] & vocab_valid[None, :], logits, 0.0)
+            pooled += tl.sum(logits, axis=0)
+    tl.store(out_ptr + sequence * vocab_size + vocab, pooled, mask=vocab_valid)
+
+def triton_decoder_pool(hidden: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, seq_lens: torch.Tensor, *, pooling: str, config: dict[str, int]) -> torch.Tensor:
+    """Run the fused custom Triton SPLADE decoder/pooling stage."""
+    batch_size = int(seq_lens.numel())
+    total_tokens, hidden_size = hidden.shape
+    vocab_size = weight.shape[0]
+    block_t = int(config['block_t'])
+    block_v = int(config['block_v'])
+    block_k = int(config['block_k'])
+    max_seq = int(config['max_seq'])
+    if block_t <= 0 or block_v <= 0 or block_k <= 0 or (max_seq <= 0):
+        raise ValueError('invalid fused decoder tile configuration')
+    out = torch.empty((batch_size, vocab_size), device=hidden.device, dtype=hidden.dtype)
+    _decoder_pool_kernel[batch_size, triton.cdiv(vocab_size, block_v)](hidden, weight, bias, seq_lens, out, batch_size, total_tokens, hidden_size, vocab_size, MAX_SEQ=max_seq, POOL_MAX=pooling == 'max', BLOCK_T=block_t, BLOCK_V=block_v, BLOCK_K=block_k, num_warps=int(config['num_warps']))
     return out
 
 @triton.jit
@@ -99,6 +153,48 @@ def _attention_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.constexpr, q_
     result = result / running_norm
     tl.store(out_ptr + batch * stride_ob + q_index * stride_os + head * stride_oh + d * stride_od, result, mask=d_mask)
 
+@triton.jit
+def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.constexpr, q_len: tl.constexpr, kv_len: tl.constexpr, num_heads: tl.constexpr, head_dim: tl.constexpr, scale, stride_qb: tl.constexpr, stride_qs: tl.constexpr, stride_qh: tl.constexpr, stride_qd: tl.constexpr, stride_kb: tl.constexpr, stride_ks: tl.constexpr, stride_kh: tl.constexpr, stride_kd: tl.constexpr, stride_vb: tl.constexpr, stride_vs: tl.constexpr, stride_vh: tl.constexpr, stride_vd: tl.constexpr, stride_ob: tl.constexpr, stride_os: tl.constexpr, stride_oh: tl.constexpr, stride_od: tl.constexpr, CAUSAL: tl.constexpr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_D: tl.constexpr):
+    """Fused attention for a tile of queries.
+
+    One program owns BLOCK_M queries for one batch/head pair.  K/V tiles are
+    streamed through an online softmax, so the kernel never materializes the
+    score matrix and launches far fewer programs than the scalar-query
+    implementation above.
+    """
+    query_block = tl.program_id(0)
+    head = tl.program_id(1)
+    batch = tl.program_id(2)
+    q_index = query_block * BLOCK_M + tl.arange(0, BLOCK_M)
+    d = tl.arange(0, BLOCK_D)
+    q_valid = q_index < q_len
+    d_valid = d < head_dim
+    q = tl.load(q_ptr + batch * stride_qb + q_index[:, None] * stride_qs + head * stride_qh + d[None, :] * stride_qd, mask=q_valid[:, None] & d_valid[None, :], other=0.0)
+    running_max = tl.full((BLOCK_M,), -float('inf'), tl.float32)
+    running_norm = tl.zeros((BLOCK_M,), tl.float32)
+    result = tl.zeros((BLOCK_M, BLOCK_D), tl.float32)
+    for n_start in range(0, kv_len, BLOCK_N):
+        n_index = n_start + tl.arange(0, BLOCK_N)
+        n_valid = n_index < kv_len
+        k = tl.load(k_ptr + batch * stride_kb + n_index[:, None] * stride_ks + head * stride_kh + d[None, :] * stride_kd, mask=n_valid[:, None] & d_valid[None, :], other=0.0)
+        scores = tl.dot(q, tl.trans(k)) * scale
+        valid = q_valid[:, None] & n_valid[None, :]
+        if CAUSAL:
+            valid = valid & (n_index[None, :] <= q_index[:, None])
+        scores = tl.where(valid, scores, -float('inf'))
+        tile_max = tl.max(scores, axis=1)
+        tile_max = tl.where(q_valid, tile_max, 0.0)
+        next_max = tl.maximum(running_max, tile_max)
+        next_max = tl.where(q_valid, next_max, 0.0)
+        old_scale = tl.where(q_valid, tl.exp(running_max - next_max), 0.0)
+        probs = tl.where(valid, tl.exp(scores - next_max[:, None]), 0.0)
+        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_valid[:, None] & d_valid[None, :], other=0.0).to(tl.float32)
+        result = result * old_scale[:, None] + tl.dot(probs, v)
+        running_norm = running_norm * old_scale + tl.sum(probs, axis=1)
+        running_max = next_max
+    result = result / running_norm[:, None]
+    tl.store(out_ptr + batch * stride_ob + q_index[:, None] * stride_os + head * stride_oh + d[None, :] * stride_od, result, mask=q_valid[:, None] & d_valid[None, :])
+
 def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, *, scale: float, causal: bool, config: dict[str, int]) -> torch.Tensor:
     """Attention for contiguous logical [B, S, H, D] tensors/views."""
     batch_size, q_len, num_heads, head_dim = query.shape
@@ -110,11 +206,14 @@ def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor
     if key.shape[2] != num_heads or key.shape[3] != head_dim:
         raise ValueError('query/key/value heads and head dimensions must match')
     out = torch.empty_like(query)
+    block_m = int(config.get('block_m', 16))
     block_n = int(config.get('block_n', 64))
+    if block_m <= 0:
+        raise ValueError('attention block_m must be positive')
     if block_n <= 0:
         raise ValueError('attention block_n must be positive')
     block_d = triton.next_power_of_2(head_dim)
-    _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
     return out
 
 @triton.jit
@@ -152,30 +251,21 @@ class Model(nn.Module):
         self.decoder = nn.Linear(hidden_size, vocab_size, bias=True)
         self.pooling = pooling
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'staged_portable', 'native_pytorch'}:
+        if profile['variant'] not in {'staged_portable', 'fused_pool'}:
             raise ValueError(f"unsupported SPLADE variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         config = profile['config']
         self._ks_linear_config = {'block_m': int(config['linear_block_m']), 'block_n': int(config['linear_block_n']), 'block_k': int(config['linear_block_k']), 'num_warps': int(config['linear_num_warps'])}
         self._ks_layer_norm_config = {'num_warps_small': int(config['layer_norm_num_warps_small']), 'num_warps_large': int(config['layer_norm_num_warps_large'])}
         self._ks_pool_config = {'block_t': int(config['pool_block_t']), 'block_v': int(config['pool_block_v']), 'num_warps': int(config['pool_num_warps'])}
+        self._ks_fused_config = {'block_t': int(config.get('fused_block_t', 16)), 'block_v': int(config.get('fused_block_v', 64)), 'block_k': int(config.get('fused_block_k', 16)), 'max_seq': int(config.get('fused_max_seq', 32)), 'num_warps': int(config.get('fused_num_warps', 8))}
 
     def forward(self, hidden_states: torch.Tensor, seq_lens: torch.Tensor) -> list:
-        if self._ks_variant == 'native_pytorch':
-            x = self.decoder(self.layer_norm(self.act(self.dense(hidden_states))))
-            x = torch.log1p(F.relu(x))
-            result = []
-            offset = 0
-            for length in seq_lens.tolist():
-                chunk = x[offset:offset + length]
-                if self.pooling == 'max':
-                    result.append(chunk.max(dim=0).values)
-                else:
-                    result.append(chunk.sum(dim=0))
-                offset += length
-            return result
         dense = triton_linear(hidden_states, self.dense.weight, self.dense.bias, config=self._ks_linear_config)
         normalized = gelu_layer_norm(dense, self.layer_norm.weight, self.layer_norm.bias, self.layer_norm.eps, config=self._ks_layer_norm_config)
+        if self._ks_variant == 'fused_pool':
+            pooled = triton_decoder_pool(normalized, self.decoder.weight, self.decoder.bias, seq_lens, pooling=self.pooling, config=self._ks_fused_config)
+            return [pooled[index] for index in range(pooled.shape[0])]
         logits = triton_linear(normalized, self.decoder.weight, self.decoder.bias, log1p_relu=True, config=self._ks_linear_config)
         batch_size = seq_lens.numel()
         vocab_size = logits.shape[1]

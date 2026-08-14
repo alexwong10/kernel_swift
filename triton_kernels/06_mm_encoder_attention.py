@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from common import triton_attention
 
@@ -26,7 +25,7 @@ class ModelNew(nn.Module):
         self.num_kv_heads = num_kv_heads
         self.scale = 1.0 / (head_size**0.5)
         profile = get_operator_profile("06_mm_encoder_attention")
-        if profile["variant"] not in {"tiled_online_softmax", "native_sdpa"}:
+        if profile["variant"] != "tiled_online_softmax":
             raise ValueError(f"unsupported MMEncoderAttention variant: {profile['variant']}")
         self._ks_attention_config = profile["config"]
         self._ks_variant = profile["variant"]
@@ -51,16 +50,6 @@ class ModelNew(nn.Module):
             v = v[:, :, :, None, :].expand(
                 batch_size, kv_len, self.num_kv_heads, repeat, self.head_size
             ).reshape(batch_size, kv_len, self.num_heads, self.head_size)
-        if self._ks_variant == "native_sdpa":
-            q_native = q.transpose(1, 2)
-            k_native = k.transpose(1, 2)
-            v_native = v.transpose(1, 2)
-            out = F.scaled_dot_product_attention(
-                q_native, k_native, v_native, scale=self.scale
-            )
-            return out.transpose(1, 2).reshape(
-                batch_size, q_len, self.num_heads * self.head_size
-            )
         out = triton_attention(
             q,
             k,
