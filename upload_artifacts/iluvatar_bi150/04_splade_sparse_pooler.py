@@ -7,7 +7,7 @@ import triton.language as tl
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 128, 'linear_block_n': 128, 'linear_block_k': 16, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 8, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 2, 'linear_num_stages': 1, 'linear_input_dtype': 'fp16', 'dense_block_m': 32, 'dense_block_n': 64, 'dense_block_k': 16, 'dense_num_warps': 8, 'dense_num_stages': 1}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'iluvatar_bi150', 'verified': True}
+_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 128, 'linear_block_n': 128, 'linear_block_k': 16, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 4, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 2, 'linear_num_stages': 1, 'linear_input_dtype': 'fp16', 'dense_block_m': 32, 'dense_block_n': 64, 'dense_block_k': 16, 'dense_num_warps': 8, 'dense_num_stages': 1}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'iluvatar_bi150', 'verified': True}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
