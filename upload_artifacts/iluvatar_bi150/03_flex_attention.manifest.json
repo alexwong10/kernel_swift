@@ -1,66 +1,55 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "03_flex_attention",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/iluvatar_bi150/03_flex_attention.py",
-    "artifact_sha256":  "ee8c58c5d2c3c9fb3a466f39dd58fed44cc510573aafef7e0fbc29f78b5ccbe6",
-    "sources":  {
-                    "triton_kernels/03_flex_attention.py":  "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-                    "profiles/operators/03_flex_attention.json":  "c1daddf61ba10227d18b0fe8294527c96924cdbf5b321b976e947ee7822aac85",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
-                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
-                },
-    "profile":  {
-                    "variant":  "tiled_online_softmax",
-                    "config":  {
-                                   "num_warps":  4,
-                                   "block_m":  64,
-                                   "block_n":  128
-                               },
-                    "schema_version":  1,
-                    "task_key":  "03_flex_attention",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "03_flex_attention",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "aa0a8edae813d385fca6d3e85eafc5dbdf480de0",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\03_flex_attention.py",
+  "artifact_sha256": "db068f08dc35f8683ba6c33ab04f9b3292eb89e819dce2d198ceede204d1404e",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
+    "profiles/operators/03_flex_attention.json": "b1924b1ee9c9625d04da7f8d7866932b4e6f410ca3fa18877bc11acaadc49784",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
+    "triton_kernels/common.py": "a3caf9ed09dc5645254fa42f19abe17f30fcc22ed945b4ad7ffeef3bc1ba24a0"
+  },
+  "profile": {
+    "variant": "tiled_online_softmax",
+    "config": {
+      "num_warps": 1,
+      "block_m": 64,
+      "block_n": 128,
+      "implementation": "scalar_online"
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "iluvatar_bi150",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "corex_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
 }
