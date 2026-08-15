@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "0e6eb55886e369431fbb21bc68294a0bfb6b083b",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "19bbb80bcfc664f38cdca0ca5affa7e30d0688f80b9169a0d8f2404780506429",
+  "source_commit": "420054cb045484a3b7432d62eaadffc91e68206d",
+  "artifact": "upload_artifacts\\iluvatar_bi150\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "5297588d4bbf93d466344480b3bee67eac12e6ed7086f8312362d7b931b63e13",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "46af2cce102510097db061270332dd7a773479c677104da48e8e3d6bcd23af47",
-    "profiles/operators/04_splade_sparse_pooler.json": "1150f2c48eeaa7ed2eaa6ba14517a81807a458824d7ff7b59efa0e56ffb1dfe3",
+    "profiles/operators/04_splade_sparse_pooler.json": "e343aaad4a99d1469882223d6be2db7154c74f4295f7081a3f6c71db05992401",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
     "triton_kernels/common.py": "a3caf9ed09dc5645254fa42f19abe17f30fcc22ed945b4ad7ffeef3bc1ba24a0"
   },
@@ -16,9 +16,9 @@
     "variant": "staged_portable",
     "config": {
       "linear_block_m": 128,
-      "linear_block_n": 64,
+      "linear_block_n": 128,
       "linear_block_k": 16,
-      "linear_num_warps": 8,
+      "linear_num_warps": 4,
       "layer_norm_num_warps_small": 4,
       "layer_norm_num_warps_large": 8,
       "pool_block_t": 32,
