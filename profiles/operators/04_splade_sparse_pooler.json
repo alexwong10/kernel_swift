@@ -9,7 +9,7 @@
       "linear_block_k": 32,
       "linear_num_warps": 8,
       "layer_norm_num_warps_small": 4,
-      "layer_norm_num_warps_large": 8,
+      "layer_norm_num_warps_large": 4,
       "pool_block_t": 32,
       "pool_block_v": 128,
       "pool_num_warps": 4
