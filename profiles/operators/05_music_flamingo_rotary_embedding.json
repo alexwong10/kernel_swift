@@ -17,7 +17,7 @@
         "config": {"block_pair": 32, "num_warps": 1}
       }
     },
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "paired_tiled_frequency", "config": {"block_pair": 32, "num_warps": 1}}},
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {"config": {"block_channel": 128, "num_warps": 1}}

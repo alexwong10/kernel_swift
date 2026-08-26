@@ -16,7 +16,7 @@
         "config": {"num_warps": 4}
       }
     },
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "fused_all_mixes", "config": {"num_warps": 8}}},
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {"variant": "fused_all_mixes", "config": {"num_warps": 8}}

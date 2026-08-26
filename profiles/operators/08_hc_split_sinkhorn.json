@@ -13,7 +13,7 @@
       "verified": false,
       "overrides": {"variant": "scalar_hc4", "config": {"num_warps": 1}}
     },
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "scalar_hc4", "config": {"num_warps": 1}}},
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {"variant": "matrix_reduce", "config": {"num_warps": 2}}

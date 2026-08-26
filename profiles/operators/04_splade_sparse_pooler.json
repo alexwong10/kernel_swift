@@ -34,7 +34,7 @@
         }
       }
     },
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "staged_portable", "config": {"linear_block_m": 128, "linear_block_n": 1024, "linear_block_k": 256, "linear_num_warps": 4, "linear_num_stages": 1, "linear_input_dtype": "fp16", "dense_block_m": 128, "dense_block_n": 1024, "dense_block_k": 256, "dense_num_warps": 4, "dense_num_stages": 1, "pool_block_t": 32, "pool_block_v": 1024, "pool_num_warps": 2}}},
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {

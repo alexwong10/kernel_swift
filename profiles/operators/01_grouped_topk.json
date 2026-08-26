@@ -25,7 +25,7 @@
       "verified": false,
       "overrides": {"variant": "register_reduce", "config": {"num_warps": 4}}
     },
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "register_reduce", "config": {"num_warps": 1}}},
     "iluvatar_bi150": {"verified": true, "overrides": {"config": {"num_warps": 1}}},
     "enflame_s60": {"verified": true, "overrides": {"variant": "register_reduce", "config": {"num_warps": 1}}},
     "thead_810e": {"verified": false, "overrides": {}},

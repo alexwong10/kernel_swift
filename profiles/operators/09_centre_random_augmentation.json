@@ -14,7 +14,7 @@
         }
       }
     },
-    "metax_c500": {"verified": false, "overrides": {}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "fused_center_geometry", "config": {"center_num_warps": 4, "augment_block_atoms": 256, "augment_num_warps": 1, "fused_block_atoms": 256, "fused_num_warps": 1}}},
     "iluvatar_bi150": {
       "verified": true,
       "overrides": {
