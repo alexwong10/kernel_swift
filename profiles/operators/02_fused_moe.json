@@ -20,7 +20,20 @@
     }
   },
   "chips": {
-    "ascend_a2_910b": {"verified": false, "overrides": {}},
+    "ascend_a2_910b": {
+      "verified": false,
+      "overrides": {
+        "variant": "expert_grouped_dot",
+        "config": {
+          "route_num_warps": 1,
+          "group_block_routes": 32,
+          "group_gate_num_warps": 4,
+          "group_down_num_warps": 4,
+          "reduce_block": 256,
+          "reduce_num_warps": 4
+        }
+      }
+    },
     "metax_c500": {
       "verified": false,
       "overrides": {

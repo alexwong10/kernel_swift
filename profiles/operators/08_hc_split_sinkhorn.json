@@ -9,7 +9,10 @@
     ]
   },
   "chips": {
-    "ascend_a2_910b": {"verified": false, "overrides": {}},
+    "ascend_a2_910b": {
+      "verified": false,
+      "overrides": {"variant": "scalar_hc4", "config": {"num_warps": 1}}
+    },
     "metax_c500": {"verified": false, "overrides": {}},
     "iluvatar_bi150": {
       "verified": true,
