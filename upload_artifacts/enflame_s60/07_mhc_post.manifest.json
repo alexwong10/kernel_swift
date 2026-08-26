@@ -1,65 +1,60 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "07_mhc_post",
-    "chip_key":  "enflame_s60",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/enflame_s60/07_mhc_post.py",
-    "artifact_sha256":  "fb03f70c630a9d907480bb6ae09dd8fc4cdad98d9d810996edff9c3db4cd9017",
-    "sources":  {
-                    "triton_kernels/07_mhc_post.py":  "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
-                    "profiles/operators/07_mhc_post.json":  "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
-                    "profiles/chips/enflame_s60.json":  "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
-                },
-    "profile":  {
-                    "variant":  "tiled_hidden",
-                    "config":  {
-                                   "block_hidden":  256,
-                                   "block_tokens":  4,
-                                   "num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "07_mhc_post",
-                    "chip_key":  "enflame_s60",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "enflame_s60",
-                         "vendor":  "鐕у師",
-                         "model":  "S60",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "torch_gcu",
-                                         "torch_device":  "gcu",
-                                         "accelerator_module":  "gcu",
-                                         "bootstrap_imports":  [
-                                                                   "torch_gcu"
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "gcu",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_matches"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "07_mhc_post",
+  "chip_key": "enflame_s60",
+  "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\07_mhc_post.py",
+  "artifact_sha256": "1b5a7b94cff398f0961dcbb735b2d4f9aec3cc0df8583954eeac07652e9dc6c3",
+  "sources": {
+    "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
+    "profiles/operators/07_mhc_post.json": "62aa46575790d631ed071f1ec9dd093f5f387bf00eafb2aa1f84c7706241aac1",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "fused_mix_tiled",
+    "config": {
+      "block_hidden": 256,
+      "block_tokens": 32,
+      "num_warps": 1,
+      "block_mixes": 4
+    },
+    "schema_version": 1,
+    "task_key": "07_mhc_post",
+    "chip_key": "enflame_s60",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "gcu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [],
+    "status": "no_matches"
+  }
 }

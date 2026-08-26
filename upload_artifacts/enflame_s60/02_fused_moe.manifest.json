@@ -1,81 +1,74 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "02_fused_moe",
-    "chip_key":  "enflame_s60",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/enflame_s60/02_fused_moe.py",
-    "artifact_sha256":  "dfa6c291f340d492b0da2ccb72518ce4c12a165ac059c9f6e17b6ab458507503",
-    "sources":  {
-                    "triton_kernels/02_fused_moe.py":  "38e7c2aa793eb9ddb3db914319b8eeda7a9de6d750074be51308faabaf17bcc0",
-                    "profiles/operators/02_fused_moe.json":  "820dabc7d5ee9af151a02ccd82a7d9bf604bb7085be0076fcbab3916fca62a80",
-                    "profiles/chips/enflame_s60.json":  "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
-                },
-    "profile":  {
-                    "variant":  "scalar_elementwise_fallback",
-                    "config":  {
-                                   "route_num_warps":  1,
-                                   "gate_up_num_warps":  4,
-                                   "down_num_warps":  4,
-                                   "reduce_block":  256,
-                                   "reduce_num_warps":  4,
-                                   "group_block_routes":  32,
-                                   "group_gate_num_warps":  4,
-                                   "group_down_num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "02_fused_moe",
-                    "chip_key":  "enflame_s60",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "enflame_s60",
-                         "vendor":  "鐕у師",
-                         "model":  "S60",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "torch_gcu",
-                                         "torch_device":  "gcu",
-                                         "accelerator_module":  "gcu",
-                                         "bootstrap_imports":  [
-                                                                   "torch_gcu"
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "gcu",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  651,
-                                                       "from":  "cuda",
-                                                       "to":  "gcu",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  652,
-                                                       "from":  "cuda",
-                                                       "to":  "gcu",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "02_fused_moe",
+  "chip_key": "enflame_s60",
+  "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\02_fused_moe.py",
+  "artifact_sha256": "d64ed14281d8709840633dd60a7ea33e1fbd8ea5cd0befa63c83100f6476c145",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "profiles/operators/02_fused_moe.json": "c6fbaeb827e0306bb94f7eb8c0ea0116ba83c8763296d97bc88de9fe0a936572",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
+  },
+  "profile": {
+    "variant": "fused_route_scalar_mlp_unrolled_direct",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 1,
+      "down_num_warps": 1,
+      "reduce_block": 256,
+      "reduce_num_warps": 1
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "enflame_s60",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "gcu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 1029,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 1030,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }

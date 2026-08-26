@@ -1,83 +1,80 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "03_flex_attention",
-    "chip_key":  "enflame_s60",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/enflame_s60/03_flex_attention.py",
-    "artifact_sha256":  "fa59a54bae2f9aa7864b0d1391d5477ec15521f02997118bc7cb2abcf61f9460",
-    "sources":  {
-                    "triton_kernels/03_flex_attention.py":  "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-                    "profiles/operators/03_flex_attention.json":  "c1daddf61ba10227d18b0fe8294527c96924cdbf5b321b976e947ee7822aac85",
-                    "profiles/chips/enflame_s60.json":  "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
-                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
-                },
-    "profile":  {
-                    "variant":  "tiled_online_softmax",
-                    "config":  {
-                                   "num_warps":  8,
-                                   "block_m":  16,
-                                   "block_n":  64
-                               },
-                    "schema_version":  1,
-                    "task_key":  "03_flex_attention",
-                    "chip_key":  "enflame_s60",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "enflame_s60",
-                         "vendor":  "鐕у師",
-                         "model":  "S60",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "torch_gcu",
-                                         "torch_device":  "gcu",
-                                         "accelerator_module":  "gcu",
-                                         "bootstrap_imports":  [
-                                                                   "torch_gcu"
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "gcu",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  68,
-                                                       "from":  "cuda",
-                                                       "to":  "gcu",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  69,
-                                                       "from":  "cuda",
-                                                       "to":  "gcu",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  70,
-                                                       "from":  "cuda",
-                                                       "to":  "gcu",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "03_flex_attention",
+  "chip_key": "enflame_s60",
+  "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\03_flex_attention.py",
+  "artifact_sha256": "99cc44d4b98ea4a11432ebc5f8c8835f692d94314970632cd8241967f9ab1e4c",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
+    "profiles/operators/03_flex_attention.json": "9ed5cf7019e4642a512707ba61449de086683165a65a3309b123ca9d8c9ff239",
+    "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1",
+    "triton_kernels/common.py": "3190a4c30bc376b9e6dac9a6299d635dc66eb4f8948af69ac6d655e29e1fdecf"
+  },
+  "profile": {
+    "variant": "tiled_online_softmax",
+    "config": {
+      "num_warps": 1,
+      "block_m": 64,
+      "block_n": 128,
+      "implementation": "tiled"
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "enflame_s60",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "enflame_s60",
+    "vendor": "燧原",
+    "model": "S60",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_gcu",
+      "torch_device": "gcu",
+      "accelerator_module": "gcu",
+      "bootstrap_imports": [
+        "torch_gcu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "gcu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 69,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 70,
+        "from": "cuda",
+        "to": "gcu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }
