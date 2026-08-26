@@ -6,11 +6,11 @@ import torch.nn as nn
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 8, 'block_m': 16, 'block_n': 64}, 'schema_version': 1, 'task_key': '06_mm_encoder_attention', 'chip_key': 'ascend_a2_910b', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 4, 'block_m': 32, 'block_n': 128}, 'schema_version': 1, 'task_key': '06_mm_encoder_attention', 'chip_key': 'ascend_a2_910b', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
-def _linear_kernel(a_ptr, w_ptr, bias_ptr, out_ptr, m_size: tl.constexpr, n_size: tl.constexpr, k_size: tl.constexpr, stride_am: tl.constexpr, stride_ak: tl.constexpr, stride_wn: tl.constexpr, stride_wk: tl.constexpr, stride_om: tl.constexpr, stride_on: tl.constexpr, HAS_BIAS: tl.constexpr, EPILOGUE: tl.constexpr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr):
+def _linear_kernel(a_ptr, w_ptr, bias_ptr, out_ptr, m_size: tl.constexpr, n_size: tl.constexpr, k_size: tl.constexpr, stride_am: tl.constexpr, stride_ak: tl.constexpr, stride_wn: tl.constexpr, stride_wk: tl.constexpr, stride_om: tl.constexpr, stride_on: tl.constexpr, HAS_BIAS: tl.constexpr, EPILOGUE: tl.constexpr, INPUT_FP16: tl.constexpr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr):
     pid_m = tl.program_id(0)
     pid_n = tl.program_id(1)
     offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
@@ -21,6 +21,9 @@ def _linear_kernel(a_ptr, w_ptr, bias_ptr, out_ptr, m_size: tl.constexpr, n_size
         k = k0 + offs_k
         a = tl.load(a_ptr + offs_m[:, None] * stride_am + k[None, :] * stride_ak, mask=(offs_m[:, None] < m_size) & (k[None, :] < k_size), other=0.0)
         w = tl.load(w_ptr + offs_n[None, :] * stride_wn + k[:, None] * stride_wk, mask=(offs_n[None, :] < n_size) & (k[:, None] < k_size), other=0.0)
+        if INPUT_FP16:
+            a = a.to(tl.float16)
+            w = w.to(tl.float16)
         acc += tl.dot(a, w)
     if HAS_BIAS:
         bias = tl.load(bias_ptr + offs_n, mask=offs_n < n_size, other=0.0)
@@ -44,7 +47,7 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     launch_kwargs = {'num_warps': int(config['num_warps'])}
     if 'num_stages' in config:
         launch_kwargs['num_stages'] = int(config['num_stages'])
-    _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, **launch_kwargs)
+    _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, INPUT_FP16=config.get('input_dtype') == 'fp16', BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, **launch_kwargs)
     return out
 
 @triton.jit
@@ -216,9 +219,15 @@ def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor
         raise ValueError('attention block_n must be positive')
     block_d = triton.next_power_of_2(head_dim)
     if config.get('implementation', 'tiled') == 'scalar_online':
-        _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+        launch_kwargs = {'num_warps': int(config['num_warps'])}
+        if 'num_stages' in config:
+            launch_kwargs['num_stages'] = int(config['num_stages'])
+        _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, **launch_kwargs)
         return out
-    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+    launch_kwargs = {'num_warps': int(config['num_warps'])}
+    if 'num_stages' in config:
+        launch_kwargs['num_stages'] = int(config['num_stages'])
+    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, **launch_kwargs)
     return out
 
 class Model(nn.Module):

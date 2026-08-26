@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'framework_rng_tiled_geometry', 'config': {'center_num_warps': 4, 'augment_block_atoms': 64, 'augment_num_warps': 4}, 'schema_version': 1, 'task_key': '09_centre_random_augmentation', 'chip_key': 'ascend_a2_910b', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'fused_center_geometry', 'config': {'center_num_warps': 4, 'augment_block_atoms': 64, 'augment_num_warps': 4, 'fused_block_atoms': 256, 'fused_num_warps': 4}, 'schema_version': 1, 'task_key': '09_centre_random_augmentation', 'chip_key': 'ascend_a2_910b', 'verified': False}
 
 @triton.jit
 def _center_kernel(coords_ptr, mask_ptr, center_ptr, n_atoms: tl.constexpr, HAS_MASK: tl.constexpr, EPS: tl.constexpr, BLOCK: tl.constexpr):
@@ -93,6 +93,60 @@ def _augment_tiled_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_p
     tl.store(out_ptr + output + 1, y1, mask=valid)
     tl.store(out_ptr + output + 2, y2, mask=valid)
 
+@triton.jit
+def _augment_fused_center_kernel(coords_ptr, mask_ptr, u1_ptr, u2_ptr, u3_ptr, translation_ptr, out_ptr, n_atoms: tl.constexpr, HAS_MASK: tl.constexpr, CENTRE_ONLY: tl.constexpr, EPS: tl.constexpr, BLOCK_A: tl.constexpr):
+    """Fuse weighted centering and one sample's geometry transform.
+
+    The coordinate tile is loaded once per sample.  Its three component sums
+    reproduce the standalone center kernel's FP32 reduction, while keeping the
+    center in registers for the subsequent rotation/translation stores.
+    """
+    sample = tl.program_id(0)
+    atom = tl.program_id(1) * BLOCK_A + tl.arange(0, BLOCK_A)
+    valid = atom < n_atoms
+    base = atom * 3
+    x0 = tl.load(coords_ptr + base, mask=valid, other=0.0).to(tl.float32)
+    x1 = tl.load(coords_ptr + base + 1, mask=valid, other=0.0).to(tl.float32)
+    x2 = tl.load(coords_ptr + base + 2, mask=valid, other=0.0).to(tl.float32)
+    if HAS_MASK:
+        weight = tl.load(mask_ptr + atom, mask=valid, other=0.0).to(tl.float32)
+    else:
+        weight = tl.where(valid, 1.0, 0.0)
+    weight_sum = tl.sum(weight, axis=0) + EPS
+    center0 = tl.sum(x0 * weight, axis=0) / weight_sum
+    center1 = tl.sum(x1 * weight, axis=0) / weight_sum
+    center2 = tl.sum(x2 * weight, axis=0) / weight_sum
+    x0 -= center0
+    x1 -= center1
+    x2 -= center2
+    if CENTRE_ONLY:
+        (y0, y1, y2) = (x0, x1, x2)
+    else:
+        u1 = tl.load(u1_ptr + sample).to(tl.float32)
+        u2 = tl.load(u2_ptr + sample).to(tl.float32)
+        u3 = tl.load(u3_ptr + sample).to(tl.float32)
+        qx = tl.sqrt(1.0 - u1) * tl.sin(6.283185307179586 * u2)
+        qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
+        qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
+        qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
+        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
+        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
+        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
+        y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
+        y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
+        y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
+        y0 += tl.load(translation_ptr + sample * 3).to(tl.float32)
+        y1 += tl.load(translation_ptr + sample * 3 + 1).to(tl.float32)
+        y2 += tl.load(translation_ptr + sample * 3 + 2).to(tl.float32)
+        if HAS_MASK:
+            y0 *= weight
+            y1 *= weight
+            y2 *= weight
+    output = sample * n_atoms * 3 + base
+    tl.store(out_ptr + output, y0, mask=valid)
+    tl.store(out_ptr + output + 1, y1, mask=valid)
+    tl.store(out_ptr + output + 2, y2, mask=valid)
+
 class Model(nn.Module):
 
     def __init__(self, n_sample: int=1, s_trans: float=1.0, centre_only: bool=False):
@@ -101,17 +155,18 @@ class Model(nn.Module):
         self.s_trans = s_trans
         self.centre_only = centre_only
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'framework_rng_triton_geometry', 'framework_rng_tiled_geometry'}:
+        if profile['variant'] not in {'framework_rng_triton_geometry', 'framework_rng_tiled_geometry', 'fused_center_geometry'}:
             raise ValueError(f"unsupported CentreRandomAugmentation variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         self._ks_config = profile['config']
 
     def forward(self, x_input_coords: torch.Tensor, mask: Optional[torch.Tensor]=None) -> torch.Tensor:
         n_atoms = x_input_coords.shape[0]
-        center = torch.empty(3, device=x_input_coords.device, dtype=torch.float32)
         mask_arg = mask if mask is not None else x_input_coords
         block_atoms = triton.next_power_of_2(n_atoms)
-        _center_kernel[3,](x_input_coords, mask_arg, center, n_atoms, HAS_MASK=mask is not None, EPS=1e-12, BLOCK=block_atoms, num_warps=int(self._ks_config['center_num_warps']))
+        if self._ks_variant != 'fused_center_geometry':
+            center = torch.empty(3, device=x_input_coords.device, dtype=torch.float32)
+            _center_kernel[3,](x_input_coords, mask_arg, center, n_atoms, HAS_MASK=mask is not None, EPS=1e-12, BLOCK=block_atoms, num_warps=int(self._ks_config['center_num_warps']))
         if self.centre_only:
             u1 = u2 = u3 = translation = x_input_coords
         else:
@@ -120,7 +175,12 @@ class Model(nn.Module):
             u3 = torch.rand(self.n_sample, device=x_input_coords.device, dtype=x_input_coords.dtype)
             translation = self.s_trans * torch.randn(self.n_sample, 3, device=x_input_coords.device, dtype=x_input_coords.dtype)
         out = torch.empty((self.n_sample, n_atoms, 3), device=x_input_coords.device, dtype=x_input_coords.dtype)
-        if self._ks_variant == 'framework_rng_tiled_geometry':
+        if self._ks_variant == 'fused_center_geometry':
+            fused_block = int(self._ks_config.get('fused_block_atoms', block_atoms))
+            if fused_block <= 0:
+                raise ValueError('fused_block_atoms must be positive')
+            _augment_fused_center_kernel[self.n_sample, triton.cdiv(n_atoms, fused_block)](x_input_coords, mask_arg, u1, u2, u3, translation, out, n_atoms, HAS_MASK=mask is not None, CENTRE_ONLY=self.centre_only, EPS=1e-12, BLOCK_A=fused_block, num_warps=int(self._ks_config.get('fused_num_warps', 1)))
+        elif self._ks_variant == 'framework_rng_tiled_geometry':
             block_atoms = int(self._ks_config['augment_block_atoms'])
             if block_atoms <= 0:
                 raise ValueError('augment_block_atoms must be positive')

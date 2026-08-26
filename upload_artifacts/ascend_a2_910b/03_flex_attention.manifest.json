@@ -1,83 +1,79 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "03_flex_attention",
-    "chip_key":  "ascend_a2_910b",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/ascend_a2_910b/03_flex_attention.py",
-    "artifact_sha256":  "345833c6e8af68baf492550fabf251c0c1a9caf216f16fd0fffad84eda417a44",
-    "sources":  {
-                    "triton_kernels/03_flex_attention.py":  "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-                    "profiles/operators/03_flex_attention.json":  "c1daddf61ba10227d18b0fe8294527c96924cdbf5b321b976e947ee7822aac85",
-                    "profiles/chips/ascend_a2_910b.json":  "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834",
-                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
-                },
-    "profile":  {
-                    "variant":  "tiled_online_softmax",
-                    "config":  {
-                                   "num_warps":  8,
-                                   "block_m":  16,
-                                   "block_n":  64
-                               },
-                    "schema_version":  1,
-                    "task_key":  "03_flex_attention",
-                    "chip_key":  "ascend_a2_910b",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "ascend_a2_910b",
-                         "vendor":  "华为昇腾",
-                         "model":  "A2（910B）",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "torch_npu",
-                                         "torch_device":  "npu",
-                                         "accelerator_module":  "npu",
-                                         "bootstrap_imports":  [
-                                                                   "torch_npu"
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "npu",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  68,
-                                                       "from":  "cuda",
-                                                       "to":  "npu",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  69,
-                                                       "from":  "cuda",
-                                                       "to":  "npu",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  70,
-                                                       "from":  "cuda",
-                                                       "to":  "npu",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "03_flex_attention",
+  "chip_key": "ascend_a2_910b",
+  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
+  "artifact": "upload_artifacts\\ascend_a2_910b\\03_flex_attention.py",
+  "artifact_sha256": "cf52c274010e48f75b665a1a09541a34421ec4ec8fa235873273f74a8955d67f",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
+    "profiles/operators/03_flex_attention.json": "48224ebc0e67e5494b47c77d10f50892332aedf3d15fcaa6385d4f1df7e618f2",
+    "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834",
+    "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
+  },
+  "profile": {
+    "variant": "tiled_online_softmax",
+    "config": {
+      "num_warps": 4,
+      "block_m": 32,
+      "block_n": 128
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "ascend_a2_910b",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "ascend_a2_910b",
+    "vendor": "华为昇腾",
+    "model": "A2（910B）",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_npu",
+      "torch_device": "npu",
+      "accelerator_module": "npu",
+      "bootstrap_imports": [
+        "torch_npu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "npu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 69,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      },
+      {
+        "line": 70,
+        "from": "cuda",
+        "to": "npu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }
