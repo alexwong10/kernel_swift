@@ -1,74 +1,70 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "08_hc_split_sinkhorn",
-    "chip_key":  "hygon_bw1000",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/hygon_bw1000/08_hc_split_sinkhorn.py",
-    "artifact_sha256":  "dd1d5cebd96162399a64e3cd4664b770d206dc25ba5ef23cc980c982cb50c97a",
-    "sources":  {
-                    "triton_kernels/08_hc_split_sinkhorn.py":  "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-                    "profiles/operators/08_hc_split_sinkhorn.json":  "d6560dc86d0d603ffb7c203f1b2ec3c2719175bb7f0017c916f96c29a32aad83",
-                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
-                },
-    "profile":  {
-                    "variant":  "scalar_hc4",
-                    "config":  {
-                                   "num_warps":  1
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "matrix_reduce",
-                                                  "config":  {
-                                                                 "num_warps":  1
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "08_hc_split_sinkhorn",
-                    "chip_key":  "hygon_bw1000",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "hygon_bw1000",
-                         "vendor":  "娴峰厜",
-                         "model":  "BW1000",
-                         "resource":  "user_provided_target_environment",
-                         "runtime":  {
-                                         "family":  "hygon_dtk_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-                                                             "fp16":  "observed",
-                                                             "fp32":  "observed"
-                                                         },
-                                              "primitives":  {
-                                                                 "torch_cuda":  "observed",
-                                                                 "triton":  "observed",
-                                                                 "synchronize":  "observed"
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_matches"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "hygon_bw1000",
+  "source_commit": "8797aab2bca81033504e96ecfbf4f76762b39785",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "d5f9127b4bf41db350024f37a175dc6136ab0e78cf2622e943d4fe00dc743f5d",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
+    "profiles/operators/08_hc_split_sinkhorn.json": "9387f2b54b093dff2d6a8e6e9a00daf6f02cbe0da285568cd390fc6fc25d71f1",
+    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
+  },
+  "profile": {
+    "variant": "scalar_hc4",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "hygon_bw1000",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "hygon_bw1000",
+    "vendor": "海光",
+    "model": "BW1000",
+    "resource": "user_provided_target_environment",
+    "runtime": {
+      "family": "hygon_dtk_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [],
+    "status": "no_matches"
+  }
 }

@@ -1,84 +1,79 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "02_fused_moe",
-    "chip_key":  "hygon_bw1000",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/hygon_bw1000/02_fused_moe.py",
-    "artifact_sha256":  "21ba87a49a54fe91d3b3a98df78dc5b265c5540dda657aaaf62e67bde9bc886e",
-    "sources":  {
-                    "triton_kernels/02_fused_moe.py":  "38e7c2aa793eb9ddb3db914319b8eeda7a9de6d750074be51308faabaf17bcc0",
-                    "profiles/operators/02_fused_moe.json":  "820dabc7d5ee9af151a02ccd82a7d9bf604bb7085be0076fcbab3916fca62a80",
-                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
-                },
-    "profile":  {
-                    "variant":  "scalar_elementwise_fallback",
-                    "config":  {
-                                   "route_num_warps":  1,
-                                   "gate_up_num_warps":  4,
-                                   "down_num_warps":  4,
-                                   "reduce_block":  256,
-                                   "reduce_num_warps":  4,
-                                   "group_block_routes":  32,
-                                   "group_gate_num_warps":  4,
-                                   "group_down_num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "02_fused_moe",
-                    "chip_key":  "hygon_bw1000",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "hygon_bw1000",
-                         "vendor":  "娴峰厜",
-                         "model":  "BW1000",
-                         "resource":  "user_provided_target_environment",
-                         "runtime":  {
-                                         "family":  "hygon_dtk_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-                                                             "fp16":  "observed",
-                                                             "fp32":  "observed"
-                                                         },
-                                              "primitives":  {
-                                                                 "torch_cuda":  "observed",
-                                                                 "triton":  "observed",
-                                                                 "synchronize":  "observed"
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  651,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  652,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "02_fused_moe",
+  "chip_key": "hygon_bw1000",
+  "source_commit": "8797aab2bca81033504e96ecfbf4f76762b39785",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\02_fused_moe.py",
+  "artifact_sha256": "efa594bba47f2bc4255f89155e2fb721d2f515c7d48537e1aa5ffc4e974c9d85",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
+    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
+  },
+  "profile": {
+    "variant": "fused_route_scalar_mlp_unrolled_direct",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "hygon_bw1000",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "hygon_bw1000",
+    "vendor": "海光",
+    "model": "BW1000",
+    "resource": "user_provided_target_environment",
+    "runtime": {
+      "family": "hygon_dtk_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 1029,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 1030,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }

@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_hidden', 'config': {'block_hidden': 256, 'block_tokens': 4, 'num_warps': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'hygon_bw1000', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'fused_mix_tiled', 'config': {'block_hidden': 512, 'block_tokens': 2, 'num_warps': 4, 'block_mixes': 4}, 'schema_version': 1, 'task_key': '07_mhc_post', 'chip_key': 'hygon_bw1000', 'verified': False}
 
 @triton.jit
 def _mhc_post_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, out_ptr, hidden_size: tl.constexpr, mhc_mult: tl.constexpr, total: tl.constexpr, BLOCK: tl.constexpr):
@@ -61,8 +61,9 @@ def _mhc_post_fused_mix_kernel(x_ptr, residual_ptr, post_mix_ptr, comb_mix_ptr, 
     accumulation and bf16 store.
     """
     token = tl.program_id(0) * BLOCK_TOKENS + tl.arange(0, BLOCK_TOKENS)
-    hidden_tile = tl.program_id(1)
-    out_mix = tl.arange(0, BLOCK_MIXES)
+    mix_block = tl.program_id(1)
+    hidden_tile = tl.program_id(2)
+    out_mix = mix_block * BLOCK_MIXES + tl.arange(0, BLOCK_MIXES)
     hidden = hidden_tile * BLOCK_H + tl.arange(0, BLOCK_H)
     token_mask = token < token_count
     hidden_mask = hidden < hidden_size
@@ -110,7 +111,7 @@ class Model(nn.Module):
             if block_hidden <= 0 or block_tokens <= 0 or block_mixes <= 0:
                 raise ValueError('invalid fused mhc_post tile configuration')
             token_count = x.numel() // hidden_size
-            _mhc_post_fused_mix_kernel[triton.cdiv(token_count, block_tokens), triton.cdiv(hidden_size, block_hidden)](kernel_x, kernel_residual, kernel_post, kernel_comb, out, hidden_size, mhc_mult, token_count, BLOCK_H=block_hidden, BLOCK_TOKENS=block_tokens, BLOCK_MIXES=block_mixes, num_warps=int(self._ks_config['num_warps']))
+            _mhc_post_fused_mix_kernel[triton.cdiv(token_count, block_tokens), triton.cdiv(mhc_mult, block_mixes), triton.cdiv(hidden_size, block_hidden)](kernel_x, kernel_residual, kernel_post, kernel_comb, out, hidden_size, mhc_mult, token_count, BLOCK_H=block_hidden, BLOCK_TOKENS=block_tokens, BLOCK_MIXES=block_mixes, num_warps=int(self._ks_config['num_warps']))
         elif self._ks_variant in {'tiled_hidden', 'fp32_input_tiled'}:
             block_hidden = int(self._ks_config['block_hidden'])
             block_tokens = int(self._ks_config.get('block_tokens', 1))
@@ -127,7 +128,7 @@ class Model(nn.Module):
         return out
 
 def get_inputs():
-    (n0, n1, hidden_size, mhc_mult) = (2, 4096, 1280, 4)
+    n0, n1, hidden_size, mhc_mult = (2, 4096, 1280, 4)
     x = torch.randn((n0, n1, hidden_size), dtype=torch.bfloat16)
     residual = torch.randn((n0, n1, mhc_mult, hidden_size), dtype=torch.bfloat16)
     post_layer_mix = torch.randn((n0, n1, mhc_mult, 1), dtype=torch.float32)

@@ -75,7 +75,7 @@
     "hygon_bw1000": {
       "verified": false,
       "overrides": {
-        "variant": "scalar_elementwise_fallback",
+        "variant": "fused_route_scalar_mlp_unrolled_direct",
         "config": {
           "route_num_warps": 1,
           "gate_up_num_warps": 4,

@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_frequency', 'config': {'block_channel': 128, 'num_warps': 4}, 'schema_version': 1, 'task_key': '05_music_flamingo_rotary_embedding', 'chip_key': 'hygon_bw1000', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'paired_tiled_frequency', 'config': {'block_channel': 128, 'num_warps': 1, 'block_pair': 32}, 'schema_version': 1, 'task_key': '05_music_flamingo_rotary_embedding', 'chip_key': 'hygon_bw1000', 'verified': False}
 
 @triton.jit
 def _music_rope_kernel(timestamps_ptr, inv_freq_ptr, position_angles_ptr, cos_ptr, sin_ptr, seq_len: tl.constexpr, dim: tl.constexpr, max_seq_len: tl.constexpr, total: tl.constexpr, BLOCK: tl.constexpr):
@@ -125,7 +125,7 @@ class Model(nn.Module):
         return (cos, sin)
 
 def get_inputs():
-    (batch_size, seq_len) = (4, 32)
+    batch_size, seq_len = (4, 32)
     timestamps = torch.rand(batch_size, seq_len, device='cuda')
     return [timestamps, seq_len]
 

@@ -1,86 +1,84 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "04_splade_sparse_pooler",
-    "chip_key":  "hygon_bw1000",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/hygon_bw1000/04_splade_sparse_pooler.py",
-    "artifact_sha256":  "c964933d9e58aac5c4aa5d7ace65830bfb1d62cc23c33df3c945c00b4600348f",
-    "sources":  {
-                    "triton_kernels/04_splade_sparse_pooler.py":  "16bbb01f4febf58f76c831ee6cf6b089390f76589f03b628f669ae0d220efe56",
-                    "profiles/operators/04_splade_sparse_pooler.json":  "a14b6171a23dfdf99147f67c183c48ea3e4d646d471ba48e711746a7c30ea4c8",
-                    "profiles/chips/hygon_bw1000.json":  "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
-                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
-                },
-    "profile":  {
-                    "variant":  "staged_portable",
-                    "config":  {
-                                   "linear_block_m":  64,
-                                   "linear_block_n":  128,
-                                   "linear_block_k":  32,
-                                   "linear_num_warps":  8,
-                                   "layer_norm_num_warps_small":  4,
-                                   "layer_norm_num_warps_large":  8,
-                                   "pool_block_t":  32,
-                                   "pool_block_v":  128,
-                                   "pool_num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "04_splade_sparse_pooler",
-                    "chip_key":  "hygon_bw1000",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "hygon_bw1000",
-                         "vendor":  "娴峰厜",
-                         "model":  "BW1000",
-                         "resource":  "user_provided_target_environment",
-                         "runtime":  {
-                                         "family":  "hygon_dtk_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-                                                             "fp16":  "observed",
-                                                             "fp32":  "observed"
-                                                         },
-                                              "primitives":  {
-                                                                 "torch_cuda":  "observed",
-                                                                 "triton":  "observed",
-                                                                 "synchronize":  "observed"
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  177,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  178,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "04_splade_sparse_pooler",
+  "chip_key": "hygon_bw1000",
+  "source_commit": "8797aab2bca81033504e96ecfbf4f76762b39785",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "b06c113ffde80fc7a2edc37a045bf4315409b1fdbd3715fe998549fd3dfcad6f",
+  "sources": {
+    "triton_kernels/04_splade_sparse_pooler.py": "46af2cce102510097db061270332dd7a773479c677104da48e8e3d6bcd23af47",
+    "profiles/operators/04_splade_sparse_pooler.json": "d32eeebc16c74d31fe9d423bb6f4157549d50eb04f44388b36d7c9043c02abe4",
+    "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772",
+    "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
+  },
+  "profile": {
+    "variant": "staged_portable",
+    "config": {
+      "linear_block_m": 64,
+      "linear_block_n": 128,
+      "linear_block_k": 32,
+      "linear_num_warps": 8,
+      "layer_norm_num_warps_small": 4,
+      "layer_norm_num_warps_large": 4,
+      "pool_block_t": 32,
+      "pool_block_v": 128,
+      "pool_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "hygon_bw1000",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "hygon_bw1000",
+    "vendor": "海光",
+    "model": "BW1000",
+    "resource": "user_provided_target_environment",
+    "runtime": {
+      "family": "hygon_dtk_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 184,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 185,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }
