@@ -1,74 +1,65 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "10_head_compute_mix_bwd",
-    "chip_key":  "biren_br106m",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/cambricon_mlu590_m9d/05_music_flamingo_rotary_embedding.py",
-    "artifact_sha256":  "a7c566ed82de7136936fc5c8478ff6840ef20f36065063fc415b745e4ff6ac57",
-    "sources":  {
-                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
-                    "profiles/operators/10_head_compute_mix_bwd.json":  "b8e04e0cf845625154942a290200efedbebcc6dd4604c05d38aa6d577023a4a0",
-                    "profiles/chips/biren_br106m.json":  "411db1945beb0121c8b1cfcf5e90e593bf71e0f97691616d4ea2ada98c14876b"
-                },
-    "profile":  {
-                    "variant":  "tiled_mix_chunked",
-                    "config":  {
-                                   "block_rows":  256,
-                                   "block_mixes":  4,
-                                   "num_warps":  4,
-                                   "reduce_num_warps":  1
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "single_block_reduce",
-                                                  "config":  {
-                                                                 "num_warps":  8
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "10_head_compute_mix_bwd",
-                    "chip_key":  "biren_br106m",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "biren_br106m",
-                         "vendor":  "澹佷粸",
-                         "model":  "BR106M",
-                         "resource":  "self_hosted_required",
-                         "runtime":  {
-                                         "family":  "biren_supa",
-                                         "torch_device":  "supa",
-                                         "accelerator_module":  "torch_br",
-                                         "bootstrap_imports":  [
-                                                                   "torch_br"
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "blocked_missing_triton_backend",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "supa",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_matches"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "cambricon_mlu590_m9d",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\cambricon_mlu590_m9d\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "18a4a51ee280cd5cf95edd2cf51c273c8ec281aa52965c51cc41f80281d5f5c0",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "f93dc5e6d077e551dfc0c3c38d87b6dfa608b9cf2ff423c83d3a1f6938e6e5b5",
+    "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
+  },
+  "profile": {
+    "variant": "tiled_frequency",
+    "config": {
+      "block_channel": 128,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "cambricon_mlu590_m9d",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "cambricon_mlu590_m9d",
+    "vendor": "寒武纪",
+    "model": "MLU590-M9D",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "torch_mlu",
+      "torch_device": "mlu",
+      "accelerator_module": "mlu",
+      "bootstrap_imports": [
+        "torch_mlu"
+      ],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "mlu",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 241,
+        "from": "cuda",
+        "to": "mlu",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }

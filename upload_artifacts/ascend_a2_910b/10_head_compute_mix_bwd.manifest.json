@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\ascend_a2_910b\\10_head_compute_mix_bwd.py",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\ascend_a2_910b\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "2b6c00dc1cd8d5adc767689d48d5756848ea9898db916d376911e76c23978412",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",

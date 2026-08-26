@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\ascend_a2_910b\\01_grouped_topk.py",
-  "artifact_sha256": "940e05d2f677d43ae66657b742b4e3015cf9653eedfa1a1ed3f7dd6dc604ac5c",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\ascend_a2_910b\\01_grouped_topk.py",
+  "artifact_sha256": "c36cf4e21ae07af72b41ae17a24e856f91b0631e978ec7e5126d536bd41bd44c",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
-    "profiles/operators/01_grouped_topk.json": "63f8c7e04608b37dac464b73bda1209802bab48eb3c86ee31ce0f4b9d09d418b",
+    "profiles/operators/01_grouped_topk.json": "0ee5d386c5f0383c730ca99e44c7441540d72ba3a238aac461562b6437e44b1d",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {

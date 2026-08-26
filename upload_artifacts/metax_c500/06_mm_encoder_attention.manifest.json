@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "metax_c500",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\metax_c500\\06_mm_encoder_attention.py",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\06_mm_encoder_attention.py",
   "artifact_sha256": "40c137614e4e8b28023daf0262d7be1e031d762f2ea68f55b693bbfcd631e248",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",
-    "profiles/operators/06_mm_encoder_attention.json": "edee18db3b0dc8cddd8b7b6be2c865750f5a15843ca3df356522eff3ea42dfa7",
+    "profiles/operators/06_mm_encoder_attention.json": "e934dbf3c88c4baf49ad3e9279d5112c1eae8fc39b5a7846761ba80023e0c34b",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf",
     "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
   },

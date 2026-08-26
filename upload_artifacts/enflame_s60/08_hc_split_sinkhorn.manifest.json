@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "enflame_s60",
-  "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
   "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "fa0cedcbfa7628a37365f35c22f5214b4e9028075b15a72ccd44a9f1463a554c",
+  "artifact_sha256": "1bc5d9d563b3229d02223aa464a08a9f1a6bd92d4c753724a219a860429582bb",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-    "profiles/operators/08_hc_split_sinkhorn.json": "6d18f1b9f7036ef1f21740181da747eb13fbe64b35c045ffc1dfea329a5d0a2c",
+    "profiles/operators/08_hc_split_sinkhorn.json": "9387f2b54b093dff2d6a8e6e9a00daf6f02cbe0da285568cd390fc6fc25d71f1",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
   "profile": {

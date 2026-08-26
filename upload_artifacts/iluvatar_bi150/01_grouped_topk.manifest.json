@@ -1,71 +1,59 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "01_grouped_topk",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/iluvatar_bi150/01_grouped_topk.py",
-    "artifact_sha256":  "aecfa1b12adfdf11dea7def53c5c063369e8168df56b69a715d3f66796e628d1",
-    "sources":  {
-                    "triton_kernels/01_grouped_topk.py":  "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
-                    "profiles/operators/01_grouped_topk.json":  "81f2320d9c8adbc7ab20de651ebef74a69a0edeb6c0dbb139c866af7e33b4874",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
-                },
-    "profile":  {
-                    "variant":  "vector_reduce",
-                    "config":  {
-                                   "num_warps":  1
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "manual_stable",
-                                                  "config":  {
-                                                                 "num_warps":  4
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "01_grouped_topk",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "01_grouped_topk",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\01_grouped_topk.py",
+  "artifact_sha256": "c73ec0b353d2474b3342618e4d6d5faca205589b365d2fdd2cfce6ed86ad0a45",
+  "sources": {
+    "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
+    "profiles/operators/01_grouped_topk.json": "0ee5d386c5f0383c730ca99e44c7441540d72ba3a238aac461562b6437e44b1d",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
+  },
+  "profile": {
+    "variant": "vector_reduce",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "manual_stable",
+        "config": {
+          "num_warps": 4
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "01_grouped_topk",
+    "chip_key": "iluvatar_bi150",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "corex_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
 }

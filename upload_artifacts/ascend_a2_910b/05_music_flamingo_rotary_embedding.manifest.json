@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\ascend_a2_910b\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "ba0347e5607ba2ebc14452bfd2d4a1f5be3d74d6b2dbf691e8dbf87052c998fb",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\ascend_a2_910b\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "3082afe5643c1c68c6c8b62e7f60d0a6c72275662476c3dd8d37ed81b41a5eca",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "680787957501cc6268f83622695ba72802799b29d90376bac155b056c47bc663",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "f93dc5e6d077e551dfc0c3c38d87b6dfa608b9cf2ff423c83d3a1f6938e6e5b5",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {

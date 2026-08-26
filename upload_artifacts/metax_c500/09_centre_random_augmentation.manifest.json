@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "metax_c500",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\metax_c500\\09_centre_random_augmentation.py",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\09_centre_random_augmentation.py",
   "artifact_sha256": "c3cca16ff0056389ecba433a7660cad8e02f95260e2544417d774b8a9ba5bf82",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
-    "profiles/operators/09_centre_random_augmentation.json": "53fdc5538f86cfc9de96b564ad680ead13086b51d26c1ac2ffb2d0b818b0dc68",
+    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

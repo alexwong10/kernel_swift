@@ -1,89 +1,84 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "02_fused_moe",
-    "chip_key":  "moore_threads_ph100",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/moore_threads_ph100/02_fused_moe.py",
-    "artifact_sha256":  "af8ffe914b144fc3f898399214b5aa3e1438dea259fa5622f459fae650b52280",
-    "sources":  {
-                    "triton_kernels/02_fused_moe.py":  "38e7c2aa793eb9ddb3db914319b8eeda7a9de6d750074be51308faabaf17bcc0",
-                    "profiles/operators/02_fused_moe.json":  "820dabc7d5ee9af151a02ccd82a7d9bf604bb7085be0076fcbab3916fca62a80",
-                    "profiles/chips/moore_threads_ph100.json":  "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
-                },
-    "profile":  {
-                    "variant":  "scalar_elementwise_fallback",
-                    "config":  {
-                                   "route_num_warps":  1,
-                                   "gate_up_num_warps":  4,
-                                   "down_num_warps":  4,
-                                   "reduce_block":  256,
-                                   "reduce_num_warps":  4,
-                                   "group_block_routes":  32,
-                                   "group_gate_num_warps":  4,
-                                   "group_down_num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "02_fused_moe",
-                    "chip_key":  "moore_threads_ph100",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "moore_threads_ph100",
-                         "vendor":  "鎽╁皵绾跨▼",
-                         "model":  "PH100",
-                         "observed_device_name":  "MTT S5000",
-                         "device_mapping":  {
-                                                "status":  "confirmed_by_user",
-                                                "detail":  "This target reports MTT S5000 and is the competition PH100 resource."
-                                            },
-                         "resource":  "user_provided_target_environment",
-                         "runtime":  {
-                                         "family":  "torch_musa_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  "torch_musa",
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-                                                             "fp16":  "observed",
-                                                             "fp32":  "observed"
-                                                         },
-                                              "primitives":  {
-                                                                 "torch_cuda_alias":  "observed",
-                                                                 "triton":  "observed",
-                                                                 "synchronize":  "observed"
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  651,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  652,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "02_fused_moe",
+  "chip_key": "moore_threads_ph100",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\02_fused_moe.py",
+  "artifact_sha256": "b9fc368f976a3e074da9a288ca58dc29e0b3333879ad0d3cee897b6927da1128",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
+    "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
+  },
+  "profile": {
+    "variant": "scalar_elementwise_fallback",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "moore_threads_ph100",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "moore_threads_ph100",
+    "vendor": "摩尔线程",
+    "model": "PH100",
+    "observed_device_name": "MTT S5000",
+    "device_mapping": {
+      "status": "confirmed_by_user",
+      "detail": "This target reports MTT S5000 and is the competition PH100 resource."
+    },
+    "resource": "user_provided_target_environment",
+    "runtime": {
+      "family": "torch_musa_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": "torch_musa",
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda_alias": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 1029,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 1030,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }

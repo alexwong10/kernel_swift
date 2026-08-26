@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "07_mhc_post",
   "chip_key": "metax_c500",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\07_mhc_post.py",
   "artifact_sha256": "1e3f959c5847273cd1b00468569905ed4190e96bf2c1ea13ac104af3ba45279a",
   "sources": {
     "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
-    "profiles/operators/07_mhc_post.json": "8175702779b9e5247340b9b7490d390d73888cc5095743f1616c3f95656ef976",
+    "profiles/operators/07_mhc_post.json": "4988e1549de2da85ce902239a013aa2bdcee14812155e40fd346291c53f4cca4",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

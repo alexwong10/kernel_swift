@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "5875e5763fe0518ed12db10dd417cfd03364faee",
-  "artifact": "upload_artifacts\\iluvatar_bi150\\09_centre_random_augmentation.py",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\09_centre_random_augmentation.py",
   "artifact_sha256": "bde51b3471ac3c28dc9d3fb6f4578bbb9d0c92e01f770ab4dd372610549b2058",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
-    "profiles/operators/09_centre_random_augmentation.json": "b5548118e54ef708b688a185110d23fb3aff79fe0ce7dd6a17581981a470230d",
+    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {

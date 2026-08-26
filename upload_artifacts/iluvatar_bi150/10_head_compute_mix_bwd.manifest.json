@@ -1,74 +1,62 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "10_head_compute_mix_bwd",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/iluvatar_bi150/10_head_compute_mix_bwd.py",
-    "artifact_sha256":  "ecb49cdf066a5f3c2ce1af5714b7a8747ac02142ab30895b4679bb04f2da1f3b",
-    "sources":  {
-                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
-                    "profiles/operators/10_head_compute_mix_bwd.json":  "b8e04e0cf845625154942a290200efedbebcc6dd4604c05d38aa6d577023a4a0",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
-                },
-    "profile":  {
-                    "variant":  "fused_all_mixes",
-                    "config":  {
-                                   "block_rows":  256,
-                                   "block_mixes":  4,
-                                   "num_warps":  8,
-                                   "reduce_num_warps":  1
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "single_block_reduce",
-                                                  "config":  {
-                                                                 "num_warps":  8
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "10_head_compute_mix_bwd",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "10_head_compute_mix_bwd",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\10_head_compute_mix_bwd.py",
+  "artifact_sha256": "ecb49cdf066a5f3c2ce1af5714b7a8747ac02142ab30895b4679bb04f2da1f3b",
+  "sources": {
+    "triton_kernels/10_head_compute_mix_bwd.py": "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
+    "profiles/operators/10_head_compute_mix_bwd.json": "5662fed31e20f0426fc74a3029c67130c5177c5b939be5b9615f750ddd8f81e1",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
+  },
+  "profile": {
+    "variant": "fused_all_mixes",
+    "config": {
+      "block_rows": 256,
+      "block_mixes": 4,
+      "num_warps": 8,
+      "reduce_num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "single_block_reduce",
+        "config": {
+          "num_warps": 8
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "iluvatar_bi150",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "corex_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
 }

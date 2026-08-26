@@ -1,71 +1,59 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "08_hc_split_sinkhorn",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/iluvatar_bi150/08_hc_split_sinkhorn.py",
-    "artifact_sha256":  "948d89f32bd7c31ba940f67f1a47e9e1d91f1f44712250ee76d69805d03905c9",
-    "sources":  {
-                    "triton_kernels/08_hc_split_sinkhorn.py":  "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-                    "profiles/operators/08_hc_split_sinkhorn.json":  "d6560dc86d0d603ffb7c203f1b2ec3c2719175bb7f0017c916f96c29a32aad83",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
-                },
-    "profile":  {
-                    "variant":  "matrix_reduce",
-                    "config":  {
-                                   "num_warps":  2
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "matrix_reduce",
-                                                  "config":  {
-                                                                 "num_warps":  1
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "08_hc_split_sinkhorn",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "iluvatar_bi150",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\iluvatar_bi150\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "67f681311e9051d1afe8218c9999bc36cdaf799d294862eb095332495d323c5a",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
+    "profiles/operators/08_hc_split_sinkhorn.json": "9387f2b54b093dff2d6a8e6e9a00daf6f02cbe0da285568cd390fc6fc25d71f1",
+    "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
+  },
+  "profile": {
+    "variant": "matrix_reduce",
+    "config": {
+      "num_warps": 2
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "iluvatar_bi150",
+    "verified": true
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "iluvatar_bi150",
+    "vendor": "天数智芯",
+    "model": "BI150",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "corex_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "native_after_case_preparation",
+      "verified": true
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
 }

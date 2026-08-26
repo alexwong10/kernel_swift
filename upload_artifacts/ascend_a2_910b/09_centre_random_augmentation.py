@@ -42,9 +42,9 @@ def _augment_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_ptr, tr
         qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
         qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
         qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
-        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
-        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
-        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
+        xx, yy, zz = (qx * qx, qy * qy, qz * qz)
+        xy, xz, yz = (qx * qy, qx * qz, qy * qz)
+        wx, wy, wz = (qw * qx, qw * qy, qw * qz)
         y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
         y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
@@ -65,7 +65,7 @@ def _augment_tiled_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_p
     x1 = tl.load(coords_ptr + base + 1, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 1)
     x2 = tl.load(coords_ptr + base + 2, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 2)
     if CENTRE_ONLY:
-        (y0, y1, y2) = (x0, x1, x2)
+        y0, y1, y2 = (x0, x1, x2)
     else:
         u1 = tl.load(u1_ptr + sample).to(tl.float32)
         u2 = tl.load(u2_ptr + sample).to(tl.float32)
@@ -74,9 +74,9 @@ def _augment_tiled_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_p
         qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
         qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
         qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
-        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
-        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
-        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
+        xx, yy, zz = (qx * qx, qy * qy, qz * qz)
+        xy, xz, yz = (qx * qy, qx * qz, qy * qz)
+        wx, wy, wz = (qw * qx, qw * qy, qw * qz)
         y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
         y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
@@ -120,7 +120,7 @@ def _augment_fused_center_kernel(coords_ptr, mask_ptr, u1_ptr, u2_ptr, u3_ptr, t
     x1 -= center1
     x2 -= center2
     if CENTRE_ONLY:
-        (y0, y1, y2) = (x0, x1, x2)
+        y0, y1, y2 = (x0, x1, x2)
     else:
         u1 = tl.load(u1_ptr + sample).to(tl.float32)
         u2 = tl.load(u2_ptr + sample).to(tl.float32)
@@ -129,9 +129,9 @@ def _augment_fused_center_kernel(coords_ptr, mask_ptr, u1_ptr, u2_ptr, u3_ptr, t
         qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
         qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
         qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
-        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
-        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
-        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
+        xx, yy, zz = (qx * qx, qy * qy, qz * qz)
+        xy, xz, yz = (qx * qy, qx * qz, qy * qz)
+        wx, wy, wz = (qw * qx, qw * qy, qw * qz)
         y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
         y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2

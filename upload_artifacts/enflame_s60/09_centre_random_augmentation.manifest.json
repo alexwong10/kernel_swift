@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "enflame_s60",
-  "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
   "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
-  "artifact_sha256": "2d2781dd4f9ac1d9362387a216e8e95a636e50a019c0cc11c5ce9db6a1091d40",
+  "artifact_sha256": "522907110865bd722676e2db0cff5ef95b1bcb7e805bc12354ef876226927c98",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
-    "profiles/operators/09_centre_random_augmentation.json": "c96856895003d10d3dc8a87a05cb0f22b7192cc3dbf0eee87b7a72091b4cdf4d",
+    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
   "profile": {

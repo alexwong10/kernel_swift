@@ -10,7 +10,7 @@ _KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
-def _linear_kernel(a_ptr, w_ptr, bias_ptr, out_ptr, m_size: tl.constexpr, n_size: tl.constexpr, k_size: tl.constexpr, stride_am: tl.constexpr, stride_ak: tl.constexpr, stride_wn: tl.constexpr, stride_wk: tl.constexpr, stride_om: tl.constexpr, stride_on: tl.constexpr, HAS_BIAS: tl.constexpr, EPILOGUE: tl.constexpr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr):
+def _linear_kernel(a_ptr, w_ptr, bias_ptr, out_ptr, m_size: tl.constexpr, n_size: tl.constexpr, k_size: tl.constexpr, stride_am: tl.constexpr, stride_ak: tl.constexpr, stride_wn: tl.constexpr, stride_wk: tl.constexpr, stride_om: tl.constexpr, stride_on: tl.constexpr, HAS_BIAS: tl.constexpr, EPILOGUE: tl.constexpr, INPUT_FP16: tl.constexpr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr):
     pid_m = tl.program_id(0)
     pid_n = tl.program_id(1)
     offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
@@ -21,6 +21,9 @@ def _linear_kernel(a_ptr, w_ptr, bias_ptr, out_ptr, m_size: tl.constexpr, n_size
         k = k0 + offs_k
         a = tl.load(a_ptr + offs_m[:, None] * stride_am + k[None, :] * stride_ak, mask=(offs_m[:, None] < m_size) & (k[None, :] < k_size), other=0.0)
         w = tl.load(w_ptr + offs_n[None, :] * stride_wn + k[:, None] * stride_wk, mask=(offs_n[None, :] < n_size) & (k[:, None] < k_size), other=0.0)
+        if INPUT_FP16:
+            a = a.to(tl.float16)
+            w = w.to(tl.float16)
         acc += tl.dot(a, w)
     if HAS_BIAS:
         bias = tl.load(bias_ptr + offs_n, mask=offs_n < n_size, other=0.0)
@@ -33,7 +36,7 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     """Compute a 2-D nn.Linear with a portable tiled Triton kernel."""
     if x.ndim != 2 or weight.ndim != 2:
         raise ValueError('triton_linear expects 2-D input and weight')
-    (m_size, k_size) = x.shape
+    m_size, k_size = x.shape
     n_size = weight.shape[0]
     out = torch.empty((m_size, n_size), device=x.device, dtype=x.dtype)
     block_m = int(config['block_m'])
@@ -44,7 +47,7 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     launch_kwargs = {'num_warps': int(config['num_warps'])}
     if 'num_stages' in config:
         launch_kwargs['num_stages'] = int(config['num_stages'])
-    _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, **launch_kwargs)
+    _linear_kernel[grid](x, weight, bias_arg, out, m_size, n_size, k_size, x.stride(0), x.stride(1), weight.stride(0), weight.stride(1), out.stride(0), out.stride(1), HAS_BIAS=bias is not None, EPILOGUE=1 if log1p_relu else 0, INPUT_FP16=config.get('input_dtype') == 'fp16', BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_K=block_k, **launch_kwargs)
     return out
 
 @triton.jit
@@ -90,7 +93,7 @@ def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr
 def triton_decoder_pool(hidden: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, seq_lens: torch.Tensor, *, pooling: str, config: dict[str, int]) -> torch.Tensor:
     """Run the fused custom Triton SPLADE decoder/pooling stage."""
     batch_size = int(seq_lens.numel())
-    (total_tokens, hidden_size) = hidden.shape
+    total_tokens, hidden_size = hidden.shape
     vocab_size = weight.shape[0]
     block_t = int(config['block_t'])
     block_v = int(config['block_v'])
@@ -118,7 +121,7 @@ def _gelu_layer_norm_kernel(x_ptr, weight_ptr, bias_ptr, out_ptr, width: tl.cons
     tl.store(out_ptr + row * width + cols, norm * weight + bias, mask=mask)
 
 def gelu_layer_norm(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, eps: float, *, config: dict[str, int]) -> torch.Tensor:
-    (rows, width) = x.shape
+    rows, width = x.shape
     out = torch.empty_like(x)
     block = triton.next_power_of_2(width)
     _gelu_layer_norm_kernel[rows,](x, weight, bias, out, width, eps, BLOCK=block, num_warps=int(config['num_warps_large'] if block >= 2048 else config['num_warps_small']))
@@ -199,7 +202,7 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
 
 def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, *, scale: float, causal: bool, config: dict[str, int]) -> torch.Tensor:
     """Attention for contiguous logical [B, S, H, D] tensors/views."""
-    (batch_size, q_len, num_heads, head_dim) = query.shape
+    batch_size, q_len, num_heads, head_dim = query.shape
     kv_len = key.shape[1]
     if key.shape[0] != batch_size or value.shape[0] != batch_size:
         raise ValueError('query/key/value batch sizes must match')
@@ -216,9 +219,15 @@ def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor
         raise ValueError('attention block_n must be positive')
     block_d = triton.next_power_of_2(head_dim)
     if config.get('implementation', 'tiled') == 'scalar_online':
-        _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+        launch_kwargs = {'num_warps': int(config['num_warps'])}
+        if 'num_stages' in config:
+            launch_kwargs['num_stages'] = int(config['num_stages'])
+        _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, **launch_kwargs)
         return out
-    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+    launch_kwargs = {'num_warps': int(config['num_warps'])}
+    if 'num_stages' in config:
+        launch_kwargs['num_stages'] = int(config['num_stages'])
+    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, **launch_kwargs)
     return out
 
 class Model(nn.Module):
@@ -236,7 +245,7 @@ class Model(nn.Module):
         self._ks_variant = profile['variant']
 
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor):
-        (batch_size, q_len) = query.shape[:2]
+        batch_size, q_len = query.shape[:2]
         kv_len = key.shape[1]
         q = query.view(batch_size, q_len, self.num_heads, self.head_size)
         k = key.view(batch_size, kv_len, self.num_kv_heads, self.head_size)
@@ -251,7 +260,7 @@ class Model(nn.Module):
         return out.reshape(batch_size, q_len, self.num_heads * self.head_size)
 
 def get_inputs():
-    (batch_size, seq_len, num_heads, head_size, dtype) = (2, 83, 8, 64, torch.float16)
+    batch_size, seq_len, num_heads, head_size, dtype = (2, 83, 8, 64, torch.float16)
     hidden = num_heads * head_size
     query = torch.randn(batch_size, seq_len, hidden, dtype=dtype, device='mlu')
     key = torch.randn(batch_size, seq_len, hidden, dtype=dtype, device='mlu')

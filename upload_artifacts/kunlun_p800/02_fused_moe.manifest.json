@@ -1,74 +1,55 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "10_head_compute_mix_bwd",
-    "chip_key":  "iluvatar_bi150",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/kunlun_p800/02_fused_moe.py",
-    "artifact_sha256":  "ce6c8044fbaab32041a4443035eb79476b24b07ed5001768e3cad3f6b0023f81",
-    "sources":  {
-                    "triton_kernels/10_head_compute_mix_bwd.py":  "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
-                    "profiles/operators/10_head_compute_mix_bwd.json":  "b8e04e0cf845625154942a290200efedbebcc6dd4604c05d38aa6d577023a4a0",
-                    "profiles/chips/iluvatar_bi150.json":  "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
-                },
-    "profile":  {
-                    "variant":  "fused_all_mixes",
-                    "config":  {
-                                   "block_rows":  256,
-                                   "block_mixes":  4,
-                                   "num_warps":  8,
-                                   "reduce_num_warps":  1
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "single_block_reduce",
-                                                  "config":  {
-                                                                 "num_warps":  8
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "10_head_compute_mix_bwd",
-                    "chip_key":  "iluvatar_bi150",
-                    "verified":  true
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "iluvatar_bi150",
-                         "vendor":  "澶╂暟鏅鸿姱",
-                         "model":  "BI150",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "corex_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-
-                                                                   ],
-                                         "evaluator_support":  "native_after_case_preparation",
-                                         "verified":  true
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_source_aliases"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "02_fused_moe",
+  "chip_key": "kunlun_p800",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\kunlun_p800\\02_fused_moe.py",
+  "artifact_sha256": "e173c18c4a8fdfdfc546c59fca6123f4531dd2ebf8e609ccfdd2a83dbec36812",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
+    "profiles/chips/kunlun_p800.json": "c9a685b30e4af20e83e9975a5167348dd022c989f31a7304f46d8e58e48cce81"
+  },
+  "profile": {
+    "variant": "tiled_dot_fp16_reference",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "kunlun_p800",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "kunlun_p800",
+    "vendor": "昆仑芯",
+    "model": "P800",
+    "resource": "self_hosted_required",
+    "runtime": {
+      "family": "unconfirmed",
+      "torch_device": null,
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": null,
+    "source_aliases": [],
+    "replacements": [],
+    "status": "unconfirmed_runtime"
+  }
 }

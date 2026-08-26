@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "hygon_bw1000",
-  "source_commit": "8797aab2bca81033504e96ecfbf4f76762b39785",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
   "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
   "artifact_sha256": "4650c98b275696f5ad40ce732e4824fa9dc396739e1c69cee368b55da605824d",
   "sources": {

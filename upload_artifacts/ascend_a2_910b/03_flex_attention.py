@@ -36,7 +36,7 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     """Compute a 2-D nn.Linear with a portable tiled Triton kernel."""
     if x.ndim != 2 or weight.ndim != 2:
         raise ValueError('triton_linear expects 2-D input and weight')
-    (m_size, k_size) = x.shape
+    m_size, k_size = x.shape
     n_size = weight.shape[0]
     out = torch.empty((m_size, n_size), device=x.device, dtype=x.dtype)
     block_m = int(config['block_m'])
@@ -93,7 +93,7 @@ def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr
 def triton_decoder_pool(hidden: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, seq_lens: torch.Tensor, *, pooling: str, config: dict[str, int]) -> torch.Tensor:
     """Run the fused custom Triton SPLADE decoder/pooling stage."""
     batch_size = int(seq_lens.numel())
-    (total_tokens, hidden_size) = hidden.shape
+    total_tokens, hidden_size = hidden.shape
     vocab_size = weight.shape[0]
     block_t = int(config['block_t'])
     block_v = int(config['block_v'])
@@ -121,7 +121,7 @@ def _gelu_layer_norm_kernel(x_ptr, weight_ptr, bias_ptr, out_ptr, width: tl.cons
     tl.store(out_ptr + row * width + cols, norm * weight + bias, mask=mask)
 
 def gelu_layer_norm(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, eps: float, *, config: dict[str, int]) -> torch.Tensor:
-    (rows, width) = x.shape
+    rows, width = x.shape
     out = torch.empty_like(x)
     block = triton.next_power_of_2(width)
     _gelu_layer_norm_kernel[rows,](x, weight, bias, out, width, eps, BLOCK=block, num_warps=int(config['num_warps_large'] if block >= 2048 else config['num_warps_small']))
@@ -202,7 +202,7 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
 
 def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, *, scale: float, causal: bool, config: dict[str, int]) -> torch.Tensor:
     """Attention for contiguous logical [B, S, H, D] tensors/views."""
-    (batch_size, q_len, num_heads, head_dim) = query.shape
+    batch_size, q_len, num_heads, head_dim = query.shape
     kv_len = key.shape[1]
     if key.shape[0] != batch_size or value.shape[0] != batch_size:
         raise ValueError('query/key/value batch sizes must match')
@@ -257,7 +257,7 @@ class Model(nn.Module):
         return out.reshape(num_tokens, self.num_heads * self.head_size)
 
 def get_inputs():
-    (num_tokens, num_heads, head_size) = (83, 8, 64)
+    num_tokens, num_heads, head_size = (83, 8, 64)
     dtype = torch.float16
     query = torch.randn(num_tokens, num_heads, head_size, dtype=dtype, device='npu')
     key = torch.randn(num_tokens, num_heads, head_size, dtype=dtype, device='npu')

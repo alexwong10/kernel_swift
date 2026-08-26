@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
-  "artifact_sha256": "50293531fd672d60f240195641635dd7846c976a52bf7808ad83135f87fbb339",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
+  "artifact_sha256": "654857cdd9e48f37647a0d8f8104d4a8500d3ae108c113901ff976c53316c1e2",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
-    "profiles/operators/09_centre_random_augmentation.json": "53fdc5538f86cfc9de96b564ad680ead13086b51d26c1ac2ffb2d0b818b0dc68",
+    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {

@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "metax_c500",
-  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
-  "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\02_fused_moe.py",
   "artifact_sha256": "b5f703fac04a93ef093b405c9f20d9664fc2292550b9985e933309157d9ebfbf",
   "sources": {
     "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
-    "profiles/operators/02_fused_moe.json": "42a6e64cedc3d1cc3e597bfb23016795c6ef2fed47ee7774fb3183e463e035d5",
+    "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

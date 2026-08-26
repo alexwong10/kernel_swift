@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "hygon_bw1000",
-  "source_commit": "8797aab2bca81033504e96ecfbf4f76762b39785",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
   "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\04_splade_sparse_pooler.py",
   "artifact_sha256": "b06c113ffde80fc7a2edc37a045bf4315409b1fdbd3715fe998549fd3dfcad6f",
   "sources": {

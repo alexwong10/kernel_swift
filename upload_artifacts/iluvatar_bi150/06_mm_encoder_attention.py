@@ -218,9 +218,15 @@ def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor
         raise ValueError('attention block_n must be positive')
     block_d = triton.next_power_of_2(head_dim)
     if config.get('implementation', 'tiled') == 'scalar_online':
-        _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+        launch_kwargs = {'num_warps': int(config['num_warps'])}
+        if 'num_stages' in config:
+            launch_kwargs['num_stages'] = int(config['num_stages'])
+        _attention_kernel[q_len, num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_N=block_n, BLOCK_D=block_d, **launch_kwargs)
         return out
-    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, num_warps=int(config['num_warps']))
+    launch_kwargs = {'num_warps': int(config['num_warps'])}
+    if 'num_stages' in config:
+        launch_kwargs['num_stages'] = int(config['num_stages'])
+    _attention_query_tile_kernel[triton.cdiv(q_len, block_m), num_heads, batch_size](query, key, value, out, batch_size, q_len, kv_len, num_heads, head_dim, scale, query.stride(0), query.stride(1), query.stride(2), query.stride(3), key.stride(0), key.stride(1), key.stride(2), key.stride(3), value.stride(0), value.stride(1), value.stride(2), value.stride(3), out.stride(0), out.stride(1), out.stride(2), out.stride(3), CAUSAL=causal, BLOCK_M=block_m, BLOCK_N=block_n, BLOCK_D=block_d, **launch_kwargs)
     return out
 
 class Model(nn.Module):

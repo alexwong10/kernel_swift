@@ -126,7 +126,7 @@ class Model(nn.Module):
         return (cos, sin)
 
 def get_inputs():
-    (batch_size, seq_len) = (4, 32)
+    batch_size, seq_len = (4, 32)
     timestamps = torch.rand(batch_size, seq_len, device='mlu')
     return [timestamps, seq_len]
 

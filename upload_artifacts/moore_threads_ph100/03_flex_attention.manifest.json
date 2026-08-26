@@ -1,92 +1,90 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "03_flex_attention",
-    "chip_key":  "moore_threads_ph100",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/moore_threads_ph100/03_flex_attention.py",
-    "artifact_sha256":  "f0b8e5e3a7a2c265d0fabfeb42f4eea0a971bbf2333f0baf6879e2b77fab92fb",
-    "sources":  {
-                    "triton_kernels/03_flex_attention.py":  "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-                    "profiles/operators/03_flex_attention.json":  "c1daddf61ba10227d18b0fe8294527c96924cdbf5b321b976e947ee7822aac85",
-                    "profiles/chips/moore_threads_ph100.json":  "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
-                    "triton_kernels/common.py":  "2157fc722f66fb1d2a3257dfca86ed87834f2d33bee069483b80b6baf38d7dec"
-                },
-    "profile":  {
-                    "variant":  "tiled_online_softmax",
-                    "config":  {
-                                   "num_warps":  4,
-                                   "block_m":  16,
-                                   "block_n":  64,
-                                   "implementation":  "scalar_online"
-                               },
-                    "schema_version":  1,
-                    "task_key":  "03_flex_attention",
-                    "chip_key":  "moore_threads_ph100",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "moore_threads_ph100",
-                         "vendor":  "鎽╁皵绾跨▼",
-                         "model":  "PH100",
-                         "observed_device_name":  "MTT S5000",
-                         "device_mapping":  {
-                                                "status":  "confirmed_by_user",
-                                                "detail":  "This target reports MTT S5000 and is the competition PH100 resource."
-                                            },
-                         "resource":  "user_provided_target_environment",
-                         "runtime":  {
-                                         "family":  "torch_musa_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  "torch_musa",
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-                                                             "fp16":  "observed",
-                                                             "fp32":  "observed"
-                                                         },
-                                              "primitives":  {
-                                                                 "torch_cuda_alias":  "observed",
-                                                                 "triton":  "observed",
-                                                                 "synchronize":  "observed"
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  68,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  69,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   },
-                                                   {
-                                                       "line":  70,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "03_flex_attention",
+  "chip_key": "moore_threads_ph100",
+  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\03_flex_attention.py",
+  "artifact_sha256": "ffe713f7c9df2980bdff1cdc950682ce8dd89e0b558673bc8f7994ee0ed5c1b5",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
+    "profiles/operators/03_flex_attention.json": "44e6724440339d83b37c8b541bcd3f52c90c950053a2f6aea2e6ab70e2284f87",
+    "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
+    "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
+  },
+  "profile": {
+    "variant": "tiled_online_softmax",
+    "config": {
+      "num_warps": 4,
+      "block_m": 16,
+      "block_n": 64,
+      "implementation": "scalar_online"
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "moore_threads_ph100",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "moore_threads_ph100",
+    "vendor": "摩尔线程",
+    "model": "PH100",
+    "observed_device_name": "MTT S5000",
+    "device_mapping": {
+      "status": "confirmed_by_user",
+      "detail": "This target reports MTT S5000 and is the competition PH100 resource."
+    },
+    "resource": "user_provided_target_environment",
+    "runtime": {
+      "family": "torch_musa_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": "torch_musa",
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {
+        "fp16": "observed",
+        "fp32": "observed"
+      },
+      "primitives": {
+        "torch_cuda_alias": "observed",
+        "triton": "observed",
+        "synchronize": "observed"
+      }
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 68,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 69,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      },
+      {
+        "line": 70,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }

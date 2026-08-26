@@ -365,7 +365,7 @@ class Model(nn.Module):
             counts_host = packed_counts.cpu().tolist()
             block_experts_host = []
             block_starts_host = []
-            for (expert, count) in enumerate(counts_host):
+            for expert, count in enumerate(counts_host):
                 for start in range(0, int(count), group_block_routes):
                     block_experts_host.append(expert)
                     block_starts_host.append(start)

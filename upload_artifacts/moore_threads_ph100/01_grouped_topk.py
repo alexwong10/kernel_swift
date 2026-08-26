@@ -253,7 +253,7 @@ class Model(nn.Module):
         self._ks_num_warps = int(profile['config']['num_warps'])
 
     def forward(self, hidden_states: torch.Tensor, gating_output: torch.Tensor):
-        (num_tokens, num_experts) = gating_output.shape
+        num_tokens, num_experts = gating_output.shape
         if hidden_states.shape[0] != num_tokens:
             raise ValueError('hidden_states and gating_output batch sizes must match')
         if self.num_expert_group <= 0 or num_experts % self.num_expert_group != 0:
@@ -283,7 +283,7 @@ class Model(nn.Module):
         return (weights, ids)
 
 def get_inputs():
-    (num_tokens, hidden_size, num_experts) = (83, 7168, 256)
+    num_tokens, hidden_size, num_experts = (83, 7168, 256)
     hidden_states = torch.randn(num_tokens, hidden_size, dtype=torch.float16)
     gating_output = torch.randn(num_tokens, num_experts, dtype=torch.float32)
     return [hidden_states, gating_output]
