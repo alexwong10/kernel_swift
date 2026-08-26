@@ -1,71 +1,63 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "01_grouped_topk",
-    "chip_key":  "metax_c500",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/metax_c500/01_grouped_topk.py",
-    "artifact_sha256":  "7e62b7e4df863d74a5d1487fda085bf74567dc1769c5d6d925ac35014b3830fc",
-    "sources":  {
-                    "triton_kernels/01_grouped_topk.py":  "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
-                    "profiles/operators/01_grouped_topk.json":  "81f2320d9c8adbc7ab20de651ebef74a69a0edeb6c0dbb139c866af7e33b4874",
-                    "profiles/chips/metax_c500.json":  "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
-                },
-    "profile":  {
-                    "variant":  "vector_reduce",
-                    "config":  {
-                                   "num_warps":  4
-                               },
-                    "fallback_variants":  [
-                                              {
-                                                  "variant":  "manual_stable",
-                                                  "config":  {
-                                                                 "num_warps":  4
-                                                             }
-                                              }
-                                          ],
-                    "schema_version":  1,
-                    "task_key":  "01_grouped_topk",
-                    "chip_key":  "metax_c500",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "metax_c500",
-                         "vendor":  "娌愭洣",
-                         "model":  "C500",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "metax_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_matches"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "01_grouped_topk",
+  "chip_key": "metax_c500",
+  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
+  "artifact": "upload_artifacts\\metax_c500\\01_grouped_topk.py",
+  "artifact_sha256": "aaf61834e14105cfe595956281a0a304284840d3a02f66491207421209f7c51f",
+  "sources": {
+    "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
+    "profiles/operators/01_grouped_topk.json": "63f8c7e04608b37dac464b73bda1209802bab48eb3c86ee31ce0f4b9d09d418b",
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
+  },
+  "profile": {
+    "variant": "register_reduce",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "manual_stable",
+        "config": {
+          "num_warps": 4
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "01_grouped_topk",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "metax_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [],
+    "status": "no_matches"
+  }
 }

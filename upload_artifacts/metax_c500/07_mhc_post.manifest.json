@@ -1,65 +1,57 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "07_mhc_post",
-    "chip_key":  "metax_c500",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/metax_c500/07_mhc_post.py",
-    "artifact_sha256":  "ed91f70803ec26e5e663e3c75c8ca86724ad00f8d1e164a1b7f69b531fa208b5",
-    "sources":  {
-                    "triton_kernels/07_mhc_post.py":  "62a2a8292b61bf000b37f46d6e65184771d8c447c68e8433a4d325dae4f05d86",
-                    "profiles/operators/07_mhc_post.json":  "96182a9d081c311f22f02002b95abc53537323fce83ad76d853fafe2592b44bc",
-                    "profiles/chips/metax_c500.json":  "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
-                },
-    "profile":  {
-                    "variant":  "fp32_input_tiled",
-                    "config":  {
-                                   "block_hidden":  256,
-                                   "block_tokens":  4,
-                                   "num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "07_mhc_post",
-                    "chip_key":  "metax_c500",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "metax_c500",
-                         "vendor":  "娌愭洣",
-                         "model":  "C500",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "metax_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-
-                                               ],
-                              "status":  "no_matches"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "07_mhc_post",
+  "chip_key": "metax_c500",
+  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
+  "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
+  "artifact_sha256": "1e3f959c5847273cd1b00468569905ed4190e96bf2c1ea13ac104af3ba45279a",
+  "sources": {
+    "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
+    "profiles/operators/07_mhc_post.json": "8175702779b9e5247340b9b7490d390d73888cc5095743f1616c3f95656ef976",
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
+  },
+  "profile": {
+    "variant": "tiled_hidden",
+    "config": {
+      "block_hidden": 512,
+      "block_tokens": 2,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "07_mhc_post",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "metax_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [],
+    "status": "no_matches"
+  }
 }

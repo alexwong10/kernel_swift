@@ -1,69 +1,64 @@
-﻿{
-    "schema_version":  1,
-    "builder_version":  5,
-    "task_key":  "05_music_flamingo_rotary_embedding",
-    "chip_key":  "metax_c500",
-    "source_commit":  "2ae43c0fb0718d842a3f89147380436570ad343f",
-    "artifact":  "upload_artifacts/metax_c500/05_music_flamingo_rotary_embedding.py",
-    "artifact_sha256":  "8ed1ed126636b6be993e540a9448f6ff0ac93e2e8ef353ec33311b51caf6ba94",
-    "sources":  {
-                    "triton_kernels/05_music_flamingo_rotary_embedding.py":  "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",
-                    "profiles/operators/05_music_flamingo_rotary_embedding.json":  "66dc10af770474bba054f253a5fcd98c171b32f435fa321883c022d28679e315",
-                    "profiles/chips/metax_c500.json":  "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
-                },
-    "profile":  {
-                    "variant":  "tiled_frequency",
-                    "config":  {
-                                   "block_channel":  128,
-                                   "num_warps":  4
-                               },
-                    "schema_version":  1,
-                    "task_key":  "05_music_flamingo_rotary_embedding",
-                    "chip_key":  "metax_c500",
-                    "verified":  false
-                },
-    "chip_profile":  {
-                         "schema_version":  1,
-                         "chip_key":  "metax_c500",
-                         "vendor":  "娌愭洣",
-                         "model":  "C500",
-                         "resource":  "kernelswift_option_observed",
-                         "runtime":  {
-                                         "family":  "metax_cuda",
-                                         "torch_device":  "cuda",
-                                         "accelerator_module":  null,
-                                         "bootstrap_imports":  [
-
-                                                               ],
-                                         "source_device_aliases":  [
-                                                                       "cuda"
-                                                                   ],
-                                         "evaluator_support":  "target_runner_only",
-                                         "verified":  false
-                                     },
-                         "capabilities":  {
-                                              "verified":  false,
-                                              "dtypes":  {
-
-                                                         },
-                                              "primitives":  {
-
-                                                             }
-                                          }
-                     },
-    "device_adaptation":  {
-                              "target_device":  "cuda",
-                              "source_aliases":  [
-                                                     "cuda"
-                                                 ],
-                              "replacements":  [
-                                                   {
-                                                       "line":  241,
-                                                       "from":  "cuda",
-                                                       "to":  "cuda",
-                                                       "context":  "device_keyword"
-                                                   }
-                                               ],
-                              "status":  "rewritten"
-                          }
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "metax_c500",
+  "source_commit": "e91a4c89a8521d7791a4e8d06cf6ababce0cffd7",
+  "artifact": "upload_artifacts\\metax_c500\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "3d8423496a681aff3a984c39e755df08f310cee895c354c4efb801303bca9cf9",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "680787957501cc6268f83622695ba72802799b29d90376bac155b056c47bc663",
+    "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
+  },
+  "profile": {
+    "variant": "paired_tiled_frequency",
+    "config": {
+      "block_channel": 128,
+      "num_warps": 1,
+      "block_pair": 32
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "metax_c500",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "metax_c500",
+    "vendor": "沐曦",
+    "model": "C500",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "metax_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [
+        "cuda"
+      ],
+      "evaluator_support": "target_runner_only",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [
+      "cuda"
+    ],
+    "replacements": [
+      {
+        "line": 241,
+        "from": "cuda",
+        "to": "cuda",
+        "context": "device_keyword"
+      }
+    ],
+    "status": "rewritten"
+  }
 }

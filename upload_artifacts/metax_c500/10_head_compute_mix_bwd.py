@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_mix_chunked', 'config': {'block_rows': 256, 'block_mixes': 4, 'num_warps': 4, 'reduce_num_warps': 1}, 'fallback_variants': [{'variant': 'single_block_reduce', 'config': {'num_warps': 8}}], 'schema_version': 1, 'task_key': '10_head_compute_mix_bwd', 'chip_key': 'metax_c500', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'fused_all_mixes', 'config': {'block_rows': 256, 'block_mixes': 4, 'num_warps': 8, 'reduce_num_warps': 1}, 'fallback_variants': [{'variant': 'single_block_reduce', 'config': {'num_warps': 8}}], 'schema_version': 1, 'task_key': '10_head_compute_mix_bwd', 'chip_key': 'metax_c500', 'verified': False}
 
 @triton.jit
 def _head_mix_bwd_kernel(input_ptr, scale_ptr, base_ptr, grad_out_ptr, grad_input_ptr, grad_scale_parts_ptr, grad_base_ptr, rows: tl.constexpr, mhc_mult: tl.constexpr, BLOCK: tl.constexpr):
