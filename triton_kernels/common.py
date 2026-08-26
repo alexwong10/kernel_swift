@@ -531,6 +531,9 @@ def triton_attention(
         # a Triton kernel, but use the scalar-query online-softmax kernel for
         # that backend.  This is a backend-selected implementation, not a
         # PyTorch fallback.
+        launch_kwargs = {"num_warps": int(config["num_warps"])}
+        if "num_stages" in config:
+            launch_kwargs["num_stages"] = int(config["num_stages"])
         _attention_kernel[(q_len, num_heads, batch_size)](
             query,
             key,
@@ -561,9 +564,12 @@ def triton_attention(
             CAUSAL=causal,
             BLOCK_N=block_n,
             BLOCK_D=block_d,
-            num_warps=int(config["num_warps"]),
+            **launch_kwargs,
         )
         return out
+    launch_kwargs = {"num_warps": int(config["num_warps"])}
+    if "num_stages" in config:
+        launch_kwargs["num_stages"] = int(config["num_stages"])
     _attention_query_tile_kernel[(triton.cdiv(q_len, block_m), num_heads, batch_size)](
         query,
         key,
@@ -595,6 +601,6 @@ def triton_attention(
         BLOCK_M=block_m,
         BLOCK_N=block_n,
         BLOCK_D=block_d,
-        num_warps=int(config["num_warps"]),
+        **launch_kwargs,
     )
     return out

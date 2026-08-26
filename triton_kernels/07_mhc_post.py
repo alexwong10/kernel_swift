@@ -148,8 +148,9 @@ def _mhc_post_fused_mix_kernel(
     accumulation and bf16 store.
     """
     token = tl.program_id(0) * BLOCK_TOKENS + tl.arange(0, BLOCK_TOKENS)
-    hidden_tile = tl.program_id(1)
-    out_mix = tl.arange(0, BLOCK_MIXES)
+    mix_block = tl.program_id(1)
+    hidden_tile = tl.program_id(2)
+    out_mix = mix_block * BLOCK_MIXES + tl.arange(0, BLOCK_MIXES)
     hidden = hidden_tile * BLOCK_H + tl.arange(0, BLOCK_H)
     token_mask = token < token_count
     hidden_mask = hidden < hidden_size
@@ -242,6 +243,7 @@ class ModelNew(nn.Module):
             _mhc_post_fused_mix_kernel[
                 (
                     triton.cdiv(token_count, block_tokens),
+                    triton.cdiv(mhc_mult, block_mixes),
                     triton.cdiv(hidden_size, block_hidden),
                 )
             ](

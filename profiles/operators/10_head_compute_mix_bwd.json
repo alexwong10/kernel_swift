@@ -15,7 +15,7 @@
       "verified": true,
       "overrides": {"variant": "fused_all_mixes", "config": {"num_warps": 8}}
     },
-    "enflame_s60": {"verified": false, "overrides": {}},
+    "enflame_s60": {"verified": true, "overrides": {"variant": "fused_all_mixes", "config": {"num_warps": 2}}},
     "thead_810e": {"verified": false, "overrides": {}},
     "cambricon_mlu590_m9d": {"verified": false, "overrides": {}},
     "hygon_bw1000": {

@@ -18,7 +18,12 @@
         }
       }
     },
-    "enflame_s60": {"verified": false, "overrides": {}},
+    "enflame_s60": {
+      "verified": true,
+      "overrides": {"variant": "framework_rng_tiled_geometry", "config": {
+        "center_num_warps": 4, "augment_block_atoms": 128, "augment_num_warps": 1
+      }}
+    },
     "thead_810e": {"verified": false, "overrides": {}},
     "cambricon_mlu590_m9d": {"verified": false, "overrides": {}},
     "hygon_bw1000": {"verified": false, "overrides": {}},

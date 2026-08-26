@@ -18,7 +18,12 @@
         "config": {"block_hidden": 512, "block_tokens": 2, "block_mixes": 4, "num_warps": 4}
       }
     },
-    "enflame_s60": {"verified": false, "overrides": {}},
+    "enflame_s60": {
+      "verified": true,
+      "overrides": {"variant": "fused_mix_tiled", "config": {
+        "block_hidden": 256, "block_tokens": 32, "block_mixes": 4, "num_warps": 1
+      }}
+    },
     "thead_810e": {"verified": false, "overrides": {}},
     "cambricon_mlu590_m9d": {"verified": false, "overrides": {}},
     "hygon_bw1000": {"verified": false, "overrides": {}},
