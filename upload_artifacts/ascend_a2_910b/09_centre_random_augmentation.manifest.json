@@ -3,11 +3,11 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
-  "artifact_sha256": "654857cdd9e48f37647a0d8f8104d4a8500d3ae108c113901ff976c53316c1e2",
+  "artifact_sha256": "b67e44cbef78690529ae11755c56ca42b4259f515973378bf962073f6f674627",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
+    "triton_kernels/09_centre_random_augmentation.py": "c183a86f3540273b01fb08b179f1741b7e9a74fd76281dbad5db94999e0e7a4d",
     "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
@@ -57,13 +57,13 @@
     ],
     "replacements": [
       {
-        "line": 339,
+        "line": 373,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"
       },
       {
-        "line": 340,
+        "line": 374,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"

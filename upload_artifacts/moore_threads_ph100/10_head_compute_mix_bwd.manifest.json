@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\moore_threads_ph100\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "e372ccbdbddab0c73032baebb9b399b5b8af6850a5ceaf87bebe26005b72ef0b",
   "sources": {

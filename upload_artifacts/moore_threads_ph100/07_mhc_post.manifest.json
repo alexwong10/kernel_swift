@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "07_mhc_post",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\moore_threads_ph100\\07_mhc_post.py",
   "artifact_sha256": "13356addc67ad5e83cde94c07ac6533d08c3193d0d7b1435fe8f7b462d657e24",
   "sources": {
     "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
-    "profiles/operators/07_mhc_post.json": "7a9a1f8e2bbbb6cf2a99a8765f3bb5bfc3685103221432a5388f32a332664a2f",
+    "profiles/operators/07_mhc_post.json": "0cbace8fc8834a12d21d7b0b067f17ed05c0638315fc2928b2e78b92608469f6",
     "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
   },
   "profile": {

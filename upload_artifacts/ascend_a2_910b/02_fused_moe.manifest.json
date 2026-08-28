@@ -3,11 +3,11 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\ascend_a2_910b\\02_fused_moe.py",
-  "artifact_sha256": "1b068bf5e335664c2effb35c1ec99c747119e67728fd7389e7f162e7aa064d87",
+  "artifact_sha256": "4691d763bce8a85596c7ddc6793d7ffceac0839ffe355d8c630ba0689cab5c2a",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "triton_kernels/02_fused_moe.py": "d4513e5f40d82cbbd4fe043c2b13afda4238c90847eee495617635fb9d3dc64c",
     "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
@@ -60,13 +60,13 @@
     ],
     "replacements": [
       {
-        "line": 1029,
+        "line": 1010,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"
       },
       {
-        "line": 1030,
+        "line": 1011,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"

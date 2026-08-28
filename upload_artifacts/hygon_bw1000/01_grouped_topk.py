@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'vector_reduce', 'config': {'num_warps': 4}, 'fallback_variants': [{'variant': 'manual_stable', 'config': {'num_warps': 4}}], 'schema_version': 1, 'task_key': '01_grouped_topk', 'chip_key': 'hygon_bw1000', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'vector_reduce', 'config': {'num_warps': 8}, 'fallback_variants': [{'variant': 'manual_stable', 'config': {'num_warps': 4}}], 'schema_version': 1, 'task_key': '01_grouped_topk', 'chip_key': 'hygon_bw1000', 'verified': False}
 
 @triton.jit
 def _grouped_topk_kernel(logits_ptr, weights_ptr, ids_ptr, num_experts: tl.constexpr, experts_per_group: tl.constexpr, num_groups: tl.constexpr, TOPK: tl.constexpr, TOPK_GROUPS: tl.constexpr, SOFTMAX: tl.constexpr, RENORMALIZE: tl.constexpr, ROUTED_SCALE: tl.constexpr, BLOCK: tl.constexpr):

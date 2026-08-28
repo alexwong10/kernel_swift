@@ -3,11 +3,11 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "enflame_s60",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\enflame_s60\\02_fused_moe.py",
-  "artifact_sha256": "61297d293468c9ff4463c0d579f7ccc956af0ba2c22af0cd5f37ea98fd8f2077",
+  "artifact_sha256": "d31f478e62dadbd75e2f3811fa2299d24ff61a5ad8bca11213ca7fe9d26cbf53",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "triton_kernels/02_fused_moe.py": "d4513e5f40d82cbbd4fe043c2b13afda4238c90847eee495617635fb9d3dc64c",
     "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
@@ -57,13 +57,13 @@
     ],
     "replacements": [
       {
-        "line": 1029,
+        "line": 1010,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 1030,
+        "line": 1011,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"

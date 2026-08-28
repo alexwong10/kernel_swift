@@ -7,7 +7,7 @@ import triton.language as tl
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 64, 'linear_block_n': 128, 'linear_block_k': 32, 'linear_num_warps': 8, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 4, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 4}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'hygon_bw1000', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 64, 'linear_block_n': 128, 'linear_block_k': 32, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 4, 'pool_block_t': 32, 'pool_block_v': 128, 'pool_num_warps': 4}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'hygon_bw1000', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -72,7 +72,7 @@ def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr
         pooled = tl.full((BLOCK_V,), -float('inf'), tl.float32)
     else:
         pooled = tl.zeros((BLOCK_V,), tl.float32)
-    for token_start in range(0, MAX_SEQ, BLOCK_T):
+    for token_start in range(0, total_tokens, BLOCK_T):
         token = token_start + tl.arange(0, BLOCK_T)
         token_valid = (token < length) & (start + token < total_tokens)
         acc = tl.zeros((BLOCK_T, BLOCK_V), tl.float32)
@@ -248,7 +248,7 @@ def _pool_logits_kernel(logits_ptr, seq_lens_ptr, out_ptr, batch_size: tl.conste
         pooled = tl.zeros((BLOCK_V,), tl.float32)
     for token_start in range(0, total_tokens, BLOCK_T):
         current_token = token_start + token
-        valid = (current_token[:, None] < length) & (current_token[:, None] < total_tokens) & (vocab[None, :] < vocab_size)
+        valid = (current_token[:, None] < length) & (start + current_token[:, None] < total_tokens) & (vocab[None, :] < vocab_size)
         values = tl.load(logits_ptr + (start + current_token[:, None]) * vocab_size + vocab[None, :], mask=valid, other=-float('inf') if POOL_MAX else 0.0).to(tl.float32)
         if POOL_MAX:
             pooled = tl.maximum(pooled, tl.max(values, axis=0))

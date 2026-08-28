@@ -73,7 +73,7 @@ def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr
         pooled = tl.full((BLOCK_V,), -float('inf'), tl.float32)
     else:
         pooled = tl.zeros((BLOCK_V,), tl.float32)
-    for token_start in range(0, MAX_SEQ, BLOCK_T):
+    for token_start in range(0, total_tokens, BLOCK_T):
         token = token_start + tl.arange(0, BLOCK_T)
         token_valid = (token < length) & (start + token < total_tokens)
         acc = tl.zeros((BLOCK_T, BLOCK_V), tl.float32)
@@ -249,7 +249,7 @@ def _pool_logits_kernel(logits_ptr, seq_lens_ptr, out_ptr, batch_size: tl.conste
         pooled = tl.zeros((BLOCK_V,), tl.float32)
     for token_start in range(0, total_tokens, BLOCK_T):
         current_token = token_start + token
-        valid = (current_token[:, None] < length) & (current_token[:, None] < total_tokens) & (vocab[None, :] < vocab_size)
+        valid = (current_token[:, None] < length) & (start + current_token[:, None] < total_tokens) & (vocab[None, :] < vocab_size)
         values = tl.load(logits_ptr + (start + current_token[:, None]) * vocab_size + vocab[None, :], mask=valid, other=-float('inf') if POOL_MAX else 0.0).to(tl.float32)
         if POOL_MAX:
             pooled = tl.maximum(pooled, tl.max(values, axis=0))

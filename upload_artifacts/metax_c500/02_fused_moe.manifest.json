@@ -3,11 +3,11 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "metax_c500",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\metax_c500\\02_fused_moe.py",
-  "artifact_sha256": "b5f703fac04a93ef093b405c9f20d9664fc2292550b9985e933309157d9ebfbf",
+  "artifact_sha256": "106ee7211a2e666df4f5f217157250382c4d2a989915a85857c2d94491205699",
   "sources": {
-    "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
+    "triton_kernels/02_fused_moe.py": "d4513e5f40d82cbbd4fe043c2b13afda4238c90847eee495617635fb9d3dc64c",
     "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
@@ -55,13 +55,13 @@
     ],
     "replacements": [
       {
-        "line": 1029,
+        "line": 1010,
         "from": "cuda",
         "to": "cuda",
         "context": "device_keyword"
       },
       {
-        "line": 1030,
+        "line": 1011,
         "from": "cuda",
         "to": "cuda",
         "context": "device_keyword"

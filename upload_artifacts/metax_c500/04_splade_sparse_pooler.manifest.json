@@ -3,14 +3,14 @@
   "builder_version": 5,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "metax_c500",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\metax_c500\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "2c075beb8f71f2230af9fcceb294de090114ddec6ee99876651eb7f937710b43",
+  "artifact_sha256": "582dfcde9bb3fc52a5a76fae42ede9d1f5605a4822d02201f5a7b663f1426fa1",
   "sources": {
-    "triton_kernels/04_splade_sparse_pooler.py": "46af2cce102510097db061270332dd7a773479c677104da48e8e3d6bcd23af47",
-    "profiles/operators/04_splade_sparse_pooler.json": "64d52ffc62327818e17c8808aa46003129f0b302440c27f2faa97d0baa4bfafd",
+    "triton_kernels/04_splade_sparse_pooler.py": "1bdf9e614b7a577cb8d4ebb910dc01d65886cfc23ccdc9f4b646e8244e58d164",
+    "profiles/operators/04_splade_sparse_pooler.json": "357c002e8048ee7a33df2559a03366740353e8a0c3fcf094242b3ee3b1f9011a",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf",
-    "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
+    "triton_kernels/common.py": "be0d3d51e815ad5341792c03e30c2bae1b429fb7ef6ecd08935ee885a5a7a88f"
   },
   "profile": {
     "variant": "staged_portable",

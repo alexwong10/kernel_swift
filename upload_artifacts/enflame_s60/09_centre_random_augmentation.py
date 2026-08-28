@@ -164,7 +164,7 @@ class Model(nn.Module):
         n_atoms = x_input_coords.shape[0]
         mask_arg = mask if mask is not None else x_input_coords
         block_atoms = triton.next_power_of_2(n_atoms)
-        if self._ks_variant != 'fused_center_geometry':
+        if self._ks_variant != 'fused_center_geometry' or self.centre_only:
             center = torch.empty(3, device=x_input_coords.device, dtype=torch.float32)
             _center_kernel[3,](x_input_coords, mask_arg, center, n_atoms, HAS_MASK=mask is not None, EPS=1e-12, BLOCK=block_atoms, num_warps=int(self._ks_config['center_num_warps']))
         if self.centre_only:
@@ -175,11 +175,16 @@ class Model(nn.Module):
             u3 = torch.rand(self.n_sample, device=x_input_coords.device, dtype=x_input_coords.dtype)
             translation = self.s_trans * torch.randn(self.n_sample, 3, device=x_input_coords.device, dtype=x_input_coords.dtype)
         out = torch.empty((self.n_sample, n_atoms, 3), device=x_input_coords.device, dtype=x_input_coords.dtype)
-        if self._ks_variant == 'fused_center_geometry':
+        if self._ks_variant == 'fused_center_geometry' and (not self.centre_only):
             fused_block = int(self._ks_config.get('fused_block_atoms', block_atoms))
             if fused_block <= 0:
                 raise ValueError('fused_block_atoms must be positive')
             _augment_fused_center_kernel[self.n_sample, triton.cdiv(n_atoms, fused_block)](x_input_coords, mask_arg, u1, u2, u3, translation, out, n_atoms, HAS_MASK=mask is not None, CENTRE_ONLY=self.centre_only, EPS=1e-12, BLOCK_A=fused_block, num_warps=int(self._ks_config.get('fused_num_warps', 1)))
+        elif self._ks_variant == 'fused_center_geometry' and self.centre_only:
+            block_atoms = int(self._ks_config.get('augment_block_atoms', self._ks_config.get('fused_block_atoms', block_atoms)))
+            if block_atoms <= 0:
+                raise ValueError('augment_block_atoms must be positive')
+            _augment_tiled_kernel[self.n_sample, triton.cdiv(n_atoms, block_atoms)](x_input_coords, mask_arg, center, u1, u2, u3, translation, out, n_atoms, HAS_MASK=mask is not None, CENTRE_ONLY=True, BLOCK_A=block_atoms, num_warps=int(self._ks_config.get('augment_num_warps', self._ks_config.get('fused_num_warps', 1))))
         elif self._ks_variant == 'framework_rng_tiled_geometry':
             block_atoms = int(self._ks_config['augment_block_atoms'])
             if block_atoms <= 0:

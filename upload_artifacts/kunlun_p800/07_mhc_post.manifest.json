@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "07_mhc_post",
   "chip_key": "kunlun_p800",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\kunlun_p800\\07_mhc_post.py",
   "artifact_sha256": "8c31a3fd5d112bfe10795211305c5a589a58fb9884a91b9b03719cd9ba9b32ad",
   "sources": {
     "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
-    "profiles/operators/07_mhc_post.json": "7a9a1f8e2bbbb6cf2a99a8765f3bb5bfc3685103221432a5388f32a332664a2f",
+    "profiles/operators/07_mhc_post.json": "0cbace8fc8834a12d21d7b0b067f17ed05c0638315fc2928b2e78b92608469f6",
     "profiles/chips/kunlun_p800.json": "c9a685b30e4af20e83e9975a5167348dd022c989f31a7304f46d8e58e48cce81"
   },
   "profile": {

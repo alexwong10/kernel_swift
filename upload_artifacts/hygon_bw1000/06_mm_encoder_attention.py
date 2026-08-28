@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 4, 'block_m': 32, 'block_n': 64, 'implementation': 'tiled'}, 'schema_version': 1, 'task_key': '06_mm_encoder_attention', 'chip_key': 'hygon_bw1000', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 1, 'block_m': 64, 'block_n': 64, 'implementation': 'scalar_online'}, 'schema_version': 1, 'task_key': '06_mm_encoder_attention', 'chip_key': 'hygon_bw1000', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -70,7 +70,7 @@ def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr
         pooled = tl.full((BLOCK_V,), -float('inf'), tl.float32)
     else:
         pooled = tl.zeros((BLOCK_V,), tl.float32)
-    for token_start in range(0, MAX_SEQ, BLOCK_T):
+    for token_start in range(0, total_tokens, BLOCK_T):
         token = token_start + tl.arange(0, BLOCK_T)
         token_valid = (token < length) & (start + token < total_tokens)
         acc = tl.zeros((BLOCK_T, BLOCK_V), tl.float32)

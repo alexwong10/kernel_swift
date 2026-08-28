@@ -3,11 +3,11 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "enflame_s60",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
-  "artifact_sha256": "522907110865bd722676e2db0cff5ef95b1bcb7e805bc12354ef876226927c98",
+  "artifact_sha256": "15145880f54571d5bab81c33c847345fbf17ab3b7f73a6231446588fc29f6e4d",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
+    "triton_kernels/09_centre_random_augmentation.py": "c183a86f3540273b01fb08b179f1741b7e9a74fd76281dbad5db94999e0e7a4d",
     "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
@@ -55,13 +55,13 @@
     ],
     "replacements": [
       {
-        "line": 339,
+        "line": 373,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"
       },
       {
-        "line": 340,
+        "line": 374,
         "from": "cuda",
         "to": "gcu",
         "context": "device_keyword"

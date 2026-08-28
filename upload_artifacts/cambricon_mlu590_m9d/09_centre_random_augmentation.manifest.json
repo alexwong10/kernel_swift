@@ -3,11 +3,11 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\09_centre_random_augmentation.py",
-  "artifact_sha256": "38b51a2d8accc8375a4b66ccb7452b6eab2cff685c53178019ac3b7060fcc10c",
+  "artifact_sha256": "36b4641f393944f6855788927ef0660c6a164f747cae40ee1baddac1fcdc856e",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",
+    "triton_kernels/09_centre_random_augmentation.py": "c183a86f3540273b01fb08b179f1741b7e9a74fd76281dbad5db94999e0e7a4d",
     "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
     "profiles/chips/cambricon_mlu590_m9d.json": "26f988f30406a19f8aae4356224def9e3d5d80bb6bc28c5e2b7102b25241cfed"
   },
@@ -55,13 +55,13 @@
     ],
     "replacements": [
       {
-        "line": 339,
+        "line": 373,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"
       },
       {
-        "line": 340,
+        "line": 374,
         "from": "cuda",
         "to": "mlu",
         "context": "device_keyword"

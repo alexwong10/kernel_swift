@@ -3,14 +3,14 @@
   "builder_version": 5,
   "task_key": "03_flex_attention",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\iluvatar_bi150\\03_flex_attention.py",
-  "artifact_sha256": "a2a69063c94dbc89a830c8b799fda9b95d8add927765000674624bcbcd546a39",
+  "artifact_sha256": "689f7d3ca2d8f0f6fc4e7ce1a7ed9bf5b92e60bdb5ea255bd1cff8d351ed17db",
   "sources": {
     "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-    "profiles/operators/03_flex_attention.json": "97f46f914a47e1749686fa8bb5612feff3ac8ae70c0e5c6e5560e483ae160d4e",
+    "profiles/operators/03_flex_attention.json": "1eafe4db771899080c569c2dadc5e7235acfc23d06fa5f106a3f704e79df0dc5",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a",
-    "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
+    "triton_kernels/common.py": "be0d3d51e815ad5341792c03e30c2bae1b429fb7ef6ecd08935ee885a5a7a88f"
   },
   "profile": {
     "variant": "tiled_online_softmax",

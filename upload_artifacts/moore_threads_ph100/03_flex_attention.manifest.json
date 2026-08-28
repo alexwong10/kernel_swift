@@ -3,14 +3,14 @@
   "builder_version": 5,
   "task_key": "03_flex_attention",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
   "artifact": "upload_artifacts\\moore_threads_ph100\\03_flex_attention.py",
-  "artifact_sha256": "ffe713f7c9df2980bdff1cdc950682ce8dd89e0b558673bc8f7994ee0ed5c1b5",
+  "artifact_sha256": "7203e37b3f2f55f006e987d0c4fa7a3e125dfc52f483ddc6fad474a1b02da08d",
   "sources": {
     "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-    "profiles/operators/03_flex_attention.json": "97f46f914a47e1749686fa8bb5612feff3ac8ae70c0e5c6e5560e483ae160d4e",
+    "profiles/operators/03_flex_attention.json": "1eafe4db771899080c569c2dadc5e7235acfc23d06fa5f106a3f704e79df0dc5",
     "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848",
-    "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
+    "triton_kernels/common.py": "be0d3d51e815ad5341792c03e30c2bae1b429fb7ef6ecd08935ee885a5a7a88f"
   },
   "profile": {
     "variant": "tiled_online_softmax",
