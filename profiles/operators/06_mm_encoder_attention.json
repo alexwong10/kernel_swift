@@ -26,9 +26,9 @@
       "overrides": {
         "variant": "tiled_online_softmax",
         "config": {
-          "implementation": "tiled",
-          "num_warps": 4,
-          "block_m": 32,
+          "implementation": "scalar_online",
+          "num_warps": 1,
+          "block_m": 64,
           "block_n": 64
         }
       }

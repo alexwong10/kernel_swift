@@ -29,7 +29,7 @@
       "verified": false,
       "overrides": {
         "variant": "paired_tiled_frequency",
-        "config": {"block_pair": 32, "num_warps": 1}
+        "config": {"block_pair": 16, "num_warps": 1}
       }
     },
     "moore_threads_ph100": {"verified": false, "overrides": {}},

@@ -44,19 +44,21 @@ def _moe_route_kernel(
     scores = tl.exp(logits - tl.max(logits, axis=0))
     scores = scores / tl.sum(tl.where(valid, scores, 0.0), axis=0)
     remaining = tl.where(valid, scores, -float("inf"))
+    rank_offsets = tl.arange(0, TOP_K)
+    selected_weights = tl.zeros((TOP_K,), tl.float32)
     selected_sum = 0.0
     for rank in range(TOP_K):
         expert_id = tl.argmax(remaining, axis=0)
         weight = tl.max(remaining, axis=0)
         tl.store(ids_ptr + token * TOP_K + rank, expert_id)
-        tl.store(weights_ptr + token * TOP_K + rank, weight)
+        selected_weights = tl.where(rank_offsets == rank, weight, selected_weights)
         selected_sum += weight
         remaining = tl.where(expert == expert_id, -float("inf"), remaining)
-    rank_offsets = tl.arange(0, TOP_K)
-    selected = tl.load(weights_ptr + token * TOP_K + rank_offsets)
     if RENORMALIZE:
-        selected /= selected_sum
-    tl.store(weights_ptr + token * TOP_K + rank_offsets, selected)
+        selected_weights /= selected_sum
+    # Keep routing weights in FP32 until optional renormalization completes.
+    # The destination store is the single cast to the hidden-state dtype.
+    tl.store(weights_ptr + token * TOP_K + rank_offsets, selected_weights)
 
 
 @triton.jit
@@ -533,21 +535,21 @@ def _moe_route_pack_kernel(
     scores = tl.exp(logits - tl.max(logits, axis=0))
     scores = scores / tl.sum(tl.where(valid, scores, 0.0), axis=0)
     remaining = tl.where(valid, scores, -float("inf"))
+    rank_offsets = tl.arange(0, TOP_K)
+    selected_weights = tl.zeros((TOP_K,), tl.float32)
     selected_sum = 0.0
     for rank in range(TOP_K):
         expert_id = tl.argmax(remaining, axis=0)
         weight = tl.max(remaining, axis=0)
         route = token * TOP_K + rank
-        tl.store(weights_ptr + route, weight)
+        selected_weights = tl.where(rank_offsets == rank, weight, selected_weights)
         slot = tl.atomic_add(counts_ptr + expert_id, 1)
         tl.store(packed_routes_ptr + expert_id * TOTAL_ROUTES + slot, route)
         selected_sum += weight
         remaining = tl.where(expert_offsets == expert_id, -float("inf"), remaining)
-    rank_offsets = tl.arange(0, TOP_K)
-    selected = tl.load(weights_ptr + token * TOP_K + rank_offsets)
     if RENORMALIZE:
-        selected /= selected_sum
-    tl.store(weights_ptr + token * TOP_K + rank_offsets, selected)
+        selected_weights /= selected_sum
+    tl.store(weights_ptr + token * TOP_K + rank_offsets, selected_weights)
 
 
 @triton.jit
@@ -555,8 +557,6 @@ def _moe_gate_up_grouped_kernel(
     x_ptr,
     packed_routes_ptr,
     counts_ptr,
-    block_experts_ptr,
-    block_starts_ptr,
     w1_ptr,
     act_ptr,
     hidden_size: tl.constexpr,
@@ -566,19 +566,19 @@ def _moe_gate_up_grouped_kernel(
     BLOCK_R: tl.constexpr,
     BLOCK_H: tl.constexpr,
     BLOCK_I: tl.constexpr,
+    BLOCKS_PER_EXPERT: tl.constexpr,
 ):
-    """Batched gate/up dot for routes belonging to one expert.
+    """Batched gate/up dot for a fixed expert/block grid.
 
-    The route compaction makes the ``BLOCK_R`` dimension dense for each
-    expert.  ``block_experts_ptr``/``block_starts_ptr`` contain only non-empty
-    blocks, so no expert-wide empty tiles are launched.  Invalid tail rows
-    are masked, and the masked rows never store to ``act_ptr``.  Weight layout
-    remains [2I, H], but is loaded as [H, I] so that the dot is [R, H] x
-    [H, I].
+    Route compaction makes the ``BLOCK_R`` dimension dense for each expert.
+    A fixed grid removes the host metadata and synchronization between
+    routing and the two projection stages.  Empty tail rows are masked and
+    never store to act_ptr.
     """
     block_id = tl.program_id(0)
-    expert = tl.load(block_experts_ptr + block_id)
-    route_block_start = tl.load(block_starts_ptr + block_id)
+    expert = block_id // BLOCKS_PER_EXPERT
+    block_slot = block_id % BLOCKS_PER_EXPERT
+    route_block_start = block_slot * BLOCK_R
     rows = route_block_start + tl.arange(0, BLOCK_R)
     count = tl.load(counts_ptr + expert)
     row_mask = rows < count
@@ -626,8 +626,6 @@ def _moe_gate_up_grouped_kernel(
 def _moe_down_grouped_kernel(
     packed_routes_ptr,
     counts_ptr,
-    block_experts_ptr,
-    block_starts_ptr,
     act_ptr,
     route_weights_ptr,
     w2_ptr,
@@ -638,11 +636,13 @@ def _moe_down_grouped_kernel(
     BLOCK_R: tl.constexpr,
     BLOCK_H: tl.constexpr,
     BLOCK_I: tl.constexpr,
+    BLOCKS_PER_EXPERT: tl.constexpr,
 ):
     """Batched down projection for compacted routes of one expert."""
     block_id = tl.program_id(0)
-    expert = tl.load(block_experts_ptr + block_id)
-    route_block_start = tl.load(block_starts_ptr + block_id)
+    expert = block_id // BLOCKS_PER_EXPERT
+    block_slot = block_id % BLOCKS_PER_EXPERT
+    route_block_start = block_slot * BLOCK_R
     rows = route_block_start + tl.arange(0, BLOCK_R)
     count = tl.load(counts_ptr + expert)
     row_mask = rows < count
@@ -758,10 +758,14 @@ class ModelNew(nn.Module):
             )
         block_e = triton.next_power_of_2(self.num_experts)
         total_routes = num_tokens * self.top_k
-        block_experts = None
-        block_starts = None
         group_block_routes = None
+        blocks_per_expert = None
         if self._ks_variant == "expert_grouped_dot":
+            group_block_routes = int(self._ks_config["group_block_routes"])
+            if group_block_routes <= 0:
+                raise ValueError("group_block_routes must be positive")
+            if total_routes <= 0:
+                raise ValueError("expert_grouped_dot requires at least one route")
             # Allocate the compaction buffers before routing so the grouped
             # route kernel can produce weights and expert segments in one
             # launch.
@@ -785,28 +789,7 @@ class ModelNew(nn.Module):
                 TOTAL_ROUTES=total_routes,
                 num_warps=int(self._ks_config["route_num_warps"]),
             )
-            group_block_routes = int(self._ks_config["group_block_routes"])
-            if group_block_routes <= 0:
-                raise ValueError("group_block_routes must be positive")
-            # Routing has already produced a compact device-side count.  A
-            # tiny metadata readback lets the two projection kernels launch
-            # only non-empty expert blocks instead of doing masked matrix dots
-            # for every expert/total-route combination.
-            counts_host = packed_counts.cpu().tolist()
-            block_experts_host = []
-            block_starts_host = []
-            for expert, count in enumerate(counts_host):
-                for start in range(0, int(count), group_block_routes):
-                    block_experts_host.append(expert)
-                    block_starts_host.append(start)
-            if not block_experts_host:
-                raise ValueError("route compaction produced no expert blocks")
-            block_experts = torch.tensor(
-                block_experts_host, device=hidden_states.device, dtype=torch.int32
-            )
-            block_starts = torch.tensor(
-                block_starts_host, device=hidden_states.device, dtype=torch.int32
-            )
+            blocks_per_expert = triton.cdiv(total_routes, group_block_routes)
         elif self._ks_variant in {
             "fused_route_scalar_mlp",
             "fused_route_scalar_mlp_unrolled",
@@ -836,13 +819,11 @@ class ModelNew(nn.Module):
             # The route-pack kernel above produced only a Triton-generated
             # permutation.  No framework sort or PyTorch fallback is used.
             _moe_gate_up_grouped_kernel[
-                (len(block_experts_host),)
+                (self.num_experts * blocks_per_expert,)
             ](
                 hidden_states,
                 packed_routes,
                 packed_counts,
-                block_experts,
-                block_starts,
                 self.w1,
                 act,
                 self.hidden_size,
@@ -852,6 +833,7 @@ class ModelNew(nn.Module):
                 BLOCK_R=group_block_routes,
                 BLOCK_H=block_h,
                 BLOCK_I=block_i,
+                BLOCKS_PER_EXPERT=blocks_per_expert,
                 num_warps=int(self._ks_config["group_gate_num_warps"]),
             )
         elif self._ks_variant in {
@@ -958,12 +940,10 @@ class ModelNew(nn.Module):
                 dtype=hidden_states.dtype,
             )
             _moe_down_grouped_kernel[
-                (len(block_experts_host),)
+                (self.num_experts * blocks_per_expert,)
             ](
                 packed_routes,
                 packed_counts,
-                block_experts,
-                block_starts,
                 act,
                 route_weights,
                 self.w2,
@@ -974,6 +954,7 @@ class ModelNew(nn.Module):
                 BLOCK_R=group_block_routes,
                 BLOCK_H=block_h,
                 BLOCK_I=block_i,
+                BLOCKS_PER_EXPERT=blocks_per_expert,
                 num_warps=int(self._ks_config["group_down_num_warps"]),
             )
         elif self._ks_variant in {

@@ -34,7 +34,7 @@
       "verified": false,
       "overrides": {
         "variant": "vector_reduce",
-        "config": {"num_warps": 4}
+        "config": {"num_warps": 8}
       }
     },
     "moore_threads_ph100": {"verified": false, "overrides": {}},

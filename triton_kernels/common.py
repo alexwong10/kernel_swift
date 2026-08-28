@@ -159,7 +159,9 @@ def _decoder_pool_kernel(
     else:
         pooled = tl.zeros((BLOCK_V,), tl.float32)
 
-    for token_start in range(0, MAX_SEQ, BLOCK_T):
+    # MAX_SEQ remains a profile field for compatibility; total_tokens is the
+    # safe compile-time upper bound and avoids silently truncating long inputs.
+    for token_start in range(0, total_tokens, BLOCK_T):
         token = token_start + tl.arange(0, BLOCK_T)
         token_valid = (token < length) & ((start + token) < total_tokens)
         acc = tl.zeros((BLOCK_T, BLOCK_V), tl.float32)

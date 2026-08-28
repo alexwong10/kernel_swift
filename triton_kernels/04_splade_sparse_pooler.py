@@ -60,7 +60,7 @@ def _pool_logits_kernel(
         # the total-token guard so malformed lengths cannot read past logits.
         valid = (
             (current_token[:, None] < length)
-            & (current_token[:, None] < total_tokens)
+            & ((start + current_token[:, None]) < total_tokens)
             & (vocab[None, :] < vocab_size)
         )
         values = tl.load(

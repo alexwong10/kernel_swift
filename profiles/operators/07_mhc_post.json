@@ -42,10 +42,10 @@
       "overrides": {
         "variant": "fused_mix_tiled",
         "config": {
-          "block_hidden": 512,
+          "block_hidden": 256,
           "block_tokens": 2,
           "block_mixes": 4,
-          "num_warps": 4
+          "num_warps": 2
         }
       }
     },
