@@ -10,7 +10,7 @@
         "config": {"num_warps": 4, "block_m": 32, "block_n": 128}
       }
     },
-    "metax_c500": {"verified": false, "overrides": {"variant": "tiled_online_softmax", "config": {"implementation": "tiled", "num_warps": 1, "block_m": 64, "block_n": 128}}},
+    "metax_c500": {"verified": false, "overrides": {"variant": "tiled_online_softmax", "config": {"implementation": "scalar_online", "num_warps": 2, "block_m": 64, "block_n": 64}}},
     "iluvatar_bi150": {"verified": true, "overrides": {"variant": "tiled_online_softmax", "config": {"implementation": "scalar_online", "num_warps": 1, "block_m": 64, "block_n": 128}}},
     "enflame_s60": {
       "verified": true,

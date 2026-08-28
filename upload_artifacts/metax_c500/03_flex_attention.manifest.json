@@ -3,22 +3,22 @@
   "builder_version": 5,
   "task_key": "03_flex_attention",
   "chip_key": "metax_c500",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\03_flex_attention.py",
-  "artifact_sha256": "9434ef5d6110263678d6c027298d6364c1cad3ed17c6be2e5f918db69ecda0e6",
+  "source_commit": "a688fec3b62df05541d901dfce4ca7ab17bddbf6",
+  "artifact": "upload_artifacts\\metax_c500\\03_flex_attention.py",
+  "artifact_sha256": "2de930bcc862072554beabe4cb652aa9f709a26550ee2aefc255a30c208cfc2b",
   "sources": {
     "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-    "profiles/operators/03_flex_attention.json": "44e6724440339d83b37c8b541bcd3f52c90c950053a2f6aea2e6ab70e2284f87",
+    "profiles/operators/03_flex_attention.json": "94115a30386524ba606c766da2fcd4ab98059dcccd869cdfacc911291054009a",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf",
     "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
   },
   "profile": {
     "variant": "tiled_online_softmax",
     "config": {
-      "num_warps": 1,
+      "num_warps": 2,
       "block_m": 64,
-      "block_n": 128,
-      "implementation": "tiled"
+      "block_n": 64,
+      "implementation": "scalar_online"
     },
     "schema_version": 1,
     "task_key": "03_flex_attention",
