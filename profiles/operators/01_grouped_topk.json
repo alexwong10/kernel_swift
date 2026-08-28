@@ -33,7 +33,7 @@
     "hygon_bw1000": {
       "verified": false,
       "overrides": {
-        "variant": "unrolled_reduce",
+        "variant": "vector_reduce",
         "config": {"num_warps": 4}
       }
     },

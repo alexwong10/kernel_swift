@@ -3,16 +3,16 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "hygon_bw1000",
-  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
-  "artifact": "upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
-  "artifact_sha256": "4650c98b275696f5ad40ce732e4824fa9dc396739e1c69cee368b55da605824d",
+  "source_commit": "29bb722448cb788b7ca79423dec698f7460c4446",
+  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
+  "artifact_sha256": "9f7fb3e54e517aae722e6cb3236f992df37fcef9817aff042ce9c06d615d7bce",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
-    "profiles/operators/01_grouped_topk.json": "0ee5d386c5f0383c730ca99e44c7441540d72ba3a238aac461562b6437e44b1d",
+    "profiles/operators/01_grouped_topk.json": "44cece4fba2417b8a5b7c271e10f587f210a80bbfa69fc85c1faebef58757ff4",
     "profiles/chips/hygon_bw1000.json": "2bb8df59f08afa3adf54a826ec1627b1aa98a1ffc1f97f6d482e5e10ee4b1772"
   },
   "profile": {
-    "variant": "unrolled_reduce",
+    "variant": "vector_reduce",
     "config": {
       "num_warps": 4
     },
