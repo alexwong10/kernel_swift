@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "thead_810e",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\08_hc_split_sinkhorn.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\thead_810e\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "0a4658365d1cee1a9ca2294c59ed936f993d70ba13f53bb3435aa961765064e9",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",

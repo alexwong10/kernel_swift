@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "thead_810e",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\01_grouped_topk.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\thead_810e\\01_grouped_topk.py",
   "artifact_sha256": "45f8c07ea1b367f8cfc4e0a09c25e8d7ae9e6871cca7aafc3c3271426480b91e",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",

@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "hygon_bw1000",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "b9e0b2e98161e1e10a1588831d586ce46ef00ed9abdf0e5e962035ad70b88cbf",
   "sources": {
     "triton_kernels/10_head_compute_mix_bwd.py": "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",

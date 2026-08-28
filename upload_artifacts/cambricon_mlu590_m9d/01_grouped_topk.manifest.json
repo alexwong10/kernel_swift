@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\cambricon_mlu590_m9d\\01_grouped_topk.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\01_grouped_topk.py",
   "artifact_sha256": "21b57da2b526e8155b848d9ddf9199204bd0709224cec6241528cab6759a2bcc",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",

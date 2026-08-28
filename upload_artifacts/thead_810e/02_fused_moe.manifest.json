@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "thead_810e",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\02_fused_moe.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\thead_810e\\02_fused_moe.py",
   "artifact_sha256": "e52cd310e9ccdfc195aad439be4c0be566b76a00fc22e7c48a181ca3f1c64d4d",
   "sources": {
     "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",

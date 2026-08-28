@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\moore_threads_ph100\\02_fused_moe.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\moore_threads_ph100\\02_fused_moe.py",
   "artifact_sha256": "b9fc368f976a3e074da9a288ca58dc29e0b3333879ad0d3cee897b6927da1128",
   "sources": {
     "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",

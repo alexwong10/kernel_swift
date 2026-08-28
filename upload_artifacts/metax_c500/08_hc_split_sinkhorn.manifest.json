@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "metax_c500",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\08_hc_split_sinkhorn.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\metax_c500\\08_hc_split_sinkhorn.py",
   "artifact_sha256": "d701de87b32655b6a451cd0d69031607961fc90e4eb2d63d7e48b9b0d5832903",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",

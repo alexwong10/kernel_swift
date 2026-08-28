@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "thead_810e",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\05_music_flamingo_rotary_embedding.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\thead_810e\\05_music_flamingo_rotary_embedding.py",
   "artifact_sha256": "a1f0ab1b6dd0332ef70eb4df92f098255b564cd8dc5e4f66575f791a262f8a61",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",

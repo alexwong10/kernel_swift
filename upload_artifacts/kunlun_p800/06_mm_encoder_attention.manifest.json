@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "06_mm_encoder_attention",
   "chip_key": "kunlun_p800",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\kunlun_p800\\06_mm_encoder_attention.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\kunlun_p800\\06_mm_encoder_attention.py",
   "artifact_sha256": "c3d8e43486da2f742856d1a7db59dbfee4e6946ae1c130dc473489660db40411",
   "sources": {
     "triton_kernels/06_mm_encoder_attention.py": "9e09fea48c1595eaa9458d2ae068284e0f6705eec4149475dc3de549fcdd5f4d",

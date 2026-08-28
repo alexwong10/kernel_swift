@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "enflame_s60",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\enflame_s60\\09_centre_random_augmentation.py",
   "artifact_sha256": "522907110865bd722676e2db0cff5ef95b1bcb7e805bc12354ef876226927c98",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",

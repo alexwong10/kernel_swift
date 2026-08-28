@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "thead_810e",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\thead_810e\\09_centre_random_augmentation.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\thead_810e\\09_centre_random_augmentation.py",
   "artifact_sha256": "16794aef8260faf1af7078196ea2d814ca1a8429a8deaeff46fe9389906ffbd5",
   "sources": {
     "triton_kernels/09_centre_random_augmentation.py": "7e39f084ec77012b40d325ac86e5f31f276a63bad6563f57586169a770c16dfe",

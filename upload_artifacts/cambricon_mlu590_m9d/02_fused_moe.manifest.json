@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\cambricon_mlu590_m9d\\02_fused_moe.py",
+  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\02_fused_moe.py",
   "artifact_sha256": "fa5245c5a86bfed5a86500a193a1614a49517a9346dee3c0c257b5bff82cf687",
   "sources": {
     "triton_kernels/02_fused_moe.py": "d332cc1cfeb4506094a9baa874bc653d866890758adde5d463b6ac64b04662ab",
