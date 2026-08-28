@@ -3,19 +3,19 @@
   "builder_version": 5,
   "task_key": "07_mhc_post",
   "chip_key": "metax_c500",
-  "source_commit": "574e7472546a77e865e908021385116dd7e6a881",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\metax_c500\\07_mhc_post.py",
-  "artifact_sha256": "1e3f959c5847273cd1b00468569905ed4190e96bf2c1ea13ac104af3ba45279a",
+  "source_commit": "8d5aaf05045cafc28fe41cb44f4f79a1ef19940c",
+  "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
+  "artifact_sha256": "9439e851460dd4ed928092a46aa24179a6e98090bc6b462729ce5a2a464bffd5",
   "sources": {
     "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
-    "profiles/operators/07_mhc_post.json": "4988e1549de2da85ce902239a013aa2bdcee14812155e40fd346291c53f4cca4",
+    "profiles/operators/07_mhc_post.json": "7a9a1f8e2bbbb6cf2a99a8765f3bb5bfc3685103221432a5388f32a332664a2f",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {
-    "variant": "tiled_hidden",
+    "variant": "fp32_input_tiled",
     "config": {
-      "block_hidden": 512,
-      "block_tokens": 2,
+      "block_hidden": 256,
+      "block_tokens": 4,
       "num_warps": 4
     },
     "schema_version": 1,
