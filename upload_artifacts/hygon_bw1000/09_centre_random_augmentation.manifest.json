@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "hygon_bw1000",
-  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
   "artifact": "upload_artifacts\\hygon_bw1000\\09_centre_random_augmentation.py",
   "artifact_sha256": "824c0cb9eeaa5790713a91d689624cbe539479cbf594c714cbbf37b722a2a8c2",
   "sources": {

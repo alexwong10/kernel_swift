@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 2, 'block_m': 64, 'block_n': 128, 'implementation': 'scalar_online'}, 'schema_version': 1, 'task_key': '03_flex_attention', 'chip_key': 'metax_c500', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'tiled_online_softmax', 'config': {'num_warps': 2, 'block_m': 64, 'block_n': 128, 'implementation': 'scalar_online', 'num_stages': 2}, 'schema_version': 1, 'task_key': '03_flex_attention', 'chip_key': 'metax_c500', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit

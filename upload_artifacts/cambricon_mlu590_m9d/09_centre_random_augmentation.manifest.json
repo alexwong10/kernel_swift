@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "cambricon_mlu590_m9d",
-  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
   "artifact": "upload_artifacts\\cambricon_mlu590_m9d\\09_centre_random_augmentation.py",
   "artifact_sha256": "38b51a2d8accc8375a4b66ccb7452b6eab2cff685c53178019ac3b7060fcc10c",
   "sources": {

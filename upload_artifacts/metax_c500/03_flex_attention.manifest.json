@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "03_flex_attention",
   "chip_key": "metax_c500",
-  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
   "artifact": "upload_artifacts\\metax_c500\\03_flex_attention.py",
-  "artifact_sha256": "6fcfa859c534c22d98c10501808ae12d9faf81e89de2fb8cbf48727bd9171f62",
+  "artifact_sha256": "3fd144d2a50fed04cc44642853172940fa905494de554ae0f960af34806511f3",
   "sources": {
     "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-    "profiles/operators/03_flex_attention.json": "55449450652ac4b295083484c0fc6f7490f1e4b013aa2ab6382e672c2ac26a7e",
+    "profiles/operators/03_flex_attention.json": "97f46f914a47e1749686fa8bb5612feff3ac8ae70c0e5c6e5560e483ae160d4e",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf",
     "triton_kernels/common.py": "293814ce2572a96a11c06cf875fd10d006cb88838a800931a8df4642201c2a86"
   },
@@ -18,7 +18,8 @@
       "num_warps": 2,
       "block_m": 64,
       "block_n": 128,
-      "implementation": "scalar_online"
+      "implementation": "scalar_online",
+      "num_stages": 2
     },
     "schema_version": 1,
     "task_key": "03_flex_attention",

@@ -3,8 +3,8 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "hygon_bw1000",
-  "source_commit": "29bb722448cb788b7ca79423dec698f7460c4446",
-  "artifact": "D:\\project\\kernel_swift\\upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
+  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
+  "artifact": "upload_artifacts\\hygon_bw1000\\01_grouped_topk.py",
   "artifact_sha256": "9f7fb3e54e517aae722e6cb3236f992df37fcef9817aff042ce9c06d615d7bce",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",

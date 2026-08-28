@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "hygon_bw1000",
-  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
   "artifact": "upload_artifacts\\hygon_bw1000\\10_head_compute_mix_bwd.py",
   "artifact_sha256": "b9e0b2e98161e1e10a1588831d586ce46ef00ed9abdf0e5e962035ad70b88cbf",
   "sources": {

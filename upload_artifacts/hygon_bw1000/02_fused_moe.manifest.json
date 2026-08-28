@@ -3,7 +3,7 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "hygon_bw1000",
-  "source_commit": "31ef3407fdbe7932bb37b675f7c530d368189b37",
+  "source_commit": "ca248f473008e32a803dcd8810b487f9e17b5d19",
   "artifact": "upload_artifacts\\hygon_bw1000\\02_fused_moe.py",
   "artifact_sha256": "efa594bba47f2bc4255f89155e2fb721d2f515c7d48537e1aa5ffc4e974c9d85",
   "sources": {
