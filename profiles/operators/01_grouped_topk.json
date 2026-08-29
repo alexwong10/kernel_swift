@@ -23,7 +23,7 @@
   "chips": {
     "ascend_a2_910b": {
       "verified": false,
-      "overrides": {"variant": "register_reduce", "config": {"num_warps": 4}}
+      "overrides": {"variant": "unrolled_reduce", "config": {"num_warps": 1}}
     },
     "metax_c500": {"verified": false, "overrides": {"variant": "register_reduce", "config": {"num_warps": 1}}},
     "iluvatar_bi150": {"verified": true, "overrides": {"config": {"num_warps": 1}}},

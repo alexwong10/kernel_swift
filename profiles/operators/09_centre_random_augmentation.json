@@ -2,15 +2,22 @@
   "schema_version": 1,
   "task_key": "09_centre_random_augmentation",
   "default": {"variant": "framework_rng_tiled_geometry", "config": {"center_num_warps": 4, "augment_block_atoms": 64, "augment_num_warps": 4}},
+  "candidates": {
+    "reuse_center_tiled_geometry": {
+      "verified": false,
+      "config": {"center_num_warps": 4, "augment_block_atoms": 256, "augment_num_warps": 4},
+      "note": "Computes the weighted center once and reuses it across samples/tiles; requires target-chip correctness and timing validation."
+    }
+  },
   "chips": {
     "ascend_a2_910b": {
       "verified": false,
       "overrides": {
-        "variant": "fused_center_geometry",
+        "variant": "reuse_center_tiled_geometry",
         "config": {
           "center_num_warps": 4,
-          "fused_block_atoms": 256,
-          "fused_num_warps": 4
+          "augment_block_atoms": 256,
+          "augment_num_warps": 4
         }
       }
     },

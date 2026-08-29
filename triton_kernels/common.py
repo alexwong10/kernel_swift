@@ -448,13 +448,22 @@ def _attention_query_tile_kernel(
     for n_start in range(0, kv_len, BLOCK_N):
         n_index = n_start + tl.arange(0, BLOCK_N)
         n_valid = n_index < kv_len
+        # In a causal tile, keys beyond the last query in this program can
+        # never contribute to any output row.  Keep the score mask below
+        # unchanged (it is per query row), but avoid fetching those K/V rows.
+        # This matters for the short, causal competition case where BLOCK_N
+        # is often larger than a query tile.
+        if CAUSAL:
+            n_load_valid = n_valid & (n_index <= q_index[BLOCK_M - 1])
+        else:
+            n_load_valid = n_valid
         k = tl.load(
             k_ptr
             + batch * stride_kb
             + n_index[:, None] * stride_ks
             + head * stride_kh
             + d[None, :] * stride_kd,
-            mask=n_valid[:, None] & d_valid[None, :],
+            mask=n_load_valid[:, None] & d_valid[None, :],
             other=0.0,
         )
         scores = tl.dot(q, tl.trans(k)) * scale
@@ -476,7 +485,7 @@ def _attention_query_tile_kernel(
             + n_index[:, None] * stride_vs
             + head * stride_vh
             + d[None, :] * stride_vd,
-            mask=n_valid[:, None] & d_valid[None, :],
+            mask=n_load_valid[:, None] & d_valid[None, :],
             other=0.0,
         )
         # Keep the online-softmax state in FP32, but feed the value dot with

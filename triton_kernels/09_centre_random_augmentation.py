@@ -230,6 +230,7 @@ class ModelNew(nn.Module):
             "framework_rng_triton_geometry",
             "framework_rng_tiled_geometry",
             "fused_center_geometry",
+            "reuse_center_tiled_geometry",
         }:
             raise ValueError(f"unsupported CentreRandomAugmentation variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
@@ -270,7 +271,41 @@ class ModelNew(nn.Module):
             device=x_input_coords.device,
             dtype=x_input_coords.dtype,
         )
-        if self._ks_variant == "fused_center_geometry" and not self.centre_only:
+        if self._ks_variant == "reuse_center_tiled_geometry":
+            # Reuse the single globally reduced center across all samples.
+            # Unlike fused_center_geometry, this keeps the reduction cost
+            # independent of n_sample and remains correct for multi-tile inputs.
+            augment_block = int(
+                self._ks_config.get(
+                    "augment_block_atoms",
+                    self._ks_config.get("fused_block_atoms", block_atoms),
+                )
+            )
+            if augment_block <= 0:
+                raise ValueError("augment_block_atoms must be positive")
+            _augment_tiled_kernel[
+                (self.n_sample, triton.cdiv(n_atoms, augment_block))
+            ](
+                x_input_coords,
+                mask_arg,
+                center,
+                u1,
+                u2,
+                u3,
+                translation,
+                out,
+                n_atoms,
+                HAS_MASK=mask is not None,
+                CENTRE_ONLY=self.centre_only,
+                BLOCK_A=augment_block,
+                num_warps=int(
+                    self._ks_config.get(
+                        "augment_num_warps",
+                        self._ks_config.get("fused_num_warps", 1),
+                    )
+                ),
+            )
+        elif self._ks_variant == "fused_center_geometry" and not self.centre_only:
             fused_block = int(self._ks_config.get("fused_block_atoms", block_atoms))
             if fused_block <= 0:
                 raise ValueError("fused_block_atoms must be positive")
