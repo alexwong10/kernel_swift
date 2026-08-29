@@ -12,7 +12,7 @@
     "ascend_a2_910b": {
       "verified": false,
       "overrides": {
-        "variant": "tiled_mix_atomic",
+        "variant": "native",
         "config": {"block_rows": 256, "block_mixes": 4, "num_warps": 1, "reduce_num_warps": 1}
       }
     },

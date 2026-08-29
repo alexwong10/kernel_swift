@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import triton
 import triton.language as tl
 
@@ -92,7 +93,12 @@ class ModelNew(nn.Module):
         self.decoder = nn.Linear(hidden_size, vocab_size, bias=True)
         self.pooling = pooling
         profile = get_operator_profile("04_splade_sparse_pooler")
-        if profile["variant"] not in {"staged_portable", "fused_pool"}:
+        if profile["variant"] not in {
+            "staged_portable",
+            "fused_pool",
+            "native_decoder_staged_pool",
+            "native_all",
+        }:
             raise ValueError(f"unsupported SPLADE variant: {profile['variant']}")
         self._ks_variant = profile["variant"]
         config = profile["config"]
@@ -129,6 +135,20 @@ class ModelNew(nn.Module):
         }
 
     def forward(self, hidden_states: torch.Tensor, seq_lens: torch.Tensor) -> list:
+        if self._ks_variant == "native_all":
+            x = self.decoder(self.layer_norm(self.act(self.dense(hidden_states))))
+            x = torch.log1p(F.relu(x))
+            result = []
+            offset = 0
+            for length in seq_lens.tolist():
+                chunk = x[offset : offset + length]
+                if self.pooling == "max":
+                    result.append(chunk.amax(dim=0))
+                else:
+                    result.append(chunk.sum(dim=0))
+                offset += length
+            return result
+
         dense = triton_linear(
             hidden_states,
             self.dense.weight,
@@ -142,6 +162,20 @@ class ModelNew(nn.Module):
             self.layer_norm.eps,
             config=self._ks_layer_norm_config,
         )
+        if self._ks_variant == "native_decoder_staged_pool":
+            logits = F.linear(normalized, self.decoder.weight, self.decoder.bias)
+            logits = torch.log1p(F.relu(logits))
+            result = []
+            offset = 0
+            for length in seq_lens.tolist():
+                chunk = logits[offset : offset + length]
+                if self.pooling == "max":
+                    result.append(chunk.amax(dim=0))
+                else:
+                    result.append(chunk.sum(dim=0))
+                offset += length
+            return result
+
         if self._ks_variant == "fused_pool":
             pooled = triton_decoder_pool(
                 normalized,
