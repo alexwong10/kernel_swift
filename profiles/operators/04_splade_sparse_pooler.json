@@ -19,7 +19,7 @@
     "ascend_a2_910b": {
       "verified": false,
       "overrides": {
-        "variant": "native_all",
+        "variant": "staged_portable",
         "config": {
           "linear_block_m": 64,
           "linear_block_n": 256,

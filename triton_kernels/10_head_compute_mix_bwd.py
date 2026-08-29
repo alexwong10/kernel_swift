@@ -234,7 +234,6 @@ class ModelNew(nn.Module):
             "chunked_deterministic",
             "tiled_mix_chunked",
             "tiled_mix_atomic",
-            "native",
             "fused_all_mixes",
         }:
             raise ValueError(f"unsupported head_compute_mix_bwd variant: {profile['variant']}")
@@ -251,14 +250,6 @@ class ModelNew(nn.Module):
         mhc_mult = input_mix.shape[-1]
         rows = input_mix.numel() // mhc_mult
         grad_input = torch.empty_like(input_mix)
-        if self._ks_variant == "native":
-            z = input_mix * mhc_scale + mhc_base
-            sigmoid = torch.sigmoid(z)
-            grad_z = grad_out * sigmoid * (1 - sigmoid)
-            grad_input = grad_z * mhc_scale
-            grad_base = grad_z.sum(dim=(0, 1), keepdim=True).view(-1)
-            grad_scale = (grad_z * input_mix).sum(dim=(0, 1, 2), keepdim=True).view(1)
-            return grad_input, grad_scale, grad_base
         if self._ks_variant == "tiled_mix_atomic":
             block_rows = int(self._ks_config["block_rows"])
             num_chunks = triton.cdiv(rows, block_rows)
