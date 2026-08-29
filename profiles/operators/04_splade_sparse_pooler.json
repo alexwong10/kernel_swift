@@ -29,7 +29,7 @@
           "layer_norm_num_warps_small": 4,
           "layer_norm_num_warps_large": 4,
           "pool_block_t": 32,
-          "pool_block_v": 512,
+          "pool_block_v": 256,
           "pool_num_warps": 2
         }
       }

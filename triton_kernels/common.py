@@ -454,7 +454,9 @@ def _attention_query_tile_kernel(
         # This matters for the short, causal competition case where BLOCK_N
         # is often larger than a query tile.
         if CAUSAL:
-            n_load_valid = n_valid & (n_index <= q_index[BLOCK_M - 1])
+            n_load_valid = n_valid & (
+                n_index <= query_block * BLOCK_M + BLOCK_M - 1
+            )
         else:
             n_load_valid = n_valid
         k = tl.load(
