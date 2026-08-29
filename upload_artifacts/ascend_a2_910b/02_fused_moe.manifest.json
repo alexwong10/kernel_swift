@@ -3,25 +3,22 @@
   "builder_version": 5,
   "task_key": "02_fused_moe",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
   "artifact": "upload_artifacts\\ascend_a2_910b\\02_fused_moe.py",
-  "artifact_sha256": "4691d763bce8a85596c7ddc6793d7ffceac0839ffe355d8c630ba0689cab5c2a",
+  "artifact_sha256": "9d9cb43c4b076639c7103946383e66405e4531daa5e3a8ea53842eceb618099a",
   "sources": {
     "triton_kernels/02_fused_moe.py": "d4513e5f40d82cbbd4fe043c2b13afda4238c90847eee495617635fb9d3dc64c",
-    "profiles/operators/02_fused_moe.json": "e5bcc85fa8823043513c1c2a87bbb3963c548e1fa52e4d4dec6aa79debf8e2d7",
+    "profiles/operators/02_fused_moe.json": "ee682d0643102090445e49e711869b9829993ea1a065775e8ed7110f0b346d64",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {
-    "variant": "expert_grouped_dot",
+    "variant": "fused_route_scalar_mlp_unrolled_direct",
     "config": {
       "route_num_warps": 1,
       "gate_up_num_warps": 4,
       "down_num_warps": 4,
       "reduce_block": 256,
-      "reduce_num_warps": 4,
-      "group_block_routes": 32,
-      "group_gate_num_warps": 4,
-      "group_down_num_warps": 4
+      "reduce_num_warps": 1
     },
     "schema_version": 1,
     "task_key": "02_fused_moe",

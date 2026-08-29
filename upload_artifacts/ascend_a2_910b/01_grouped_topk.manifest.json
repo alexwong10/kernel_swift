@@ -3,18 +3,18 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
   "artifact": "upload_artifacts\\ascend_a2_910b\\01_grouped_topk.py",
-  "artifact_sha256": "c36cf4e21ae07af72b41ae17a24e856f91b0631e978ec7e5126d536bd41bd44c",
+  "artifact_sha256": "cf8ebd1b0dc03e5d26dd44e0b75bf4d4df52f774fe4041c2617fc7db59d2f7be",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
-    "profiles/operators/01_grouped_topk.json": "343746d8b4cda34c5ec67a8cc85cc3f31b3af78ee5d5711fda71510c8f6c531d",
+    "profiles/operators/01_grouped_topk.json": "e119306a8b82a19e7b801f370628e0aaea7969f2318c7e83c8a4bae60e1e8ce7",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {
-    "variant": "register_reduce",
+    "variant": "unrolled_reduce",
     "config": {
-      "num_warps": 4
+      "num_warps": 1
     },
     "fallback_variants": [
       {

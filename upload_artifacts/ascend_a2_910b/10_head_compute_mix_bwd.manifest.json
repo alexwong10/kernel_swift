@@ -3,20 +3,20 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
   "artifact": "upload_artifacts\\ascend_a2_910b\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "2b6c00dc1cd8d5adc767689d48d5756848ea9898db916d376911e76c23978412",
+  "artifact_sha256": "ffd10ffe4cbbb88e472f89d763855871ce770f541bf9bb1334923207adaa8723",
   "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
-    "profiles/operators/10_head_compute_mix_bwd.json": "5662fed31e20f0426fc74a3029c67130c5177c5b939be5b9615f750ddd8f81e1",
+    "triton_kernels/10_head_compute_mix_bwd.py": "fd36b2acebf49755502d9eeb5b6fcdf3f80100621004b2e34bf4f17ac9395e60",
+    "profiles/operators/10_head_compute_mix_bwd.json": "4c81ca4cd7bfda54cd3c2b6688639275ae20cea7edae5d3433a80edd807d2800",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {
-    "variant": "fused_all_mixes",
+    "variant": "tiled_mix_atomic",
     "config": {
       "block_rows": 256,
       "block_mixes": 4,
-      "num_warps": 4,
+      "num_warps": 1,
       "reduce_num_warps": 1
     },
     "fallback_variants": [

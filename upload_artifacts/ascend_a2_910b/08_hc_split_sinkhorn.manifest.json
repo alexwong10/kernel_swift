@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
   "artifact": "upload_artifacts\\ascend_a2_910b\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "46b588cf8ab917ddcb4711413a18ba77902d2bad3f1cd8d7a5ded4af5a864da3",
+  "artifact_sha256": "f0a91eebaf244551838fe790ef9e90a321706424d313a67aef0b0adeaa962e29",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-    "profiles/operators/08_hc_split_sinkhorn.json": "9387f2b54b093dff2d6a8e6e9a00daf6f02cbe0da285568cd390fc6fc25d71f1",
+    "profiles/operators/08_hc_split_sinkhorn.json": "467930d3bdaea2d9c8dff874847b5e4fd9214cddd6bd930fe56678eb065ebb2c",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {

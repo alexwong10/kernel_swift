@@ -3,22 +3,20 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "ascend_a2_910b",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
   "artifact": "upload_artifacts\\ascend_a2_910b\\09_centre_random_augmentation.py",
-  "artifact_sha256": "b67e44cbef78690529ae11755c56ca42b4259f515973378bf962073f6f674627",
+  "artifact_sha256": "f02023d19482a55ed31d86918e1df1bdb2179dc078b401d4fc28353ac8e78c26",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c183a86f3540273b01fb08b179f1741b7e9a74fd76281dbad5db94999e0e7a4d",
-    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
+    "triton_kernels/09_centre_random_augmentation.py": "0ec0c411a8bfc92db59749b12ac80c102f2d8c6ea65d92cd1a9cf97d580a4b4e",
+    "profiles/operators/09_centre_random_augmentation.json": "ccf01c10e8836374ef2f143284ed24cd22f439c40e9085fb75f8d4cdb8942f3e",
     "profiles/chips/ascend_a2_910b.json": "e114dcc600280a3e276f1b932ebe1c739a02a801e4e9dd647a054eff58c5e834"
   },
   "profile": {
-    "variant": "fused_center_geometry",
+    "variant": "reuse_center_tiled_geometry",
     "config": {
       "center_num_warps": 4,
-      "augment_block_atoms": 64,
-      "augment_num_warps": 4,
-      "fused_block_atoms": 256,
-      "fused_num_warps": 4
+      "augment_block_atoms": 256,
+      "augment_num_warps": 4
     },
     "schema_version": 1,
     "task_key": "09_centre_random_augmentation",
@@ -57,13 +55,13 @@
     ],
     "replacements": [
       {
-        "line": 373,
+        "line": 408,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"
       },
       {
-        "line": 374,
+        "line": 409,
         "from": "cuda",
         "to": "npu",
         "context": "device_keyword"

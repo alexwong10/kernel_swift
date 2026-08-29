@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'expert_grouped_dot', 'config': {'route_num_warps': 1, 'gate_up_num_warps': 4, 'down_num_warps': 4, 'reduce_block': 256, 'reduce_num_warps': 4, 'group_block_routes': 32, 'group_gate_num_warps': 4, 'group_down_num_warps': 4}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'ascend_a2_910b', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'fused_route_scalar_mlp_unrolled_direct', 'config': {'route_num_warps': 1, 'gate_up_num_warps': 4, 'down_num_warps': 4, 'reduce_block': 256, 'reduce_num_warps': 1}, 'schema_version': 1, 'task_key': '02_fused_moe', 'chip_key': 'ascend_a2_910b', 'verified': False}
 
 @triton.jit
 def _moe_route_kernel(logits_ptr, ids_ptr, weights_ptr, num_experts: tl.constexpr, TOP_K: tl.constexpr, RENORMALIZE: tl.constexpr, BLOCK_E: tl.constexpr):

@@ -8,7 +8,7 @@ import triton.language as tl
 import torch
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 64, 'linear_block_n': 256, 'linear_block_k': 64, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 4, 'pool_block_t': 32, 'pool_block_v': 512, 'pool_num_warps': 2, 'linear_input_dtype': 'fp16'}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'ascend_a2_910b', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'staged_portable', 'config': {'linear_block_m': 64, 'linear_block_n': 256, 'linear_block_k': 64, 'linear_num_warps': 4, 'layer_norm_num_warps_small': 4, 'layer_norm_num_warps_large': 4, 'pool_block_t': 32, 'pool_block_v': 256, 'pool_num_warps': 2, 'linear_input_dtype': 'fp16'}, 'schema_version': 1, 'task_key': '04_splade_sparse_pooler', 'chip_key': 'ascend_a2_910b', 'verified': False}
 'Shared, conservative Triton kernels used by multiple competition tasks.\n\nThe code intentionally sticks to operations implemented by the major Triton\nforks used by the competition: masked load/store, reductions, exp/erf and\n`tl.dot`.  Backend-specific tuning belongs in per-chip configuration files;\nthe default configurations favor portability and correctness.\n'
 
 @triton.jit
@@ -38,7 +38,7 @@ def triton_linear(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor | No
     """Compute a 2-D nn.Linear with a portable tiled Triton kernel."""
     if x.ndim != 2 or weight.ndim != 2:
         raise ValueError('triton_linear expects 2-D input and weight')
-    m_size, k_size = x.shape
+    (m_size, k_size) = x.shape
     n_size = weight.shape[0]
     out = torch.empty((m_size, n_size), device=x.device, dtype=x.dtype)
     block_m = int(config['block_m'])
@@ -95,7 +95,7 @@ def _decoder_pool_kernel(hidden_ptr, weight_ptr, bias_ptr, seq_lens_ptr, out_ptr
 def triton_decoder_pool(hidden: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, seq_lens: torch.Tensor, *, pooling: str, config: dict[str, int]) -> torch.Tensor:
     """Run the fused custom Triton SPLADE decoder/pooling stage."""
     batch_size = int(seq_lens.numel())
-    total_tokens, hidden_size = hidden.shape
+    (total_tokens, hidden_size) = hidden.shape
     vocab_size = weight.shape[0]
     block_t = int(config['block_t'])
     block_v = int(config['block_v'])
@@ -123,7 +123,7 @@ def _gelu_layer_norm_kernel(x_ptr, weight_ptr, bias_ptr, out_ptr, width: tl.cons
     tl.store(out_ptr + row * width + cols, norm * weight + bias, mask=mask)
 
 def gelu_layer_norm(x: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor, eps: float, *, config: dict[str, int]) -> torch.Tensor:
-    rows, width = x.shape
+    (rows, width) = x.shape
     out = torch.empty_like(x)
     block = triton.next_power_of_2(width)
     _gelu_layer_norm_kernel[rows,](x, weight, bias, out, width, eps, BLOCK=block, num_warps=int(config['num_warps_large'] if block >= 2048 else config['num_warps_small']))
@@ -183,7 +183,11 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
     for n_start in range(0, kv_len, BLOCK_N):
         n_index = n_start + tl.arange(0, BLOCK_N)
         n_valid = n_index < kv_len
-        k = tl.load(k_ptr + batch * stride_kb + n_index[:, None] * stride_ks + head * stride_kh + d[None, :] * stride_kd, mask=n_valid[:, None] & d_valid[None, :], other=0.0)
+        if CAUSAL:
+            n_load_valid = n_valid & (n_index <= query_block * BLOCK_M + BLOCK_M - 1)
+        else:
+            n_load_valid = n_valid
+        k = tl.load(k_ptr + batch * stride_kb + n_index[:, None] * stride_ks + head * stride_kh + d[None, :] * stride_kd, mask=n_load_valid[:, None] & d_valid[None, :], other=0.0)
         scores = tl.dot(q, tl.trans(k)) * scale
         valid = q_valid[:, None] & n_valid[None, :]
         if CAUSAL:
@@ -195,7 +199,7 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
         next_max = tl.where(q_valid, next_max, 0.0)
         old_scale = tl.where(q_valid, tl.exp(running_max - next_max), 0.0)
         probs = tl.where(valid, tl.exp(scores - next_max[:, None]), 0.0)
-        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_valid[:, None] & d_valid[None, :], other=0.0)
+        v = tl.load(v_ptr + batch * stride_vb + n_index[:, None] * stride_vs + head * stride_vh + d[None, :] * stride_vd, mask=n_load_valid[:, None] & d_valid[None, :], other=0.0)
         result = result * old_scale[:, None] + tl.dot(probs.to(tl.float16), v)
         running_norm = running_norm * old_scale + tl.sum(probs, axis=1)
         running_max = next_max
@@ -204,7 +208,7 @@ def _attention_query_tile_kernel(q_ptr, k_ptr, v_ptr, out_ptr, batch_size: tl.co
 
 def triton_attention(query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, *, scale: float, causal: bool, config: dict[str, int]) -> torch.Tensor:
     """Attention for contiguous logical [B, S, H, D] tensors/views."""
-    batch_size, q_len, num_heads, head_dim = query.shape
+    (batch_size, q_len, num_heads, head_dim) = query.shape
     kv_len = key.shape[1]
     if key.shape[0] != batch_size or value.shape[0] != batch_size:
         raise ValueError('query/key/value batch sizes must match')

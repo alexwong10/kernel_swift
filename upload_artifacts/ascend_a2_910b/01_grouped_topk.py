@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import triton
 import triton.language as tl
-_KS_BAKED_PROFILE = {'variant': 'register_reduce', 'config': {'num_warps': 4}, 'fallback_variants': [{'variant': 'manual_stable', 'config': {'num_warps': 4}}], 'schema_version': 1, 'task_key': '01_grouped_topk', 'chip_key': 'ascend_a2_910b', 'verified': False}
+_KS_BAKED_PROFILE = {'variant': 'unrolled_reduce', 'config': {'num_warps': 1}, 'fallback_variants': [{'variant': 'manual_stable', 'config': {'num_warps': 4}}], 'schema_version': 1, 'task_key': '01_grouped_topk', 'chip_key': 'ascend_a2_910b', 'verified': False}
 
 @triton.jit
 def _grouped_topk_kernel(logits_ptr, weights_ptr, ids_ptr, num_experts: tl.constexpr, experts_per_group: tl.constexpr, num_groups: tl.constexpr, TOPK: tl.constexpr, TOPK_GROUPS: tl.constexpr, SOFTMAX: tl.constexpr, RENORMALIZE: tl.constexpr, ROUTED_SCALE: tl.constexpr, BLOCK: tl.constexpr):
@@ -254,7 +254,7 @@ class Model(nn.Module):
         self._ks_num_warps = int(profile['config']['num_warps'])
 
     def forward(self, hidden_states: torch.Tensor, gating_output: torch.Tensor):
-        num_tokens, num_experts = gating_output.shape
+        (num_tokens, num_experts) = gating_output.shape
         if hidden_states.shape[0] != num_tokens:
             raise ValueError('hidden_states and gating_output batch sizes must match')
         if self.num_expert_group <= 0 or num_experts % self.num_expert_group != 0:
@@ -284,7 +284,7 @@ class Model(nn.Module):
         return (weights, ids)
 
 def get_inputs():
-    num_tokens, hidden_size, num_experts = (83, 7168, 256)
+    (num_tokens, hidden_size, num_experts) = (83, 7168, 256)
     hidden_states = torch.randn(num_tokens, hidden_size, dtype=torch.float16)
     gating_output = torch.randn(num_tokens, num_experts, dtype=torch.float32)
     return [hidden_states, gating_output]
