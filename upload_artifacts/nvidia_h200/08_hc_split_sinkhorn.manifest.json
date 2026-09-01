@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "08_hc_split_sinkhorn",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\08_hc_split_sinkhorn.py",
+  "artifact_sha256": "596778dc0e326253c38f2ca4a359f1d761182caac36d21ef1e848faaed7dced4",
+  "sources": {
+    "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
+    "profiles/operators/08_hc_split_sinkhorn.json": "467930d3bdaea2d9c8dff874847b5e4fd9214cddd6bd930fe56678eb065ebb2c",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf"
+  },
+  "profile": {
+    "variant": "scalar_hc4",
+    "config": {
+      "num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "matrix_reduce",
+        "config": {
+          "num_warps": 1
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "08_hc_split_sinkhorn",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

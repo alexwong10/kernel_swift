@@ -3,7 +3,7 @@
   "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
   "evaluator_url": "https://github.com/DeepLink-org/DLBlas/blob/9b5b3627a0f2e5e543ad9d05bf051308bafbd12c/benchmarks/ks/auto_bench.py",
   "evaluation_mode": "official_auto_bench",
-  "meaning": "passed requires a parsed official PASS and an immutable run bundle from that exact task and chip",
+  "meaning": "matrix status=passed requires a parsed official PASS and an immutable run bundle from that exact task and chip; chips.verification_status and target_validation record completed target-chip validation separately and do not by themselves promote a cell to formal coverage",
   "tasks": [
     "01_grouped_topk",
     "02_fused_moe",
@@ -21,25 +21,33 @@
       "vendor": "Huawei Ascend",
       "model": "A2_910B",
       "resource_status": "kernelswift_option_observed",
-      "verification_status": "verified"
+      "verification_status": "verified",
+      "verification_scope": "target_chip_validation",
+      "formal_coverage_status": "not_promoted"
     },
     "metax_c500": {
       "vendor": "MetaX",
       "model": "C500",
       "resource_status": "kernelswift_option_observed",
-      "verification_status": "unverified"
+      "verification_status": "verified",
+      "verification_scope": "target_chip_validation",
+      "formal_coverage_status": "not_promoted"
     },
     "iluvatar_bi150": {
       "vendor": "Iluvatar",
       "model": "BI150",
       "resource_status": "kernelswift_option_observed",
-      "verification_status": "verified"
+      "verification_status": "verified",
+      "verification_scope": "formal_official_auto_bench",
+      "formal_coverage_status": "promoted"
     },
     "enflame_s60": {
       "vendor": "Enflame",
       "model": "S60",
       "resource_status": "kernelswift_option_observed",
-      "verification_status": "unverified"
+      "verification_status": "verified",
+      "verification_scope": "official_auto_bench_target_evidence",
+      "formal_coverage_status": "not_promoted"
     },
     "thead_810e": {
       "vendor": "T-Head",
@@ -57,13 +65,18 @@
       "vendor": "Hygon",
       "model": "BW1000",
       "resource_status": "kernelswift_option_observed",
-      "verification_status": "unverified"
+      "verification_status": "verified",
+      "verification_scope": "official_auto_bench_target_evidence",
+      "formal_coverage_status": "not_promoted"
     },
     "moore_threads_ph100": {
       "vendor": "Moore Threads",
       "model": "PH100",
       "resource_status": "user_provided_target_environment",
-      "verification_status": "unverified"
+      "verification_status": "verified",
+      "verification_scope": "target_chip_validation",
+      "formal_coverage_status": "not_promoted",
+      "device_mapping": "MTT S5000 confirmed as competition PH100"
     },
     "kunlun_p800": {
       "vendor": "Kunlunxin",
@@ -71,76 +84,496 @@
       "resource_status": "self_hosted_required",
       "verification_status": "unverified"
     },
-    "biren_br106m": {
-      "vendor": "Biren",
-      "model": "BR106M",
-      "resource_status": "self_hosted_required",
+    "nvidia_h200": {
+      "vendor": "NVIDIA",
+      "model": "H200",
+      "resource_status": "kernelswift_option_observed",
       "verification_status": "unverified"
     }
   },
   "matrix": {
     "ascend_a2_910b": {
       "01_grouped_topk": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.210042,
+          "optimized_ms": 0.10957,
+          "speedup": 1.917,
+          "target_pass": true,
+          "artifact_sha256": "cf8ebd1b0dc03e5d26dd44e0b75bf4d4df52f774fe4041c2617fc7db59d2f7be",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "02_fused_moe": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 2.233743,
+          "optimized_ms": 0.090513,
+          "speedup": 24.679,
+          "target_pass": true,
+          "artifact_sha256": "9d9cb43c4b076639c7103946383e66405e4531daa5e3a8ea53842eceb618099a",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "03_flex_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.156376,
+          "optimized_ms": 0.102113,
+          "speedup": 1.531,
+          "target_pass": true,
+          "artifact_sha256": "d4069622226a418c32ee75a1395b5e55753ecb97bbfd7ac203f2b7cb23d52dfa",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "04_splade_sparse_pooler": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.304066,
+          "optimized_ms": 0.569211,
+          "speedup": 0.534,
+          "target_pass": true,
+          "artifact_sha256": "4f9a21e6e6495d91f561a39255cc447b664afe4cbc6cfa43472e559c905f9b7b",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "05_music_flamingo_rotary_embedding": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.10124,
+          "optimized_ms": 0.089404,
+          "speedup": 1.132,
+          "target_pass": true,
+          "artifact_sha256": "130f28cec3ca0b0a572488117675a77e84db5b0f09d81da07c68effd2d5d7265",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "06_mm_encoder_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.135317,
+          "optimized_ms": 0.110969,
+          "speedup": 1.219,
+          "target_pass": true,
+          "artifact_sha256": "a26ba0b85bf6f01fc4e1a9a00d6e51195d684715675864418de78247f4848a2e",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "07_mhc_post": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 1.946116,
+          "optimized_ms": 1.357862,
+          "speedup": 1.433,
+          "target_pass": true,
+          "artifact_sha256": "9ee0a01614ea6738089366482e9dfc1e89d6776ac250faecc81e33b00e380282",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "08_hc_split_sinkhorn": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.662938,
+          "optimized_ms": 0.093268,
+          "speedup": 7.108,
+          "target_pass": true,
+          "artifact_sha256": "f0a91eebaf244551838fe790ef9e90a321706424d313a67aef0b0adeaa962e29",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "09_centre_random_augmentation": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.525172,
+          "optimized_ms": 0.266484,
+          "speedup": 1.971,
+          "target_pass": true,
+          "artifact_sha256": "f02023d19482a55ed31d86918e1df1bdb2179dc078b401d4fc28353ac8e78c26",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "10_head_compute_mix_bwd": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+          "reference_ms": 0.077816,
+          "optimized_ms": 0.108721,
+          "speedup": 0.716,
+          "target_pass": true,
+          "artifact_sha256": "ffd10ffe4cbbb88e472f89d763855871ce770f541bf9bb1334923207adaa8723",
+          "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "passed",
+          "device": null,
+          "formal_coverage_status": "not_promoted"
+        }
       }
     },
     "metax_c500": {
       "01_grouped_topk": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.293033,
+          "optimized_ms": 0.089494,
+          "speedup": 3.274,
+          "target_pass": true,
+          "artifact_sha256": "b90f51de2ca4be5e208cbba7041a6fefab8c183000463659b114f8abff36a7bb",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "02_fused_moe": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 1.967052,
+          "optimized_ms": 0.195033,
+          "speedup": 10.086,
+          "target_pass": true,
+          "artifact_sha256": "106ee7211a2e666df4f5f217157250382c4d2a989915a85857c2d94491205699",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "03_flex_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.135572,
+          "optimized_ms": 0.097034,
+          "speedup": 1.397,
+          "target_pass": true,
+          "artifact_sha256": "9f93f96afa570d3f35a3bce40284631fa42abaaf72655def483dfd77d9fce51f",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "04_splade_sparse_pooler": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.920034,
+          "optimized_ms": 0.395553,
+          "speedup": 2.326,
+          "target_pass": true,
+          "artifact_sha256": "1ad2a3bdb1610ed8d54e4aa6336b621641fba82828ebacb427da08416cc73b81",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "05_music_flamingo_rotary_embedding": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.189665,
+          "optimized_ms": 0.071374,
+          "speedup": 2.657,
+          "target_pass": true,
+          "artifact_sha256": "38779c7cd2da0943b44747bee4cb21c0b7833f0c6eebe2923f19098703d543e8",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "06_mm_encoder_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.14759,
+          "optimized_ms": 0.118015,
+          "speedup": 1.251,
+          "target_pass": true,
+          "artifact_sha256": "14b3aee24a9aff676657e601cd008aee0539f6b48d7cbde861483a61f8abcf9a",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "07_mhc_post": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 6.168008,
+          "optimized_ms": 1.528358,
+          "speedup": 4.036,
+          "target_pass": true,
+          "artifact_sha256": "f9f4756531f907ac3827d6d2bc70d9cf656b07056539d2f3412ffd6254407f97",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "08_hc_split_sinkhorn": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 1.502228,
+          "optimized_ms": 0.110557,
+          "speedup": 13.588,
+          "target_pass": true,
+          "artifact_sha256": "c1dca192dd1f673576846778207838d33963baebaaae820ea1f259d88ad59656",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "09_centre_random_augmentation": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.880246,
+          "optimized_ms": 0.129377,
+          "speedup": 6.804,
+          "target_pass": true,
+          "artifact_sha256": "8d0a537a6d040568f4216dc3ee502bc8fc518bf40107bd2d768001f378661a49",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       },
       "10_head_compute_mix_bwd": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_diagnostic",
+          "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+          "reference_ms": 0.190398,
+          "optimized_ms": 0.078949,
+          "speedup": 2.412,
+          "target_pass": true,
+          "artifact_sha256": "fc12ef1bdc23d5624df48850956ccdb221b35816615b641346aabe286d2fa98a",
+          "source_commit": "f5629ee",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+          "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+          "warmup": 200,
+          "repeat": 500,
+          "seed": 42,
+          "atol": 0.01,
+          "rtol": 0.01,
+          "result_status": "PASS accuracy",
+          "device": "cuda:0",
+          "formal_coverage_status": "not_promoted"
+        }
       }
     },
     "iluvatar_bi150": {
@@ -275,7 +708,7 @@
         "task_key": "08_hc_split_sinkhorn",
         "chip_key": "iluvatar_bi150",
         "run_id": "20260814T100000Z-official-200x500-head-fused-mixes",
-        "reference_ms": 1.384880,
+        "reference_ms": 1.38488,
         "optimized_ms": 0.153849,
         "speedup": 9.002,
         "evaluation_mode": "official_auto_bench",
@@ -327,34 +760,154 @@
     },
     "enflame_s60": {
       "01_grouped_topk": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 0.445832,
+          "optimized_ms": 0.321435,
+          "speedup": 1.387,
+          "target_pass": true,
+          "artifact_sha256": "303e1a3982ce4fa818218c6d5038d1cee783d7a9468b85e5b0ac2cb7cd620b8b",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "02_fused_moe": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 5.446173,
+          "optimized_ms": 0.342641,
+          "speedup": 15.895,
+          "target_pass": true,
+          "artifact_sha256": "d64ed14281d8709840633dd60a7ea33e1fbd8ea5cd0befa63c83100f6476c145",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "03_flex_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 0.240086,
+          "optimized_ms": 0.266157,
+          "speedup": 0.902,
+          "target_pass": true,
+          "artifact_sha256": "99cc44d4b98ea4a11432ebc5f8c8835f692d94314970632cd8241967f9ab1e4c",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "04_splade_sparse_pooler": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 0.828812,
+          "optimized_ms": 1.074174,
+          "speedup": 0.772,
+          "target_pass": true,
+          "artifact_sha256": "09a4468186dab8fe16420f63c2ba4c3784105cb0f87d8b4da6ac92606c092c0c",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "05_music_flamingo_rotary_embedding": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 0.551192,
+          "optimized_ms": 0.414556,
+          "speedup": 1.33,
+          "target_pass": true,
+          "artifact_sha256": "4a89a5005b0ed156b7ee42801d7994c8918b03fac0f97938fa4e83209ed2034e",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "06_mm_encoder_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 0.254285,
+          "optimized_ms": 0.298252,
+          "speedup": 0.853,
+          "target_pass": true,
+          "artifact_sha256": "d595a8fc6cf5d8691ac206addf902d13ae1d124c4878519e21a7e3f531a432d7",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "07_mhc_post": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 4.249407,
+          "optimized_ms": 2.120346,
+          "speedup": 2.004,
+          "target_pass": true,
+          "artifact_sha256": "1b5a7b94cff398f0961dcbb735b2d4f9aec3cc0df8583954eeac07652e9dc6c3",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "08_hc_split_sinkhorn": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 1.939761,
+          "optimized_ms": 0.309866,
+          "speedup": 6.26,
+          "target_pass": true,
+          "artifact_sha256": "fa0cedcbfa7628a37365f35c22f5214b4e9028075b15a72ccd44a9f1463a554c",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "09_centre_random_augmentation": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 2.84471,
+          "optimized_ms": 1.45776,
+          "speedup": 1.951,
+          "target_pass": true,
+          "artifact_sha256": "2d2781dd4f9ac1d9362387a216e8e95a636e50a019c0cc11c5ce9db6a1091d40",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "10_head_compute_mix_bwd": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_manual_evidence",
+          "source_summary": "results/enflame_s60/6f19171/summary.json",
+          "reference_ms": 0.344351,
+          "optimized_ms": 0.278687,
+          "speedup": 1.236,
+          "target_pass": true,
+          "artifact_sha256": "72fe1966dacecf66278f5620231bd57a556485bf0eff727ae599ac9b10b028d5",
+          "source_commit": "6f19171506f975b92855d760c37f1ca3fd5c4ffc",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       }
     },
     "thead_810e": {
@@ -423,66 +976,296 @@
     },
     "hygon_bw1000": {
       "01_grouped_topk": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 0.361789,
+          "optimized_ms": 0.156727,
+          "speedup": 2.308,
+          "target_pass": true,
+          "artifact_sha256": "22fab94fceaa0b0a708ea144c01e723c1503186c88e527a42869e02068c08984",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "02_fused_moe": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 3.44244,
+          "optimized_ms": 0.173642,
+          "speedup": 19.825,
+          "target_pass": true,
+          "artifact_sha256": "31e398c7ed2bd473df2926557f58171149953bd00aa4656a479dc7f43948a5ff",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "03_flex_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 0.159702,
+          "optimized_ms": 0.198723,
+          "speedup": 0.804,
+          "target_pass": true,
+          "artifact_sha256": "5d3ba4dcfba50df55f185c75c2ad026a73e43ab8780b98b775ef64e8fdd0e889",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "04_splade_sparse_pooler": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 1.022758,
+          "optimized_ms": 0.474361,
+          "speedup": 2.156,
+          "target_pass": true,
+          "artifact_sha256": "fa783c5629dafeca628967e04ac29dca7f081adfa0f9094f69208fb8b41fc8f3",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "05_music_flamingo_rotary_embedding": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 0.327529,
+          "optimized_ms": 0.171992,
+          "speedup": 1.904,
+          "target_pass": true,
+          "artifact_sha256": "e39153e2c3ab9479946ae93eb5aa978d3ca282fb52518223d16acd34adcf34fe",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "06_mm_encoder_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 0.148402,
+          "optimized_ms": 0.191688,
+          "speedup": 0.774,
+          "target_pass": true,
+          "artifact_sha256": "281901dd31dc7fcf542655d5fc0a5bfe09eb40c371ecab1c7fba697f00f098b6",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "07_mhc_post": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 2.205943,
+          "optimized_ms": 0.31944,
+          "speedup": 6.906,
+          "target_pass": true,
+          "artifact_sha256": "a97112b277470b1122e76ed387a858b66d1133c21064d2d90d953786e148ee40",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "08_hc_split_sinkhorn": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 1.791524,
+          "optimized_ms": 0.168627,
+          "speedup": 10.624,
+          "target_pass": true,
+          "artifact_sha256": "d5f9127b4bf41db350024f37a175dc6136ab0e78cf2622e943d4fe00dc743f5d",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "09_centre_random_augmentation": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 1.168711,
+          "optimized_ms": 0.277124,
+          "speedup": 4.217,
+          "target_pass": true,
+          "artifact_sha256": "6c48572e1badde65eaaa747e1d22e4ec652becfdd3caa3f84c3c7d7e343338d9",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       },
       "10_head_compute_mix_bwd": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "official_auto_bench_target_evidence",
+          "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+          "reference_ms": 0.217763,
+          "optimized_ms": 0.178078,
+          "speedup": 1.223,
+          "target_pass": true,
+          "artifact_sha256": "b9e0b2e98161e1e10a1588831d586ce46ef00ed9abdf0e5e962035ad70b88cbf",
+          "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+          "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c"
+        }
       }
     },
     "moore_threads_ph100": {
       "01_grouped_topk": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 9421.711159870028,
+          "optimized_ms": 750.7153740152717,
+          "speedup": 12.550311,
+          "target_pass": true,
+          "artifact_sha256": "af3847a8ba36398fd8b9173552670c706ef8532b399b84cbb12d78bb550421dc",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "02_fused_moe": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 8961.214575916529,
+          "optimized_ms": 337.9445830360055,
+          "speedup": 26.516817,
+          "target_pass": true,
+          "artifact_sha256": "fd3734061fd96d365005f3c3853ba01b568134bfdb63ff0d4c071ce41f7185e6",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "03_flex_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 38.64124324172735,
+          "optimized_ms": 770.7279426977038,
+          "speedup": 0.050136,
+          "target_pass": true,
+          "artifact_sha256": "fe20c4339071a15d56565d324a0d18031c6d67f1d56dec4c2e6003114c96701b",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "04_splade_sparse_pooler": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 5255.278333090246,
+          "optimized_ms": 1440.0095976889133,
+          "speedup": 3.649475,
+          "target_pass": true,
+          "artifact_sha256": "17b44daaf4d62de87c5d75550099410707cfcb081f623e44446ac24ac2647d23",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "05_music_flamingo_rotary_embedding": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 3207.540019415319,
+          "optimized_ms": 671.4532170444727,
+          "speedup": 4.777012,
+          "target_pass": true,
+          "artifact_sha256": "ff07bca97c514fb8a37f9edfabbd14886b34d37e80bfb5737dfb2a8bbbfd2fa3",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "06_mm_encoder_attention": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 38.44193648546934,
+          "optimized_ms": 530.4029826074839,
+          "speedup": 0.072477,
+          "target_pass": true,
+          "artifact_sha256": "93b10a83edbaae14739bd6ffbbd7995524eb6d114cf8d8773d1c4b9391123aa7",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "07_mhc_post": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 2997.90302477777,
+          "optimized_ms": 720.5203725025058,
+          "speedup": 4.160747,
+          "target_pass": true,
+          "artifact_sha256": "8196fcc3d35f33ae00d7cb457c5b9cb7cba1becd7ce55a29f566a73021a19d25",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "08_hc_split_sinkhorn": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 6411.850322037935,
+          "optimized_ms": 829.1462417691946,
+          "speedup": 7.733075,
+          "target_pass": true,
+          "artifact_sha256": "5f36bc524cd6daaef855c9878568b9d591cffbbd97486bdd44ea87fa87f592e7",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "09_centre_random_augmentation": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 5205.457181669772,
+          "optimized_ms": 1836.3077947869897,
+          "speedup": 2.834741,
+          "target_pass": true,
+          "artifact_sha256": "9e5ebdc9481017234de96fe94d4621f0abaa2287b797ceecc343cd291d93d289",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       },
       "10_head_compute_mix_bwd": {
-        "status": "not_run"
+        "status": "not_run",
+        "target_validation": {
+          "status": "passed",
+          "kind": "offline_target_chip_validation",
+          "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+          "reference_ms": 6279.521250165999,
+          "optimized_ms": 1137.465799227357,
+          "speedup": 5.520624,
+          "target_pass": true,
+          "artifact_sha256": "554c98c5c74864ee3f481a722bd9ca11daa666de55dfff300e106181e6e60300",
+          "source_commit": "d8e819158a433c96c54a86109b9c11cc9152c0ea"
+        }
       }
     },
     "kunlun_p800": {
@@ -517,7 +1300,7 @@
         "status": "not_run"
       }
     },
-    "biren_br106m": {
+    "nvidia_h200": {
       "01_grouped_topk": {
         "status": "not_run"
       },
@@ -564,5 +1347,164 @@
       "status": "non_evidence_platform_state",
       "detail": "Other task states were observed in the platform UI without complete logs; all corresponding matrix cells remain not_run."
     }
-  ]
+  ],
+  "target_validation": {
+    "meaning": "verified means that the corresponding target-chip evidence in source_summary passed the recorded validation/evaluator run; this is distinct from formal matrix.status=passed",
+    "verified_chip_count": 6,
+    "verified_cell_count": 60,
+    "unverified_chip_count": 4,
+    "unverified_chips": [
+      "thead_810e",
+      "cambricon_mlu590_m9d",
+      "kunlun_p800",
+      "nvidia_h200"
+    ],
+    "chips": {
+      "ascend_a2_910b": {
+        "status": "verified",
+        "kind": "official_auto_bench_manual_evidence",
+        "source_summary": "results/ascend_a2_910b/61a98c6/summary.json",
+        "passed": 10,
+        "total": 10,
+        "geomean_speedup": 1.943081,
+        "speedup_basis": "reference_ms/optimized_ms",
+        "task_speedups": {
+          "01_grouped_topk": 1.917,
+          "02_fused_moe": 24.679,
+          "03_flex_attention": 1.531,
+          "04_splade_sparse_pooler": 0.534,
+          "05_music_flamingo_rotary_embedding": 1.132,
+          "06_mm_encoder_attention": 1.219,
+          "07_mhc_post": 1.433,
+          "08_hc_split_sinkhorn": 7.108,
+          "09_centre_random_augmentation": 1.971,
+          "10_head_compute_mix_bwd": 0.716
+        },
+        "formal_coverage_status": "not_promoted",
+        "source_commit": "61a98c6714196ac73e046893cda39caf9df3c757",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+        "warmup": 200,
+        "repeat": 500,
+        "seed": 42,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "note": "Latest fixed-evaluator Ascend910B2C evidence: 10/10 PASS accuracy; 8/10 tasks are faster than reference and 04/10 remain regressions. Final artifacts were rebuilt after the source commit, but the post-rebuild rerun flag is false; evidence is retained and not promoted to the formal scoring ledger.",
+        "environment": "results/ascend_a2_910b/61a98c6/environment.json"
+      },
+      "metax_c500": {
+        "status": "verified",
+        "kind": "official_auto_bench_diagnostic",
+        "source_summary": "results/metax_c500/official_auto_bench_20260829_current_worktree.json",
+        "passed": 10,
+        "total": 10,
+        "geomean_speedup": 3.553449,
+        "speedup_basis": "reference_ms/optimized_ms",
+        "task_speedups": {
+          "01_grouped_topk": 3.274,
+          "02_fused_moe": 10.086,
+          "03_flex_attention": 1.397,
+          "04_splade_sparse_pooler": 2.326,
+          "05_music_flamingo_rotary_embedding": 2.657,
+          "06_mm_encoder_attention": 1.251,
+          "07_mhc_post": 4.036,
+          "08_hc_split_sinkhorn": 13.588,
+          "09_centre_random_augmentation": 6.804,
+          "10_head_compute_mix_bwd": 2.412
+        },
+        "formal_coverage_status": "not_promoted",
+        "source_commit": "f5629ee",
+        "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+        "evaluator_sha256": "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db",
+        "warmup": 200,
+        "repeat": 500,
+        "seed": 42,
+        "atol": 0.01,
+        "rtol": 0.01,
+        "note": "Latest MACA 3.7.0.38 current-worktree diagnostic: 10/10 PASS accuracy and all 10 tasks faster than reference. The target environment is unlocked/manual, so evidence is retained but not promoted to the formal scoring ledger.",
+        "observed_device": "MetaX C500",
+        "source_report": "results/metax_c500/official_auto_bench_20260829_current_worktree.md"
+      },
+      "iluvatar_bi150": {
+        "status": "verified",
+        "kind": "formal_official_auto_bench",
+        "source_summary": "results/coverage.json matrix entries reference immutable BI150 run bundles",
+        "passed": 10,
+        "total": 10,
+        "geomean_speedup": 3.046,
+        "speedup_basis": "formal coverage matrix",
+        "formal_coverage_status": "promoted",
+        "note": "Current rebuilt artifacts must be revalidated before inheriting historical run-bundle scores when their SHA-256 differs"
+      },
+      "enflame_s60": {
+        "status": "verified",
+        "kind": "official_auto_bench_manual_evidence",
+        "source_summary": "results/enflame_s60/6f19171/summary.json",
+        "passed": 10,
+        "total": 10,
+        "geomean_speedup": 1.871,
+        "speedup_basis": "official evaluator reference_ms/optimized_ms",
+        "task_speedups": {
+          "01_grouped_topk": 1.387,
+          "02_fused_moe": 15.895,
+          "03_flex_attention": 0.902,
+          "04_splade_sparse_pooler": 0.772,
+          "05_music_flamingo_rotary_embedding": 1.33,
+          "06_mm_encoder_attention": 0.853,
+          "07_mhc_post": 2.004,
+          "08_hc_split_sinkhorn": 6.26,
+          "09_centre_random_augmentation": 1.951,
+          "10_head_compute_mix_bwd": 1.236
+        },
+        "formal_coverage_status": "not_promoted"
+      },
+      "hygon_bw1000": {
+        "status": "verified",
+        "kind": "official_auto_bench_target_evidence",
+        "source_summary": "results/hygon_bw1000/20260829_official/official_summary.json",
+        "passed": 10,
+        "total": 10,
+        "geomean_speedup": 2.915,
+        "speedup_basis": "official evaluator reference_ms/optimized_ms",
+        "task_speedups": {
+          "01_grouped_topk": 2.308,
+          "02_fused_moe": 19.825,
+          "03_flex_attention": 0.804,
+          "04_splade_sparse_pooler": 2.156,
+          "05_music_flamingo_rotary_embedding": 1.904,
+          "06_mm_encoder_attention": 0.774,
+          "07_mhc_post": 6.906,
+          "08_hc_split_sinkhorn": 10.624,
+          "09_centre_random_augmentation": 4.217,
+          "10_head_compute_mix_bwd": 1.223
+        },
+        "formal_coverage_status": "not_promoted"
+      },
+      "moore_threads_ph100": {
+        "status": "verified",
+        "kind": "offline_target_chip_validation",
+        "source_summary": "results/moore_threads_ph100/20260814_moore_batch_fb6427f/summary.json",
+        "passed": 10,
+        "total": 10,
+        "observed_device": "MTT S5000",
+        "competition_model": "PH100",
+        "device_mapping_status": "confirmed",
+        "geomean_speedup": 2.526933,
+        "speedup_basis": "reference_ms/optimized_ms",
+        "task_speedups": {
+          "01_grouped_topk": 12.550311,
+          "02_fused_moe": 26.516817,
+          "03_flex_attention": 0.050136,
+          "04_splade_sparse_pooler": 3.649475,
+          "05_music_flamingo_rotary_embedding": 4.777012,
+          "06_mm_encoder_attention": 0.072477,
+          "07_mhc_post": 4.160747,
+          "08_hc_split_sinkhorn": 7.733075,
+          "09_centre_random_augmentation": 2.834741,
+          "10_head_compute_mix_bwd": 5.520624
+        },
+        "formal_coverage_status": "not_promoted"
+      }
+    }
+  }
 }

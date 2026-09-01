@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\moore_threads_ph100\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "e372ccbdbddab0c73032baebb9b399b5b8af6850a5ceaf87bebe26005b72ef0b",
+  "artifact_sha256": "c0d5fa7e66f756bf8f3bc44fa3a02b611ac8c4faa949aef6eb66cfa19d345128",
   "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
-    "profiles/operators/10_head_compute_mix_bwd.json": "5662fed31e20f0426fc74a3029c67130c5177c5b939be5b9615f750ddd8f81e1",
+    "triton_kernels/10_head_compute_mix_bwd.py": "fd36b2acebf49755502d9eeb5b6fcdf3f80100621004b2e34bf4f17ac9395e60",
+    "profiles/operators/10_head_compute_mix_bwd.json": "4c81ca4cd7bfda54cd3c2b6688639275ae20cea7edae5d3433a80edd807d2800",
     "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
   },
   "profile": {

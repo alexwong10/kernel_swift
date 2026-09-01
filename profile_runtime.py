@@ -28,7 +28,7 @@ CHIP_KEYS = (
     "hygon_bw1000",
     "moore_threads_ph100",
     "kunlun_p800",
-    "biren_br106m",
+    "nvidia_h200",
 )
 
 TASK_KEYS = (

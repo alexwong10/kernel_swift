@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "10_head_compute_mix_bwd",
   "chip_key": "iluvatar_bi150",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\iluvatar_bi150\\10_head_compute_mix_bwd.py",
-  "artifact_sha256": "ecb49cdf066a5f3c2ce1af5714b7a8747ac02142ab30895b4679bb04f2da1f3b",
+  "artifact_sha256": "ffd24a6b0ed55d6b2196d04f8545ae4b35c47d861a63244cefe222c62fc9dc3d",
   "sources": {
-    "triton_kernels/10_head_compute_mix_bwd.py": "945298ae0abde503b06761a35263b61791a045f815eb14775d1088622c4451df",
-    "profiles/operators/10_head_compute_mix_bwd.json": "5662fed31e20f0426fc74a3029c67130c5177c5b939be5b9615f750ddd8f81e1",
+    "triton_kernels/10_head_compute_mix_bwd.py": "fd36b2acebf49755502d9eeb5b6fcdf3f80100621004b2e34bf4f17ac9395e60",
+    "profiles/operators/10_head_compute_mix_bwd.json": "4c81ca4cd7bfda54cd3c2b6688639275ae20cea7edae5d3433a80edd807d2800",
     "profiles/chips/iluvatar_bi150.json": "ed9ec4c1a57c8e929b9c722eb3069162986b8870aceb33f06fdb647bcda3ad5a"
   },
   "profile": {

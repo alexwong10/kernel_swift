@@ -2,10 +2,7 @@
   "schema_version": 1,
   "chip_key": "iluvatar_bi150",
   "status": "verified",
-  "image": {
-    "identifier": "saas-de-pjsys2-pjsys2-bi150-33-f0a3-6744568d7c-47twg",
-    "digest": null
-  },
+  "image": {"identifier": "saas-de-pjsys2-pjsys2-bi150-33-f0a3-6744568d7c-47twg", "digest": null},
   "image_digest_status": "not_exposed_by_provider",
   "python": "3.10.18",
   "packages": {

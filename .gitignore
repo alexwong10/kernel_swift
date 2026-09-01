@@ -5,3 +5,16 @@ __pycache__/
 results/*/*.log
 results/*/summary.json
 
+
+# Local submission bundles and transient tuning output are not source history.
+*.zip
+.tmp_*/
+environments_legacy/
+profiles/chips_legacy/
+upload_artifacts_legacy/
+results/biren_br106m/
+
+# Local evidence and internal operation notes stay outside public Git history.
+results/*/
+AGENT_GOAL_TRITON.md
+KernelSwift平台使用记录.md

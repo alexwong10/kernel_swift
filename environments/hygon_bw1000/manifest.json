@@ -2,10 +2,7 @@
   "schema_version": 1,
   "chip_key": "hygon_bw1000",
   "status": "unverified",
-  "image": {
-    "identifier": "bcd209aab7b7",
-    "digest": null
-  },
+  "image": {"identifier": "bcd209aab7b7", "digest": null},
   "python": "3.10.12",
   "packages": {
     "torch": "2.4.1+das.opt1.dtk25041",

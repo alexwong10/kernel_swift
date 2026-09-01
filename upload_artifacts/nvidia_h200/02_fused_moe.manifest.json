@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "02_fused_moe",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\02_fused_moe.py",
+  "artifact_sha256": "91efe627f0b8450ab9e57625ad86f4218716f317a8f7b307a8a4671cae43a117",
+  "sources": {
+    "triton_kernels/02_fused_moe.py": "d4513e5f40d82cbbd4fe043c2b13afda4238c90847eee495617635fb9d3dc64c",
+    "profiles/operators/02_fused_moe.json": "ee682d0643102090445e49e711869b9829993ea1a065775e8ed7110f0b346d64",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf"
+  },
+  "profile": {
+    "variant": "tiled_dot_fp16_reference",
+    "config": {
+      "route_num_warps": 1,
+      "gate_up_num_warps": 4,
+      "down_num_warps": 4,
+      "reduce_block": 256,
+      "reduce_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "02_fused_moe",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "05_music_flamingo_rotary_embedding",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\05_music_flamingo_rotary_embedding.py",
+  "artifact_sha256": "e2b468ae880b1560a068564bda3f87d5740adb9c5e5423fbedd59f92b631f87b",
+  "sources": {
+    "triton_kernels/05_music_flamingo_rotary_embedding.py": "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "b01fcfd8b4c65597031a7db20566b721785b37c62172f6c8a6d3fc84d87b3ecb",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf"
+  },
+  "profile": {
+    "variant": "tiled_frequency",
+    "config": {
+      "block_channel": 128,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "05_music_flamingo_rotary_embedding",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

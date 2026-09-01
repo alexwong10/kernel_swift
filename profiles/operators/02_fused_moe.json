@@ -89,6 +89,6 @@
       "overrides": {"variant": "scalar_elementwise_fallback"}
     },
     "kunlun_p800": {"verified": false, "overrides": {}},
-    "biren_br106m": {"verified": false, "overrides": {}}
+    "nvidia_h200": {"verified": false, "overrides": {}}
   }
 }

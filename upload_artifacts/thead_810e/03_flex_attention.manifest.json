@@ -3,14 +3,14 @@
   "builder_version": 5,
   "task_key": "03_flex_attention",
   "chip_key": "thead_810e",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\thead_810e\\03_flex_attention.py",
-  "artifact_sha256": "72095951cb1bb5d935ec9a59cca856a001f7eaa23a4a146f840fe1e5c04da1fc",
+  "artifact_sha256": "4d8b6c8c7768d21de3c7949628b914879be8258a0ecb932d51b9651d9370bdea",
   "sources": {
     "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
-    "profiles/operators/03_flex_attention.json": "1eafe4db771899080c569c2dadc5e7235acfc23d06fa5f106a3f704e79df0dc5",
+    "profiles/operators/03_flex_attention.json": "93eeb7a292e071cb0c3b602aef38a224f12143c044c8a138e65a7722e2484bb0",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b",
-    "triton_kernels/common.py": "be0d3d51e815ad5341792c03e30c2bae1b429fb7ef6ecd08935ee885a5a7a88f"
+    "triton_kernels/common.py": "0c64d501f4857f400951b91a31c29280c9c3d66fea521c52730eee25a6e65c88"
   },
   "profile": {
     "variant": "tiled_online_softmax",

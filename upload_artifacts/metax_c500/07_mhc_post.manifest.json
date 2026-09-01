@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "07_mhc_post",
   "chip_key": "metax_c500",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "b03e19ba206e5a1869d7e6fb7a118208ee044b35",
   "artifact": "upload_artifacts\\metax_c500\\07_mhc_post.py",
-  "artifact_sha256": "9439e851460dd4ed928092a46aa24179a6e98090bc6b462729ce5a2a464bffd5",
+  "artifact_sha256": "f9f4756531f907ac3827d6d2bc70d9cf656b07056539d2f3412ffd6254407f97",
   "sources": {
     "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
-    "profiles/operators/07_mhc_post.json": "0cbace8fc8834a12d21d7b0b067f17ed05c0638315fc2928b2e78b92608469f6",
+    "profiles/operators/07_mhc_post.json": "b7a2db53c9f49437f76ecdd2dd7a14915daba75c244898847e51b48971dd03d9",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

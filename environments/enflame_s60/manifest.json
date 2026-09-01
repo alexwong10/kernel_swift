@@ -2,10 +2,7 @@
   "schema_version": 1,
   "chip_key": "enflame_s60",
   "status": "unverified",
-  "image": {
-    "identifier": "d044e64167ca",
-    "digest": null
-  },
+  "image": {"identifier": "d044e64167ca", "digest": null},
   "python": "3.12.3",
   "packages": {
     "torch": "2.10.0+cpu",

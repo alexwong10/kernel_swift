@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "07_mhc_post",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\07_mhc_post.py",
+  "artifact_sha256": "66af55ff92041a107c0d1edb9d304ceebf646bab14b4dd6580a4f71e04eae462",
+  "sources": {
+    "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
+    "profiles/operators/07_mhc_post.json": "b7a2db53c9f49437f76ecdd2dd7a14915daba75c244898847e51b48971dd03d9",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf"
+  },
+  "profile": {
+    "variant": "tiled_hidden",
+    "config": {
+      "block_hidden": 256,
+      "block_tokens": 4,
+      "num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "07_mhc_post",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

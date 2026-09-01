@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "05_music_flamingo_rotary_embedding",
   "chip_key": "moore_threads_ph100",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\moore_threads_ph100\\05_music_flamingo_rotary_embedding.py",
-  "artifact_sha256": "3dd0292b98407788e49b1f9aa0a2e947b108d74cb39d8bc44af5dee03c572547",
+  "artifact_sha256": "653eec9f0b2eee96644566336f69715c23108be0914535195c5040090f0bff8a",
   "sources": {
     "triton_kernels/05_music_flamingo_rotary_embedding.py": "29eca3f4b65e5ec4cefb4c54fcdeb223a3cb2b749547930a174579d398b54af4",
-    "profiles/operators/05_music_flamingo_rotary_embedding.json": "6ea551a598f2140bebdc1b638e1c24343f0efeb9293bb58cb2cf00d3dce7806e",
+    "profiles/operators/05_music_flamingo_rotary_embedding.json": "b01fcfd8b4c65597031a7db20566b721785b37c62172f6c8a6d3fc84d87b3ecb",
     "profiles/chips/moore_threads_ph100.json": "9f38d408ce5d5cd0d2eceebd922f00b8a85b2218313da657a8d2f49dc2876848"
   },
   "profile": {

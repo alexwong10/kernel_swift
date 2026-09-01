@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "metax_c500",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "b03e19ba206e5a1869d7e6fb7a118208ee044b35",
   "artifact": "upload_artifacts\\metax_c500\\09_centre_random_augmentation.py",
-  "artifact_sha256": "437db1e72ac7724341bf124f81ae671f0c156dbd5f98cfc4ad63cbfe75dd6788",
+  "artifact_sha256": "8d0a537a6d040568f4216dc3ee502bc8fc518bf40107bd2d768001f378661a49",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c183a86f3540273b01fb08b179f1741b7e9a74fd76281dbad5db94999e0e7a4d",
-    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
+    "triton_kernels/09_centre_random_augmentation.py": "0ec0c411a8bfc92db59749b12ac80c102f2d8c6ea65d92cd1a9cf97d580a4b4e",
+    "profiles/operators/09_centre_random_augmentation.json": "ccf01c10e8836374ef2f143284ed24cd22f439c40e9085fb75f8d4cdb8942f3e",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {
@@ -55,13 +55,13 @@
     ],
     "replacements": [
       {
-        "line": 373,
+        "line": 408,
         "from": "cuda",
         "to": "cuda",
         "context": "device_keyword"
       },
       {
-        "line": 374,
+        "line": 409,
         "from": "cuda",
         "to": "cuda",
         "context": "device_keyword"

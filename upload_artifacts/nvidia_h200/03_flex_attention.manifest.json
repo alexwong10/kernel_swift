@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "03_flex_attention",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\03_flex_attention.py",
+  "artifact_sha256": "990703577edeec9a1494b0fdc191583fd222652a78184ed6844be3f416045452",
+  "sources": {
+    "triton_kernels/03_flex_attention.py": "727ca0facbf42e1c44a4a41ba9596d37af587967f186f1cfba114fcfe67e0b62",
+    "profiles/operators/03_flex_attention.json": "93eeb7a292e071cb0c3b602aef38a224f12143c044c8a138e65a7722e2484bb0",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf",
+    "triton_kernels/common.py": "0c64d501f4857f400951b91a31c29280c9c3d66fea521c52730eee25a6e65c88"
+  },
+  "profile": {
+    "variant": "tiled_online_softmax",
+    "config": {
+      "num_warps": 8,
+      "block_m": 16,
+      "block_n": 64
+    },
+    "schema_version": 1,
+    "task_key": "03_flex_attention",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

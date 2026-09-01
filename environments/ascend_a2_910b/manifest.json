@@ -1,1 +1,22 @@
-{"schema_version":1,"chip_key":"ascend_a2_910b","status":"unverified","source":null,"image":{"identifier":null,"digest":null},"python":null,"packages":{},"driver":null,"compiler":null,"captured_at_utc":null,"evidence":null}
+{
+  "schema_version": 1,
+  "chip_key": "ascend_a2_910b",
+  "status": "unverified",
+  "image": {
+    "identifier": null,
+    "digest": null
+  },
+  "python": "3.12.13",
+  "packages": {
+    "torch": "2.10.0+cpu",
+    "triton": "3.2.0",
+    "torch_npu": "2.10.0"
+  },
+  "driver": "Ascend910B2C target device; driver version not captured",
+  "compiler": "torch_npu 2.10.0; direct runpy execution of official auto_bench",
+  "captured_at_utc": "2026-08-29",
+  "evidence": "results/ascend_a2_910b/61a98c6/summary.json; results/ascend_a2_910b/61a98c6/environment.json; results/ascend_a2_910b/61a98c6/official_auto_bench_terminal_capture.txt",
+  "verification_scope": "target_chip_validation",
+  "target_verification_status": "verified",
+  "formal_coverage_status": "not_promoted"
+}

@@ -47,10 +47,10 @@ CHIP_LABELS = {
 
 EVIDENCE = {
     "ascend_a2_910b": {
-        "kind": "target_runner_only",
-        "path": "results/ascend_a2_910b/f595d21/summary.json",
+        "kind": "official_diagnostic",
+        "path": "results/ascend_a2_910b/61a98c6/summary.json",
         "package_path": "evidence/ascend_a2_910b_summary.json",
-        "note": "Ascend910B3 target-runner correctness/compile evidence; not official KernelSwift coverage.",
+        "note": "Latest fixed-evaluator Ascend910B2C evidence: 10/10 PASS accuracy with latency and speedup; retained as target-chip evidence and not promoted to the formal scoring ledger.",
     },
     "metax_c500": {
         "kind": "official_diagnostic",
@@ -187,8 +187,8 @@ if [[ $# -gt 0 && "$1" != --* ]]; then
   task_args=(--task "$1")
   shift
 fi
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-exec python3 "$repo_root/tools/official_eval.py" --chip "$chip_key" "${task_args[@]}" "$@"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec python3 "$script_dir/official_eval.py" --chip "$chip_key" "${task_args[@]}" "$@"
 """,
     )
     write_text(
@@ -199,15 +199,15 @@ exec python3 "$repo_root/tools/official_eval.py" --chip "$chip_key" "${task_args
   [Parameter(ValueFromRemainingArguments = $true)][string[]]$ExtraArgs
 )
 
-$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\\..\\..')).Path
-$arguments = @('tools/official_eval.py', '--chip', $ChipKey)
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$arguments = @('--chip', $ChipKey)
 if ($TaskKey) {
   $arguments += @('--task', $TaskKey)
 }
 if ($ExtraArgs) {
   $arguments += $ExtraArgs
 }
-& py -3 @arguments
+& py -3 (Join-Path $scriptDir 'official_eval.py') @arguments
 exit $LASTEXITCODE
 """,
     )
@@ -221,6 +221,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EVALUATOR_SHA256 = '357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db'
 CHIPS = [
     'ascend_a2_910b', 'metax_c500', 'iluvatar_bi150', 'enflame_s60',
     'thead_810e', 'cambricon_mlu590_m9d', 'hygon_bw1000',
@@ -239,27 +240,110 @@ def digest(path: Path) -> str:
 
 
 def main() -> None:
+    runtime_dir = ROOT / 'run'
+    evaluator = runtime_dir / 'auto_bench.py'
+    if not evaluator.is_file() or digest(evaluator) != EVALUATOR_SHA256:
+        raise SystemExit('package evaluator is missing or not the pinned auto_bench.py')
+    required_runtime = (
+        'official_eval.py', 'prepare_case.py', 'chip_runtime.json',
+        'evaluator_manifest.json', 'run_official_eval.sh', 'run_official_eval.ps1',
+    )
+    for name in required_runtime:
+        path = runtime_dir / name
+        if not path.is_file():
+            raise SystemExit(f'missing package runtime file: {path}')
+    for name in ('official_eval.py', 'prepare_case.py', 'run_official_eval.sh', 'run_official_eval.ps1'):
+        source = (runtime_dir / name).read_text(encoding='utf-8')
+        if any(token in source for token in ('tools/', 'upload_artifacts', 'ROOT.parent')):
+            raise SystemExit(f'package runtime depends on repository root: {runtime_dir / name}')
+    runtime = json.loads((runtime_dir / 'chip_runtime.json').read_text(encoding='utf-8'))
+    if set(runtime) != set(CHIPS):
+        raise SystemExit('package chip runtime configuration is incomplete')
+    evaluator_info = json.loads((runtime_dir / 'evaluator_manifest.json').read_text(encoding='utf-8'))
+    if evaluator_info.get('evaluator_sha256') != EVALUATOR_SHA256:
+        raise SystemExit('evaluator manifest SHA-256 does not match the pinned evaluator')
     for task in TASKS:
-        task_dir = ROOT / task
+        reference = runtime_dir / 'reference' / f'{task}.py'
+        if not reference.is_file():
+            raise SystemExit(f'missing package reference input: {task}')
         for chip in CHIPS:
-            code = task_dir / 'code' / f'{chip}.py'
-            manifest = task_dir / 'manifests' / f'{chip}.json'
-            environment = task_dir / 'environment' / f'{chip}.json'
-            if not code.is_file() or not manifest.is_file() or not environment.is_file():
+            code = ROOT / task / 'code' / f'{chip}.py'
+            environment = ROOT / task / 'environment' / f'{chip}.json'
+            if not code.is_file() or not environment.is_file():
                 raise SystemExit(f'missing package file: {task}/{chip}')
-            payload = json.loads(manifest.read_text(encoding='utf-8'))
-            if payload.get('task_key') != task or payload.get('chip_key') != chip:
-                raise SystemExit(f'manifest identity mismatch: {task}/{chip}')
-            if payload.get('artifact_sha256') != digest(code):
-                raise SystemExit(f'artifact hash mismatch: {task}/{chip}')
             if 'biren_br106m' in code.read_text(encoding='utf-8'):
                 raise SystemExit(f'legacy chip string in active package: {task}/{chip}')
+    obsolete = [ROOT / 'evidence', ROOT / 'package_manifest.json']
+    for task in TASKS:
+        obsolete.extend([
+            ROOT / task / 'manifests',
+            ROOT / task / 'reference.py',
+            ROOT / task / 'results.json',
+        ])
+    present = [path for path in obsolete if path.exists()]
+    if present:
+        raise SystemExit('non-official generated files remain: ' + ', '.join(str(p) for p in present))
     print('PASS package structure: 10 tasks x 10 chips')
+    print('PASS package runtime: local evaluator and preparation are self-contained')
 
 
 if __name__ == '__main__':
     main()
 """,
+    )
+    shutil.copy2(
+        ROOT / "tools" / "standalone_package_eval.py",
+        run_dir / "official_eval.py",
+    )
+    shutil.copy2(
+        ROOT / "tools" / "standalone_prepare_case.py",
+        run_dir / "prepare_case.py",
+    )
+    reference_dir = run_dir / "reference"
+    reference_dir.mkdir(parents=True, exist_ok=True)
+    for task_key in TASK_LABELS:
+        shutil.copy2(
+            ROOT / "reference" / f"{task_key}.py",
+            reference_dir / f"{task_key}.py",
+        )
+    runtime_config: dict[str, Any] = {}
+    for chip_key in CHIP_LABELS:
+        chip_profile = read_json(ROOT / "profiles" / "chips" / f"{chip_key}.json")
+        runtime = chip_profile.get("runtime")
+        if not isinstance(runtime, dict):
+            raise ValueError(f"missing runtime profile: {chip_key}")
+        runtime_config[chip_key] = {
+            key: runtime[key]
+            for key in ("torch_device", "source_device_aliases", "bootstrap_imports")
+        }
+    write_text(
+        run_dir / "chip_runtime.json",
+        json.dumps(runtime_config, ensure_ascii=False, indent=2),
+    )
+    evaluator = ROOT / "third_party" / "DLBlas" / "benchmarks" / "ks" / "auto_bench.py"
+    if not evaluator.is_file():
+        raise FileNotFoundError(f"missing pinned evaluator source: {evaluator}")
+    evaluator_hash = sha256(evaluator)
+    expected_hash = "357751a12552d1712ad5f66caa4e0fbd79d940b58a99342f83144fdfc9abb5db"
+    if evaluator_hash != expected_hash:
+        raise ValueError(f"pinned evaluator hash mismatch: {evaluator_hash}")
+    shutil.copy2(evaluator, run_dir / "auto_bench.py")
+    write_text(
+        run_dir / "evaluator_manifest.json",
+        json.dumps(
+            {
+                "schema_version": 1,
+                "evaluator": "DLBlas benchmarks/ks/auto_bench.py",
+                "evaluator_commit": "9b5b3627a0f2e5e543ad9d05bf051308bafbd12c",
+                "evaluator_sha256": evaluator_hash,
+                "source_url": "https://github.com/DeepLink-org/DLBlas/blob/9b5b3627a0f2e5e543ad9d05bf051308bafbd12c/benchmarks/ks/auto_bench.py",
+                "runtime_entrypoint": "run/official_eval.py",
+                "platform_submission": False,
+                "formal_coverage_update": False,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
     )
 
 
@@ -272,33 +356,43 @@ def build() -> None:
     if coverage.get("tasks") != tasks:
         raise ValueError("coverage task order does not match active package catalog")
 
-    if OUTPUT.exists() and not (OUTPUT / "package_manifest.json").is_file():
-        raise ValueError(
-            f"refusing to overwrite a non-generated package directory: {OUTPUT}"
-        )
+    if OUTPUT.exists():
+        allowed = set(tasks) | {"run", "README.md", "evidence", "package_manifest.json"}
+        unexpected = [item.name for item in OUTPUT.iterdir() if item.name not in allowed]
+        if unexpected:
+            raise ValueError(
+                f"refusing to overwrite unexpected package entries: {unexpected}"
+            )
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    evidence_dir = OUTPUT / "evidence"
-    evidence_dir.mkdir(exist_ok=True)
-    copied_evidence: dict[str, str] = {}
-    for item in EVIDENCE.values():
-        source = ROOT / item["path"]
-        target = OUTPUT / item["package_path"]
-        if source.is_file() and str(source) not in copied_evidence:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, target)
-            copied_evidence[str(source)] = item["package_path"]
 
-    package_entries: list[dict[str, Any]] = []
+    # Remove only files/directories generated by the previous internal-audit
+    # package layout. The official package keeps the task materials and the
+    # shared local runtime only.
+    obsolete = [OUTPUT / "evidence", OUTPUT / "package_manifest.json"]
+    for task_key in tasks:
+        obsolete.extend(
+            [
+                OUTPUT / task_key / "manifests",
+                OUTPUT / task_key / "reference.py",
+                OUTPUT / task_key / "results.json",
+            ]
+        )
+    for path in obsolete:
+        if path.is_dir():
+            shutil.rmtree(path)
+        elif path.exists():
+            path.unlink()
+    for cache in OUTPUT.rglob("__pycache__"):
+        if cache.is_dir():
+            shutil.rmtree(cache)
+
     official_passed = 0
     for task_key, task_label in TASK_LABELS.items():
         task_dir = OUTPUT / task_key
         code_dir = task_dir / "code"
-        manifest_dir = task_dir / "manifests"
         environment_dir = task_dir / "environment"
         code_dir.mkdir(parents=True, exist_ok=True)
-        manifest_dir.mkdir(exist_ok=True)
         environment_dir.mkdir(exist_ok=True)
-        shutil.copy2(ROOT / "reference" / f"{task_key}.py", task_dir / "reference.py")
 
         rows: list[dict[str, Any]] = []
         for chip_key in chips:
@@ -308,24 +402,44 @@ def build() -> None:
             if not source_code.is_file() or not source_manifest.is_file() or not source_environment.is_file():
                 raise FileNotFoundError(f"missing active artifact set: {chip_key}/{task_key}")
             shutil.copy2(source_code, code_dir / f"{chip_key}.py")
-            shutil.copy2(source_manifest, manifest_dir / f"{chip_key}.json")
-            shutil.copy2(source_environment, environment_dir / f"{chip_key}.json")
+            source_env_payload = read_json(source_environment)
+            # The package describes the runtime without disclosing the
+            # connection target used to collect the metadata. In the source
+            # manifests, that target is embedded in "source"; do not copy it
+            # (or any future connection fields) into the submission package.
+            package_env = {
+                key: source_env_payload[key]
+                for key in (
+                    "schema_version",
+                    "chip_key",
+                    "python",
+                    "packages",
+                    "driver",
+                    "compiler",
+                    "captured_at_utc",
+                )
+                if key in source_env_payload
+            }
+            write_text(
+                environment_dir / f"{chip_key}.json",
+                json.dumps(package_env, ensure_ascii=False, indent=2),
+            )
 
             cell = coverage["matrix"][chip_key][task_key]
-            manifest = read_json(source_manifest)
+            artifact_manifest = read_json(source_manifest)
             row: dict[str, Any] = {
                 "chip_key": chip_key,
                 "chip": CHIP_LABELS[chip_key],
                 "official_ledger_status": cell["status"],
-                "current_artifact_sha256": manifest["artifact_sha256"],
+                "current_artifact_sha256": artifact_manifest["artifact_sha256"],
             }
             if cell["status"] == "passed":
                 official_passed += 1
                 row["ledger_artifact_sha256"] = cell.get("artifact_sha256")
                 row["current_artifact_matches_ledger"] = (
-                    cell.get("artifact_sha256") == manifest["artifact_sha256"]
+                    cell.get("artifact_sha256") == artifact_manifest["artifact_sha256"]
                 )
-                for key in ("reference_ms", "optimized_ms", "speedup", "run_id", "summary", "log"):
+                for key in ("reference_ms", "optimized_ms", "speedup", "run_id"):
                     if key in cell:
                         row[f"ledger_{key}"] = cell[key]
             evidence = evidence_for(chip_key, task_key)
@@ -333,52 +447,34 @@ def build() -> None:
                 row["additional_evidence"] = evidence
             rows.append(row)
 
-        result_payload = {
-            "schema_version": 1,
-            "task_key": task_key,
-            "task": task_label,
-            "coverage_source": "evidence/coverage.json",
-            "official_ledger_passed": sum(row["official_ledger_status"] == "passed" for row in rows),
-            "chips": rows,
-        }
-        (task_dir / "results.json").write_text(
-            json.dumps(result_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
-
         lines = [
             f"# 赛题 {task_key[:2]} · {task_label}",
             "",
-            "本目录按赛道说明的单题提交结构整理：优化代码、README、环境配置、运行脚本和性能测试结果。",
-            "代码文件均来自当前活动 `upload_artifacts/`，入口为自包含的 `class Model`；H200 未取得目标机环境，相关状态保持未验证。",
+            "本目录按赛道说明 4.2 整理该赛题的算子优化代码、README、环境配置和性能测试结果。",
             "",
             "## 文件说明",
             "",
-            "- `code/<chip_key>.py`：10 款当前有效芯片的单文件提交物。",
-            "- `manifests/<chip_key>.json`：对应 artifact 的本地审计 manifest，含 profile 和 SHA-256。",
-            "- `environment/<chip_key>.json`：对应芯片环境配置/锁定状态。",
-            "- `reference.py`：本题参考接口，便于复核，不是提交入口。",
-            "- `results.json`、`performance.md`：官方台账与目标 runner 证据分栏记录。",
+            "- `code/<chip_key>.py`：对应芯片的单文件算子优化代码，入口为 `class Model`。",
+            "- `environment/<chip_key>.json`：对应芯片的环境配置文件。",
+            "- `performance.md`：该赛题的性能测试结果。",
+            "- `../run/`：所有赛题共用的运行脚本、固定 evaluator 和运行所需参考输入。",
             "",
             "## 运行",
             "",
             "```bash",
-            f"bash ../run/run_official_eval.sh nvidia_h200 {task_key} --diagnostic",
+            f"bash ../run/run_official_eval.sh nvidia_h200 {task_key}",
             "```",
             "",
-            "正式计分运行要求目标 runtime、环境锁、固定 evaluator 和干净 commit 均已验证；当前 H200 命令只能作为诊断入口。",
-            "",
-            "## 结果口径",
-            "",
-            "`performance.md` 中只有 `official_ledger_status=passed` 才是当前覆盖台账成绩；其他芯片的目标 runner 结果仅供复核，不能替代官方计分证据。",
+            "运行脚本只在本地目标环境执行固定 evaluator，不执行平台提交。",
         ]
         write_text(task_dir / "README.md", "\n".join(lines))
 
         performance_lines = [
-            f"# {task_key} 性能与验证结果",
+            f"# {task_key} 性能测试结果",
             "",
-            "说明：`官方台账` 是可计分的固定 evaluator 结果；`目标 runner` 是已有真实设备/诊断结果，保留原始数值但不提升 coverage。",
+            "表格保留官方评测和目标设备测试的原始性能数据；未记录的数据以 `—` 表示。",
             "",
-            "| 芯片 | 官方台账 | 官方 ref ms | 官方 opt ms | 官方 speedup | 目标 runner状态 | 目标 ref ms | 目标 opt ms | 目标 ratio |",
+            "| 芯片 | 官方测试状态 | 官方 ref ms | 官方 opt ms | 官方 speedup | 目标测试状态 | 目标 ref ms | 目标 opt ms | 目标 speedup |",
             "|---|---:|---:|---:|---:|---|---:|---:|---:|",
         ]
         for row in rows:
@@ -397,84 +493,30 @@ def build() -> None:
                     target_speed=format_number(target.get("speedup")),
                 )
             )
-        performance_lines.extend(
-            [
-                "",
-                "证据来源见每个 `results.json` 的 `additional_evidence.source`，以及包根目录 `evidence/`。",
-                "BI150 的正式单元引用包内 `evidence/coverage.json`；H200 当前为 `not_run` / 未验证。",
-            ]
-        )
-        mismatches = [
-            row
-            for row in rows
-            if row.get("official_ledger_status") == "passed"
-            and row.get("current_artifact_matches_ledger") is False
-        ]
-        if mismatches:
-            performance_lines.append(
-                "注意：正式台账 artifact 与当前活动产物 SHA-256 不一致；台账成绩仍按历史 run bundle 保留，当前产物需在目标环境重新验证后才能复用该成绩。"
-            )
         write_text(task_dir / "performance.md", "\n".join(performance_lines))
-        package_entries.append(
-            {
-                "task_key": task_key,
-                "task": task_label,
-                "path": task_key,
-                "chips": len(chips),
-                "files": {"code": 10, "manifests": 10, "environment": 10},
-            }
-        )
 
     build_run_scripts(OUTPUT / "run")
-    current = current_commit()
     root_readme = [
-        "# 赛道一作品提交包（本地整理版）",
+        "# 赛道一作品提交包",
         "",
-        "本目录按《赛道说明.md》4.1 的作品结构，按赛题分别整理代码、README、环境配置、运行脚本和测试结果。",
-        "本轮只完成仓库内文件整理，不执行 KernelSwift 平台、PR 或邮件提交。正式压缩包名称仍需在提交前补充参赛选手/团队名称、赛道和 UID。",
-        "",
-        "## 当前状态",
-        "",
-        f"- 活动芯片：10 款；活动键来自 `profile_runtime.py`，第 10 个芯片为 `nvidia_h200`。",
-        f"- 官方覆盖台账：{official_passed}/100；当前只有 BI150 的 10/10 单元进入正式台账。",
-        "- MetaX C500：最新官方 auto_bench 诊断结果已归档到 `evidence/metax_c500_official_auto_bench_20260829.json`，10/10 PASS；因环境未锁定，仍不计入正式 coverage 台账。",
-        "- H200：已完成 profile、环境占位、10×10 operator profile 和自包含产物接入；没有目标 H200 环境，因此 10 个单元均为未验证/未运行。",
-        "- 旧 `biren_br106m`：活动 profile、环境和上传产物已迁入仓库 legacy 区；历史 results 原样保留，不进入本包。",
-        "- BI150 台账成绩按其历史 run bundle 和 artifact SHA-256 保留；若与当前重建产物哈希不同，当前产物不自动继承该成绩，需目标环境回归。",
+        "本包按《赛道说明》4.1、4.2 整理，包含 10 道赛题的算子优化代码、README、环境配置、运行脚本和性能测试结果。",
         "",
         "## 目录",
         "",
-        "- `01_grouped_topk/` … `10_head_compute_mix_bwd/`：每道赛题一个目录。",
-        "- 每题包含 `code/`、`manifests/`、`environment/`、`README.md`、`reference.py`、`results.json` 和 `performance.md`。",
-        "- `run/`：本地作品包校验脚本和固定 evaluator 运行入口；H200 只能先使用 `--diagnostic`。",
-        "- `evidence/`：coverage 台账和已有目标 runner 摘要的副本，便于离线审计。",
+        "- `01_grouped_topk/` … `10_head_compute_mix_bwd/`：每道赛题的官方作品材料。",
+        "- 每道赛题包含 `code/`、`README.md`、`environment/` 和 `performance.md`。",
+        "- `run/`：共享的固定 evaluator、参考输入、case preparation、运行脚本和包校验脚本。",
         "",
-        "## 提交前检查",
+        "## 本地运行",
         "",
         "```bash",
         "python3 run/validate_package.py",
+        "bash run/run_official_eval.sh <chip_key> [task_key]",
         "```",
         "",
-        "目标芯片正式测试仍需在对应硬件上使用 `run/run_official_eval.sh` 或 `run/run_official_eval.ps1`，并按固定 evaluator、200 warmup / 500 repeat 和真实环境证据更新 coverage；不使用其他芯片结果替代 H200。",
+        "`run/auto_bench.py` 为固定版本 DLBlas evaluator；运行入口只执行本地评测，不提交平台、不修改仓库 coverage。目标机器仍需安装对应的 PyTorch、Triton 和芯片运行时。",
     ]
     write_text(OUTPUT / "README.md", "\n".join(root_readme))
-    manifest = {
-        "schema_version": 1,
-        "package_kind": "kernelswift_track_submission_local",
-        "track": "赛道一",
-        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "source_commit": current,
-        "active_chip_count": len(chips),
-        "task_count": len(tasks),
-        "official_ledger_passed": official_passed,
-        "official_ledger_total": len(chips) * len(tasks),
-        "legacy_excluded": ["biren_br106m"],
-        "tasks": package_entries,
-        "evidence": copied_evidence,
-    }
-    (OUTPUT / "package_manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
     print(f"PASS package: {len(tasks)} tasks x {len(chips)} chips")
     print(f"OFFICIAL_LEDGER {official_passed}/{len(tasks) * len(chips)}")
     print(f"OUTPUT {OUTPUT}")

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "04_splade_sparse_pooler",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\04_splade_sparse_pooler.py",
+  "artifact_sha256": "7a90f91014677a0be2e2688d5b5f76864dd23217730ab51ab908cc6abf72ae85",
+  "sources": {
+    "triton_kernels/04_splade_sparse_pooler.py": "1bdf9e614b7a577cb8d4ebb910dc01d65886cfc23ccdc9f4b646e8244e58d164",
+    "profiles/operators/04_splade_sparse_pooler.json": "a1c6b6719ecc474d8c6ce1910b43584ef77feebd7e2baa92ec8137dcb4f2eea4",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf",
+    "triton_kernels/common.py": "0c64d501f4857f400951b91a31c29280c9c3d66fea521c52730eee25a6e65c88"
+  },
+  "profile": {
+    "variant": "staged_portable",
+    "config": {
+      "linear_block_m": 16,
+      "linear_block_n": 64,
+      "linear_block_k": 32,
+      "linear_num_warps": 8,
+      "layer_norm_num_warps_small": 4,
+      "layer_norm_num_warps_large": 4,
+      "pool_block_t": 32,
+      "pool_block_v": 128,
+      "pool_num_warps": 4
+    },
+    "schema_version": 1,
+    "task_key": "04_splade_sparse_pooler",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

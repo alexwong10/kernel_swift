@@ -83,6 +83,26 @@ def _head_mix_bwd_tiled_kernel(input_ptr, scale_ptr, base_ptr, grad_out_ptr, gra
     tl.store(grad_scale_partial_ptr + partial_offset, tl.sum(grad_z * x, axis=0), mask=mix_valid)
 
 @triton.jit
+def _head_mix_bwd_atomic_kernel(input_ptr, scale_ptr, base_ptr, grad_out_ptr, grad_input_ptr, grad_scale_ptr, grad_base_ptr, rows, mhc_mult: tl.constexpr, BLOCK_ROWS: tl.constexpr, BLOCK_MIXES: tl.constexpr):
+    """Process row chunks and accumulate scalar reductions in place."""
+    mix = tl.program_id(0) * BLOCK_MIXES + tl.arange(0, BLOCK_MIXES)
+    mix_valid = mix < mhc_mult
+    chunk = tl.program_id(1)
+    row = chunk * BLOCK_ROWS + tl.arange(0, BLOCK_ROWS)[:, None]
+    row_valid = row < rows
+    valid = row_valid & mix_valid
+    offset = row * mhc_mult + mix[None, :]
+    x = tl.load(input_ptr + offset, mask=valid, other=0.0).to(tl.float32)
+    scale = tl.load(scale_ptr).to(tl.float32)
+    base = tl.load(base_ptr + mix, mask=mix_valid, other=0.0).to(tl.float32)
+    grad_out = tl.load(grad_out_ptr + offset, mask=valid, other=0.0).to(tl.float32)
+    sigmoid = tl.sigmoid(x * scale + base)
+    grad_z = grad_out * sigmoid * (1.0 - sigmoid)
+    tl.store(grad_input_ptr + offset, grad_z * scale, mask=valid)
+    tl.atomic_add(grad_base_ptr + mix, tl.sum(grad_z, axis=0), mask=mix_valid)
+    tl.atomic_add(grad_scale_ptr, tl.sum(tl.sum(grad_z * x, axis=0), axis=0))
+
+@triton.jit
 def _reduce_head_mix_parts_kernel(grad_scale_partial_ptr, grad_base_partial_ptr, grad_scale_parts_ptr, grad_base_ptr, num_chunks, mhc_mult: tl.constexpr, BLOCK_CHUNKS: tl.constexpr):
     mix = tl.program_id(0)
     chunk = tl.arange(0, BLOCK_CHUNKS)
@@ -104,7 +124,7 @@ class Model(nn.Module):
     def __init__(self):
         super().__init__()
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'single_block_reduce', 'chunked_deterministic', 'tiled_mix_chunked', 'fused_all_mixes'}:
+        if profile['variant'] not in {'single_block_reduce', 'chunked_deterministic', 'tiled_mix_chunked', 'tiled_mix_atomic', 'native', 'fused_all_mixes'}:
             raise ValueError(f"unsupported head_compute_mix_bwd variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         self._ks_config = profile['config']
@@ -113,6 +133,24 @@ class Model(nn.Module):
         mhc_mult = input_mix.shape[-1]
         rows = input_mix.numel() // mhc_mult
         grad_input = torch.empty_like(input_mix)
+        if self._ks_variant == 'native':
+            z = input_mix * mhc_scale + mhc_base
+            sigmoid = torch.sigmoid(z)
+            grad_z = grad_out * sigmoid * (1 - sigmoid)
+            grad_input = grad_z * mhc_scale
+            grad_base = grad_z.sum(dim=(0, 1), keepdim=True).view(-1)
+            grad_scale = (grad_z * input_mix).sum(dim=(0, 1, 2), keepdim=True).view(1)
+            return (grad_input, grad_scale, grad_base)
+        if self._ks_variant == 'tiled_mix_atomic':
+            block_rows = int(self._ks_config['block_rows'])
+            num_chunks = triton.cdiv(rows, block_rows)
+            block_mixes = int(self._ks_config['block_mixes'])
+            if block_rows <= 0 or block_mixes <= 0:
+                raise ValueError('invalid tiled_mix_atomic tile configuration')
+            grad_scale = torch.zeros_like(mhc_scale)
+            grad_base = torch.zeros_like(mhc_base)
+            _head_mix_bwd_atomic_kernel[triton.cdiv(mhc_mult, block_mixes), num_chunks](input_mix, mhc_scale, mhc_base, grad_out, grad_input, grad_scale, grad_base, rows, mhc_mult, BLOCK_ROWS=block_rows, BLOCK_MIXES=block_mixes, num_warps=int(self._ks_config['num_warps']))
+            return (grad_input, grad_scale, grad_base)
         grad_base = torch.empty_like(mhc_base)
         if self._ks_variant == 'fused_all_mixes':
             block = triton.next_power_of_2(rows)

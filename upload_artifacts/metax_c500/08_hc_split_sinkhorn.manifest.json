@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "08_hc_split_sinkhorn",
   "chip_key": "metax_c500",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "b03e19ba206e5a1869d7e6fb7a118208ee044b35",
   "artifact": "upload_artifacts\\metax_c500\\08_hc_split_sinkhorn.py",
-  "artifact_sha256": "d701de87b32655b6a451cd0d69031607961fc90e4eb2d63d7e48b9b0d5832903",
+  "artifact_sha256": "c1dca192dd1f673576846778207838d33963baebaaae820ea1f259d88ad59656",
   "sources": {
     "triton_kernels/08_hc_split_sinkhorn.py": "e3952d12fe101c6ebc57358a5ee7310f3ecf5f38088b4761ba9a75ea54fe694c",
-    "profiles/operators/08_hc_split_sinkhorn.json": "9387f2b54b093dff2d6a8e6e9a00daf6f02cbe0da285568cd390fc6fc25d71f1",
+    "profiles/operators/08_hc_split_sinkhorn.json": "467930d3bdaea2d9c8dff874847b5e4fd9214cddd6bd930fe56678eb065ebb2c",
     "profiles/chips/metax_c500.json": "445baa5b10bf9020e322eb1b139d4a6f35304aefe8034763b25fb306f1983bcf"
   },
   "profile": {

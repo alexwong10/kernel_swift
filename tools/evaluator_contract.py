@@ -105,6 +105,20 @@ def verify_official_evaluator(bench: Path) -> dict[str, Any]:
             "url": EVALUATOR_URL,
         }
     if relative != EVALUATOR_RELATIVE_PATH:
+        payload = bench.read_bytes()
+        actual_sha256 = hashlib.sha256(payload).hexdigest()
+        if actual_sha256 == EVALUATOR_SHA256:
+            return {
+                "verified": True,
+                "detail": "exact pinned file by SHA-256 (vendored)",
+                "repo": str(repo),
+                "relative_path": relative,
+                "path": str(bench),
+                "commit": EVALUATOR_COMMIT,
+                "sha256": actual_sha256,
+                "expected_sha256": EVALUATOR_SHA256,
+                "url": EVALUATOR_URL,
+            }
         return {
             "verified": False,
             "detail": f"expected repository path {EVALUATOR_RELATIVE_PATH}, got {relative}",
@@ -112,6 +126,8 @@ def verify_official_evaluator(bench: Path) -> dict[str, Any]:
             "relative_path": relative,
             "path": str(bench),
             "commit": EVALUATOR_COMMIT,
+            "sha256": actual_sha256,
+            "expected_sha256": EVALUATOR_SHA256,
             "url": EVALUATOR_URL,
         }
     expected = subprocess.run(

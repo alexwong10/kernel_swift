@@ -42,9 +42,9 @@ def _augment_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_ptr, tr
         qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
         qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
         qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
-        xx, yy, zz = (qx * qx, qy * qy, qz * qz)
-        xy, xz, yz = (qx * qy, qx * qz, qy * qz)
-        wx, wy, wz = (qw * qx, qw * qy, qw * qz)
+        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
+        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
+        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
         y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
         y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
@@ -65,7 +65,7 @@ def _augment_tiled_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_p
     x1 = tl.load(coords_ptr + base + 1, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 1)
     x2 = tl.load(coords_ptr + base + 2, mask=valid, other=0.0).to(tl.float32) - tl.load(center_ptr + 2)
     if CENTRE_ONLY:
-        y0, y1, y2 = (x0, x1, x2)
+        (y0, y1, y2) = (x0, x1, x2)
     else:
         u1 = tl.load(u1_ptr + sample).to(tl.float32)
         u2 = tl.load(u2_ptr + sample).to(tl.float32)
@@ -74,9 +74,9 @@ def _augment_tiled_kernel(coords_ptr, mask_ptr, center_ptr, u1_ptr, u2_ptr, u3_p
         qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
         qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
         qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
-        xx, yy, zz = (qx * qx, qy * qy, qz * qz)
-        xy, xz, yz = (qx * qy, qx * qz, qy * qz)
-        wx, wy, wz = (qw * qx, qw * qy, qw * qz)
+        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
+        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
+        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
         y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
         y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
@@ -120,7 +120,7 @@ def _augment_fused_center_kernel(coords_ptr, mask_ptr, u1_ptr, u2_ptr, u3_ptr, t
     x1 -= center1
     x2 -= center2
     if CENTRE_ONLY:
-        y0, y1, y2 = (x0, x1, x2)
+        (y0, y1, y2) = (x0, x1, x2)
     else:
         u1 = tl.load(u1_ptr + sample).to(tl.float32)
         u2 = tl.load(u2_ptr + sample).to(tl.float32)
@@ -129,9 +129,9 @@ def _augment_fused_center_kernel(coords_ptr, mask_ptr, u1_ptr, u2_ptr, u3_ptr, t
         qy = tl.sqrt(1.0 - u1) * tl.cos(6.283185307179586 * u2)
         qz = tl.sqrt(u1) * tl.sin(6.283185307179586 * u3)
         qw = tl.sqrt(u1) * tl.cos(6.283185307179586 * u3)
-        xx, yy, zz = (qx * qx, qy * qy, qz * qz)
-        xy, xz, yz = (qx * qy, qx * qz, qy * qz)
-        wx, wy, wz = (qw * qx, qw * qy, qw * qz)
+        (xx, yy, zz) = (qx * qx, qy * qy, qz * qz)
+        (xy, xz, yz) = (qx * qy, qx * qz, qy * qz)
+        (wx, wy, wz) = (qw * qx, qw * qy, qw * qz)
         y0 = (1.0 - 2.0 * (yy + zz)) * x0 + 2.0 * (xy - wz) * x1 + 2.0 * (xz + wy) * x2
         y1 = 2.0 * (xy + wz) * x0 + (1.0 - 2.0 * (xx + zz)) * x1 + 2.0 * (yz - wx) * x2
         y2 = 2.0 * (xz - wy) * x0 + 2.0 * (yz + wx) * x1 + (1.0 - 2.0 * (xx + yy)) * x2
@@ -155,7 +155,7 @@ class Model(nn.Module):
         self.s_trans = s_trans
         self.centre_only = centre_only
         profile = _KS_BAKED_PROFILE
-        if profile['variant'] not in {'framework_rng_triton_geometry', 'framework_rng_tiled_geometry', 'fused_center_geometry'}:
+        if profile['variant'] not in {'framework_rng_triton_geometry', 'framework_rng_tiled_geometry', 'fused_center_geometry', 'reuse_center_tiled_geometry'}:
             raise ValueError(f"unsupported CentreRandomAugmentation variant: {profile['variant']}")
         self._ks_variant = profile['variant']
         self._ks_config = profile['config']
@@ -175,7 +175,12 @@ class Model(nn.Module):
             u3 = torch.rand(self.n_sample, device=x_input_coords.device, dtype=x_input_coords.dtype)
             translation = self.s_trans * torch.randn(self.n_sample, 3, device=x_input_coords.device, dtype=x_input_coords.dtype)
         out = torch.empty((self.n_sample, n_atoms, 3), device=x_input_coords.device, dtype=x_input_coords.dtype)
-        if self._ks_variant == 'fused_center_geometry' and (not self.centre_only):
+        if self._ks_variant == 'reuse_center_tiled_geometry':
+            augment_block = int(self._ks_config.get('augment_block_atoms', self._ks_config.get('fused_block_atoms', block_atoms)))
+            if augment_block <= 0:
+                raise ValueError('augment_block_atoms must be positive')
+            _augment_tiled_kernel[self.n_sample, triton.cdiv(n_atoms, augment_block)](x_input_coords, mask_arg, center, u1, u2, u3, translation, out, n_atoms, HAS_MASK=mask is not None, CENTRE_ONLY=self.centre_only, BLOCK_A=augment_block, num_warps=int(self._ks_config.get('augment_num_warps', self._ks_config.get('fused_num_warps', 1))))
+        elif self._ks_variant == 'fused_center_geometry' and (not self.centre_only):
             fused_block = int(self._ks_config.get('fused_block_atoms', block_atoms))
             if fused_block <= 0:
                 raise ValueError('fused_block_atoms must be positive')

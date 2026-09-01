@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "chip_key": "nvidia_h200",
+  "status": "unverified",
+  "image": {"identifier": null, "digest": null},
+  "python": null,
+  "packages": {},
+  "driver": null,
+  "compiler": null,
+  "captured_at_utc": null,
+  "evidence": "not_available: no NVIDIA H200 runtime, driver or Triton environment has been captured"
+}

@@ -2,10 +2,7 @@
   "schema_version": 1,
   "chip_key": "moore_threads_ph100",
   "status": "unverified",
-  "image": {
-    "identifier": "46ad079a9849",
-    "digest": null
-  },
+  "image": {"identifier": "46ad079a9849", "digest": null},
   "python": "3.10.12",
   "packages": {
     "torch": "2.7.1a0+gite2d141d",

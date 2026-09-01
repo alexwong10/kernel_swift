@@ -1,4 +1,8 @@
-"""Read-only probe for a Biren BR106M validation host."""
+"""Legacy read-only probe for a Biren BR106M validation host.
+
+The active catalog uses ``nvidia_h200``; this helper remains only to interpret
+historical Biren evidence and is not part of the current scoring path.
+"""
 
 from __future__ import annotations
 

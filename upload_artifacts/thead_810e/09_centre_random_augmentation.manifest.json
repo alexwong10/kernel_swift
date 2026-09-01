@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "09_centre_random_augmentation",
   "chip_key": "thead_810e",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\thead_810e\\09_centre_random_augmentation.py",
-  "artifact_sha256": "a79cd894407e9c3844f07dae4caf7c06ee9e8aad262416d6ee681b084dcb9cc5",
+  "artifact_sha256": "2edec40d773bec56919c85521a4fb791de576b8e18b2874603c638ffcb832495",
   "sources": {
-    "triton_kernels/09_centre_random_augmentation.py": "c183a86f3540273b01fb08b179f1741b7e9a74fd76281dbad5db94999e0e7a4d",
-    "profiles/operators/09_centre_random_augmentation.json": "f78aee35afc40503d66b5e7a43c83206bd152baf1ba0e8032f864f70fa6f5035",
+    "triton_kernels/09_centre_random_augmentation.py": "0ec0c411a8bfc92db59749b12ac80c102f2d8c6ea65d92cd1a9cf97d580a4b4e",
+    "profiles/operators/09_centre_random_augmentation.json": "ccf01c10e8836374ef2f143284ed24cd22f439c40e9085fb75f8d4cdb8942f3e",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
   },
   "profile": {

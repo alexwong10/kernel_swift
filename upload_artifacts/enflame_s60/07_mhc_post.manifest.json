@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "07_mhc_post",
   "chip_key": "enflame_s60",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\enflame_s60\\07_mhc_post.py",
-  "artifact_sha256": "f02dfaf084ad554ad4370b073bda6919d483cae99ad128db4f71de973b84e17f",
+  "artifact_sha256": "1b5a7b94cff398f0961dcbb735b2d4f9aec3cc0df8583954eeac07652e9dc6c3",
   "sources": {
     "triton_kernels/07_mhc_post.py": "84d9c5d69643bfbbaa734268080d35776f3f72c40610f1491ea4fc1e02e2c296",
-    "profiles/operators/07_mhc_post.json": "0cbace8fc8834a12d21d7b0b067f17ed05c0638315fc2928b2e78b92608469f6",
+    "profiles/operators/07_mhc_post.json": "b7a2db53c9f49437f76ecdd2dd7a14915daba75c244898847e51b48971dd03d9",
     "profiles/chips/enflame_s60.json": "28478e6d156a0064908f95f1fea99e2e1ef79c6fa6d2cee244fd4602e5867ed1"
   },
   "profile": {

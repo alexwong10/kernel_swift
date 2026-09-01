@@ -3,12 +3,12 @@
   "builder_version": 5,
   "task_key": "01_grouped_topk",
   "chip_key": "thead_810e",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\thead_810e\\01_grouped_topk.py",
-  "artifact_sha256": "45f8c07ea1b367f8cfc4e0a09c25e8d7ae9e6871cca7aafc3c3271426480b91e",
+  "artifact_sha256": "b4de0eae143bf43a7171ffe10e6851315709a46f4c42152bc95f35b93b759401",
   "sources": {
     "triton_kernels/01_grouped_topk.py": "031bd41da941fa022724b98c792beb52c759216c04dd7a9f0c44fee33be791ec",
-    "profiles/operators/01_grouped_topk.json": "343746d8b4cda34c5ec67a8cc85cc3f31b3af78ee5d5711fda71510c8f6c531d",
+    "profiles/operators/01_grouped_topk.json": "e119306a8b82a19e7b801f370628e0aaea7969f2318c7e83c8a4bae60e1e8ce7",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b"
   },
   "profile": {

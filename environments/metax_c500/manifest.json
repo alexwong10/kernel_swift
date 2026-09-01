@@ -8,12 +8,15 @@
   },
   "python": "3.10.10",
   "packages": {
-    "torch": "2.8.0+metax3.3.0.2",
+    "torch": "2.8.0+metax3.7.0.7",
     "triton": "3.0.0",
-    "maca": "/opt/maca-3.3.0"
+    "maca": "3.7.0.38"
   },
-  "driver": "mx-smi 2.2.9; MXC500 GPU#0",
+  "driver": "MetaX C500; MACA 3.7.0.38; driver build not captured",
   "compiler": "Triton MetaX backend",
-  "captured_at_utc": "2026-08-10T00:00:00Z",
-  "evidence": "results/metax_c500/7843fbee040db3715b36619a5c46e18a11f5edb5/summary.json; target-device runner, not official evaluator"
+  "captured_at_utc": "2026-08-29",
+  "evidence": "results/metax_c500/official_auto_bench_20260829_current_worktree.json; results/metax_c500/official_auto_bench_20260829_current_worktree.md",
+  "verification_scope": "target_chip_validation",
+  "target_verification_status": "verified",
+  "formal_coverage_status": "not_promoted"
 }

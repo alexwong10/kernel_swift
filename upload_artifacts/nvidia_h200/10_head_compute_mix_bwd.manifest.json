@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "builder_version": 5,
+  "task_key": "10_head_compute_mix_bwd",
+  "chip_key": "nvidia_h200",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
+  "artifact": "upload_artifacts\\nvidia_h200\\10_head_compute_mix_bwd.py",
+  "artifact_sha256": "576de03b09ba782832785a498859187251328cd3cdaa7ec87613177be3a7c16f",
+  "sources": {
+    "triton_kernels/10_head_compute_mix_bwd.py": "fd36b2acebf49755502d9eeb5b6fcdf3f80100621004b2e34bf4f17ac9395e60",
+    "profiles/operators/10_head_compute_mix_bwd.json": "4c81ca4cd7bfda54cd3c2b6688639275ae20cea7edae5d3433a80edd807d2800",
+    "profiles/chips/nvidia_h200.json": "79f5069907b2d7631069ad86285edc14fd90bd62f097e82f9c967c99a4bdcdaf"
+  },
+  "profile": {
+    "variant": "tiled_mix_chunked",
+    "config": {
+      "block_rows": 256,
+      "block_mixes": 4,
+      "num_warps": 4,
+      "reduce_num_warps": 1
+    },
+    "fallback_variants": [
+      {
+        "variant": "single_block_reduce",
+        "config": {
+          "num_warps": 8
+        }
+      }
+    ],
+    "schema_version": 1,
+    "task_key": "10_head_compute_mix_bwd",
+    "chip_key": "nvidia_h200",
+    "verified": false
+  },
+  "chip_profile": {
+    "schema_version": 1,
+    "chip_key": "nvidia_h200",
+    "vendor": "NVIDIA",
+    "model": "H200",
+    "resource": "kernelswift_option_observed",
+    "runtime": {
+      "family": "nvidia_cuda",
+      "torch_device": "cuda",
+      "accelerator_module": null,
+      "bootstrap_imports": [],
+      "source_device_aliases": [],
+      "evaluator_support": "unconfirmed",
+      "verified": false
+    },
+    "capabilities": {
+      "verified": false,
+      "dtypes": {},
+      "primitives": {}
+    }
+  },
+  "device_adaptation": {
+    "target_device": "cuda",
+    "source_aliases": [],
+    "replacements": [],
+    "status": "no_source_aliases"
+  }
+}

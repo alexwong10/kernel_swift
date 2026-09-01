@@ -128,7 +128,7 @@ class Model(nn.Module):
         return out
 
 def get_inputs():
-    n0, n1, hidden_size, mhc_mult = (2, 4096, 1280, 4)
+    (n0, n1, hidden_size, mhc_mult) = (2, 4096, 1280, 4)
     x = torch.randn((n0, n1, hidden_size), dtype=torch.bfloat16)
     residual = torch.randn((n0, n1, mhc_mult, hidden_size), dtype=torch.bfloat16)
     post_layer_mix = torch.randn((n0, n1, mhc_mult, 1), dtype=torch.float32)

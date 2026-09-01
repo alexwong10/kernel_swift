@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "chip_key": "nvidia_h200",
+  "vendor": "NVIDIA",
+  "model": "H200",
+  "resource": "kernelswift_option_observed",
+  "runtime": {
+    "family": "nvidia_cuda",
+    "torch_device": "cuda",
+    "accelerator_module": null,
+    "bootstrap_imports": [],
+    "source_device_aliases": [],
+    "evaluator_support": "unconfirmed",
+    "verified": false
+  },
+  "capabilities": {"verified": false, "dtypes": {}, "primitives": {}}
+}

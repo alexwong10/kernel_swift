@@ -1,18 +1,24 @@
-# KernelSwift 2026 Triton 赛道提交集
+# KernelSwift 2026 Triton 赛道一作品整理集
 
 本目录包含 `赛道说明.md` 中全部 10 道题的参考实现、profile 驱动的 canonical Triton
-`ModelNew`、单文件构建与评测工具，以及 10 款计分芯片的完整覆盖台账。适配基础设施已经落地，
-但所有厂商 profile 和环境锁仍未上芯验证，官方覆盖仍为 0/100。
+`ModelNew`、单文件构建与评测工具，以及当前 10 款计分芯片的完整覆盖台账。旧壁仞 BR106M
+已从活动目录替换为 NVIDIA H200；当前官方台账为 **10/100**，其中 BI150 为 10/10，
+其余芯片（含 H200）尚无可计分官方 PASS。
 
 ## 目录
 
 ```text
 reference/              从赛道说明机械提取的 10 个 Model 参考实现
 triton_kernels/         10 个 canonical ModelNew 和共享 Triton 内核
-profiles/chips/         10 个稳定芯片键、runtime 与能力 profile
+profiles/chips/         10 个当前有效芯片键、runtime 与能力 profile
+profiles/chips_legacy/  已替换芯片的历史 profile（不进入当前校验）
 profiles/operators/     10 题默认配置和完整 10×10 cell override
-environments/           每芯片可复现环境锁；当前全部 unverified
+environments/           每芯片可复现环境锁；状态以各 manifest 为准
+environments_legacy/    已替换芯片的历史环境清单
 tools/                  探针、设备准备、构建、评测与校验工具
+upload_artifacts/       当前 10×10 自包含单文件产物和本地审计 manifest
+upload_artifacts_legacy/ 已替换芯片的历史产物（不进入当前作品包）
+submission_package/赛道一/ 按赛题分别整理的本地作品包
 results/coverage.json   schema v2 算子 × 芯片验收台账
 KernelSwift平台使用记录.md
 离线审查记录.md
@@ -57,6 +63,14 @@ python -m compileall -q reference triton_kernels tools
 上传入口、profile 身份、源文件哈希和 SHA-256 一致。构建器还会
 对已确认 runtime profile 的芯片改写输入构造中的设备别名，并把替换记录写入 manifest；这同样
 不等价于目标编译器验证。
+
+按赛道说明的逐题作品结构生成本地整理包：
+
+```powershell
+py -3 tools/build_submission_package.py
+```
+
+输出位于 `submission_package/赛道一/`；本轮只生成和校验本地文件，不执行平台提交。
 
 单独构建某个提交文件：
 
@@ -113,12 +127,13 @@ speedup 后才原子更新 `coverage.json`。
   芯片保留原始字面量并拒绝伪造适配结论。
 - variant、tile 和 `num_warps` 已由稳定 `chip_key` 对应的 operator profile 选择并固化进单文件；
   当前配置尚未经 10 个厂商编译器验证，不能把“可选择”写成“已适配”。
-- 昆仑芯 P800、壁仞 BR106M 需自备资源；KernelSwift 当前下拉框也未显示摩尔线程 PH100。
+- 昆仑芯 P800、NVIDIA H200 仍需目标环境证据；KernelSwift 当前下拉框也未显示摩尔线程 PH100。
 
 ## 当前验证边界
 
 工作区所在 Windows 主机没有 PyTorch、Triton 或加速卡。当前证据包括接口/配置/台账校验、
 runner 自测、已有 NumPy 公式检查、Python 编译和 100/100 单文件静态构建回归；NumPy 检查不
-覆盖 SPLADE 完整数值链，任何一项也不能证明 Triton 后端可编译。没有任何芯片的官方 PASS，
-实际覆盖为 **0/100**。任何“已覆盖芯片”声明必须以目标芯片上的固定版本官方评测日志和完整
-环境证据为准。
+覆盖 SPLADE 完整数值链，任何一项也不能证明 Triton 后端可编译。官方台账当前为 **10/100**：
+BI150 10/10 具备固定 evaluator 的 PASS、延迟和 speedup；其余 90 个单元为未运行或仅有目标
+runner/诊断证据。任何“已覆盖芯片”声明必须以目标芯片上的固定版本官方评测日志和完整环境
+证据为准。

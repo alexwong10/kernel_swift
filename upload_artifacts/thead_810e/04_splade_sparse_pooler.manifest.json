@@ -3,14 +3,14 @@
   "builder_version": 5,
   "task_key": "04_splade_sparse_pooler",
   "chip_key": "thead_810e",
-  "source_commit": "774d18aa78fd2c5ab8219eee9f6751df1a401ba3",
+  "source_commit": "d5e0e4def30011af93d049ed08f18e707cea9c37",
   "artifact": "upload_artifacts\\thead_810e\\04_splade_sparse_pooler.py",
-  "artifact_sha256": "342196361ce6d20fce5f0693d5ffd754f7e449545380a8b9078817efdc004865",
+  "artifact_sha256": "04183e8e5b527b1cd6f42b0ba2a76b4bdeb172d4f771d239940dc5070e50a7da",
   "sources": {
     "triton_kernels/04_splade_sparse_pooler.py": "1bdf9e614b7a577cb8d4ebb910dc01d65886cfc23ccdc9f4b646e8244e58d164",
-    "profiles/operators/04_splade_sparse_pooler.json": "357c002e8048ee7a33df2559a03366740353e8a0c3fcf094242b3ee3b1f9011a",
+    "profiles/operators/04_splade_sparse_pooler.json": "a1c6b6719ecc474d8c6ce1910b43584ef77feebd7e2baa92ec8137dcb4f2eea4",
     "profiles/chips/thead_810e.json": "b8afcab5bf7f99f576154fcab69509e2750eb0ee64f357fcd074282e8688860b",
-    "triton_kernels/common.py": "be0d3d51e815ad5341792c03e30c2bae1b429fb7ef6ecd08935ee885a5a7a88f"
+    "triton_kernels/common.py": "0c64d501f4857f400951b91a31c29280c9c3d66fea521c52730eee25a6e65c88"
   },
   "profile": {
     "variant": "staged_portable",
