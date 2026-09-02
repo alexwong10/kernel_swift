@@ -1,5 +1,98 @@
-
-<div id="reference-standard-chip-comparison" role="figure" aria-labelledby="rsc-title" aria-describedby="rsc-description">
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Reference / Standard / Chip Comparison</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --background: light-dark(rgb(248 250 252), rgb(15 19 28));
+      --foreground: light-dark(rgb(25 34 48), rgb(236 241 250));
+      --muted: light-dark(rgb(239 243 247), rgb(28 35 48));
+      --muted-foreground: light-dark(rgb(89 101 119), rgb(167 178 196));
+      --border: light-dark(rgb(207 216 226), rgb(61 71 87));
+      --accent: light-dark(rgb(229 237 255), rgb(35 51 83));
+      --accent-foreground: light-dark(rgb(34 75 145), rgb(204 219 255));
+      --viz-series-1: light-dark(rgb(22 116 194), rgb(91 177 255));
+      --viz-series-2: light-dark(rgb(201 75 83), rgb(255 133 133));
+    }
+    html {
+      min-width: 320px;
+      background: var(--background);
+    }
+    body {
+      box-sizing: border-box;
+      min-width: 320px;
+      margin: 0;
+      padding: clamp(18px, 3.5vw, 48px);
+      background: var(--background);
+      color: var(--foreground);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+    code,
+    select,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+    #reference-standard-chip-comparison {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    #reference-standard-chip-comparison .text-small {
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    #reference-standard-chip-comparison .viz-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: 12px 18px;
+    }
+    #reference-standard-chip-comparison .form-label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+    #reference-standard-chip-comparison .form-select {
+      min-width: 220px;
+      min-height: 38px;
+      padding: 7px 34px 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--background);
+      color: var(--foreground);
+      font-size: 14px;
+    }
+    #reference-standard-chip-comparison .form-select:focus-visible {
+      outline: 2px solid var(--viz-series-1);
+      outline-offset: 2px;
+    }
+    #reference-standard-chip-comparison .rsc-diff {
+      white-space: pre;
+      overflow-wrap: normal;
+      tab-size: 2;
+    }
+    #reference-standard-chip-comparison .rsc-diff-code {
+      white-space: pre;
+      overflow-wrap: normal;
+    }
+    @media (max-width: 560px) {
+      body {
+        padding: 16px;
+      }
+      #reference-standard-chip-comparison .form-label,
+      #reference-standard-chip-comparison .form-select {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body><div id="reference-standard-chip-comparison" role="figure" aria-labelledby="rsc-title" aria-describedby="rsc-description">
   <style>
     #reference-standard-chip-comparison {
       color: var(--foreground);
@@ -419,7 +512,9 @@
           const chipKey = chipSelect.value;
           const task = taskByKey.get(taskKey);
           const row = chipByKey.get(chipKey);
-          const entry = CODE_DATA && CODE_DATA.tasks ? CODE_DATA.tasks[taskKey] : null;
+          const entry = CODE_DATA && CODE_DATA.tasks
+            ? (CODE_DATA.tasks[taskKey] || CODE_DATA.tasks[`${taskKey}.py`])
+            : null;
           const optimizedStats = entry && entry.stats.standard_optimized[chipKey];
           const speedup = row && row.values[DATA.tasks.findIndex(item => item.key === taskKey)];
           if (!entry || !optimizedStats) {
@@ -662,3 +757,5 @@
     })();
   </script>
 </div>
+</body>
+</html>
