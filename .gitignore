@@ -8,6 +8,10 @@ results/*/summary.json
 
 # Local submission bundles and transient tuning output are not source history.
 *.zip
+submission_package/
+docs/
+适配计划书.md
+离线审查记录.md
 .tmp_*/
 environments_legacy/
 profiles/chips_legacy/
