@@ -1,7 +1,6 @@
 # KernelSwift 上传产物
 
-当前活动目录只保留赛道说明中的 10 款有效芯片；已替换的 Biren BR106M 产物位于
-`upload_artifacts_legacy/biren_br106m/`，仅作历史追溯，不进入当前作品包。
+当前活动目录只保留赛道说明中的 10 款有效芯片。
 
 每个芯片目录包含 10 个可单独上传的 Python 文件：
 
@@ -34,5 +33,4 @@ upload_artifacts/<chip_key>/<task_key>.py
 python tools/validate_artifacts.py
 ```
 
-该命令同时检查临时生成产物和本目录中当前活动的 100 个文件。按赛题整理的本地作品视图见
-`submission_package/赛道一/`；本轮只整理文件，不执行平台提交。
+该命令同时检查临时生成产物和本目录中当前活动的 100 个文件。本目录即为当前可审计的单文件产物集合。

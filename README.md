@@ -11,17 +11,11 @@
 reference/              从赛道说明机械提取的 10 个 Model 参考实现
 triton_kernels/         10 个 canonical ModelNew 和共享 Triton 内核
 profiles/chips/         10 个当前有效芯片键、runtime 与能力 profile
-profiles/chips_legacy/  已替换芯片的历史 profile（不进入当前校验）
 profiles/operators/     10 题默认配置和完整 10×10 cell override
 environments/           每芯片可复现环境锁；状态以各 manifest 为准
-environments_legacy/    已替换芯片的历史环境清单
 tools/                  探针、设备准备、构建、评测与校验工具
 upload_artifacts/       当前 10×10 自包含单文件产物和本地审计 manifest
-upload_artifacts_legacy/ 已替换芯片的历史产物（不进入当前作品包）
-submission_package/赛道一/ 按赛题分别整理的本地作品包
 results/coverage.json   schema v2 算子 × 芯片验收台账
-KernelSwift平台使用记录.md
-离线审查记录.md
 赛道说明.md
 ```
 
@@ -55,22 +49,14 @@ python -m compileall -q reference triton_kernels tools
 
 `static_validate.py` 会检查 10 对文件、`Model`/`ModelNew` 的 `__init__` 和 `forward` 参数、必需的输入函数，并拒绝 `ModelNew` 中的回退式 `try/except`。
 `numeric_emulation_validate.py` 在不依赖 PyTorch/Triton 的情况下检查内核使用的索引、
-归约和公式；它只能发现代数错误，不能证明 Triton 可编译或芯片精度通过。逐算子风险见
-[`离线审查记录.md`](./离线审查记录.md)。
+归约和公式；它只能发现代数错误，不能证明 Triton 可编译或芯片精度通过。逐算子风险以
+算子 profile 的约束和 evidence 字段为准。
 
 `validate_artifacts.py` 在临时目录生成并校验全部 100 份芯片固化单文件，并再次校验仓库中
 实际用于上传的 `upload_artifacts/`：接口一致、无 `common/profile_runtime` 本地导入、`Model`
 上传入口、profile 身份、源文件哈希和 SHA-256 一致。构建器还会
 对已确认 runtime profile 的芯片改写输入构造中的设备别名，并把替换记录写入 manifest；这同样
 不等价于目标编译器验证。
-
-按赛道说明的逐题作品结构生成本地整理包：
-
-```powershell
-py -3 tools/build_submission_package.py
-```
-
-输出位于 `submission_package/赛道一/`；本轮只生成和校验本地文件，不执行平台提交。
 
 单独构建某个提交文件：
 
@@ -113,9 +99,8 @@ python tools/run_all.py \
 runner 只接受稳定芯片键，并校验 `auto_bench.py` 与固定 commit
 `9b5b3627a0f2e5e543ad9d05bf051308bafbd12c` 的文件内容完全一致。诊断运行在 profile/环境尚未
 verified 时必须使用 `--no-update-coverage`；正式台账运行要求干净 Git commit、verified runtime
-profile 和环境锁。每次执行写入
-`results/<chip_key>/<source_commit>/<UTC timestamp>-<suffix>/`，解析到官方 PASS、两侧延迟和
-speedup 后才原子更新 `coverage.json`。
+运行证据只保存在本地临时位置，不纳入版本库；解析到官方 PASS、两侧延迟和 speedup 后才原子更新
+`coverage.json`。
 
 ## 跨芯片原则
 
